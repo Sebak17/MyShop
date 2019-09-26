@@ -1,0 +1,35 @@
+.navbar>.nav-logo {
+    font-family: 'Righteous', cursive;
+}
+
+#main-baner {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+#main-baner>img {
+    width: 100%;
+}
+
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+a.none {
+    text-decoration: none;
+}
+
+#categoriesList>tr {
+    font-size: 130%
+}
+
+#categoriesList>tr:hover {
+    color: #2196F3;
+    cursor: pointer;
+}
