@@ -12,6 +12,93 @@
     width: 100%;
 }
 
+.main-category-item {
+    font-size: 150%;
+}
+
+.category-item {
+    padding: 3px;
+}
+
+.category-item:hover {
+    background: #2196F3;
+    color: white;
+    transition: 0.15s ease-in-out;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+#categoryBack {
+    text-decoration: none;
+}
+
+.category-item-back {
+    padding: 3px;
+}
+
+#categoriesList>a {
+    text-decoration: none;
+    color: #444;
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0;
+    margin: 0;
+}
+
+.offer-block:hover {
+    color: #444;
+    background-color: #EDEDED;
+}
+
+.offer-block:hover>div:nth-child(2)>h4 {
+    color: #2196F3;
+}
+
+.offer-block>div:nth-child(3)>h2 {
+    color: #444;
+}
+
+.tdn {
+    text-decoration: none !important;
+}
+
+.card-counter {
+    box-shadow: 2px 2px 10px #CCCCCC;
+    margin: 5px;
+    padding: 20px 10px;
+    height: 100px;
+    border-radius: 5px;
+}
+
+.card-counter i {
+    font-size: 5em;
+    opacity: 0.2;
+}
+
+.card-counter .count-numbers {
+    position: absolute;
+    right: 35px;
+    top: 20px;
+    font-size: 32px;
+    display: block;
+}
+
+.card-counter .count-name {
+    position: absolute;
+    right: 35px;
+    top: 65px;
+    font-style: italic;
+    opacity: 0.5;
+    display: block;
+    font-size: 18px;
+}
+
+.count-name>i {
+    font-size: 18px;
+    opacity: 1;
+}
+
 input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
@@ -23,13 +110,4 @@ input[type="number"] {
 
 a.none {
     text-decoration: none;
-}
-
-#categoriesList>tr {
-    font-size: 130%
-}
-
-#categoriesList>tr:hover {
-    color: #2196F3;
-    cursor: pointer;
 }

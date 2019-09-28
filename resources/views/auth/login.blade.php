@@ -16,7 +16,7 @@
                         <hr />
                         
                         <div class="alert d-none" id="alert"></div>
-                        
+
                         <div class="form-group">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -62,7 +62,7 @@
 </div>
 
 <script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.public_key') }}"></script>
-<script src="/assets/js/_auth.signin.js" charset="utf-8"></script>
-<script src="/assets/js/_validation.js" charset="utf-8"></script>
+<script src="{{ asset('js/_auth.signin.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_validation.js') }}" charset="utf-8"></script>
 
 @endsection

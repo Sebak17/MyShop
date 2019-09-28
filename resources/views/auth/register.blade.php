@@ -42,9 +42,9 @@
 </div>
 
 <script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.public_key') }}"></script>
-<script src="/assets/js/_auth.signup.js" charset="utf-8"></script>
-<script src="/assets/js/_validation.js" charset="utf-8"></script>
-<script src="/assets/js/jquery-mask-phone-number.js" charset="utf-8"></script>
 
+<script src="{{ asset('js/_auth.signup.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_validation.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/jquery-mask-phone-number.js') }}" charset="utf-8"></script>
 
 @endsection

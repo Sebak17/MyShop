@@ -24,7 +24,7 @@
 	</ul>
 	<ul class="nav navbar-nav d-flex align-items-center justify-content-end col-md-6 col-lg-5 col-xl-4">
 		
-		@auth
+		@auth('web')
 		<li class="nav-item h-100 col-3 col-md-2">
 			<a href="/ulubione">
 				<i class="fas fa-heart fa-2x"></i>
@@ -40,7 +40,7 @@
 		<li class="nav-item h-100 col-6 col-md-8 dropdown">
 			
 			<a class="" id="navbardrop" data-toggle="dropdown">
-				<button type="button" class="btn btn-primary"><i class="far fa-user-circle"></i> {{ Auth::user()->name }} &nbsp;<i class="fas fa-arrow-down"></i></button>
+				<button type="button" class="btn btn-primary"><i class="far fa-user-circle"></i> {{ Auth::user()->email }} &nbsp;<i class="fas fa-arrow-down"></i></button>
 			</a>
 			
 			<div class="dropdown-menu">
@@ -53,14 +53,14 @@
 				<a class="dropdown-item" href="/panel/ustawienia">
 					<i class="fas fa-cog fa-spin"></i> Ustawienia
 				</a>
-				<a class="dropdown-item" href="/panel/wyloguj">
+				<a class="dropdown-item" href="{{ route('logout') }}">
 					<i class="fas fa-sign-out-alt"></i> Wyloguj się
 				</a>
 			</div>
 		</li>
 		@endauth
 		
-		@auth
+		@auth('admin')
 		<li class="nav-item mt-2">
 			<button type="button" class="btn btn-danger" disabled><i class="fas fa-user-shield"></i> ADMINISTRATOR</button>
 		</li>
@@ -69,10 +69,10 @@
 		
 		@guest
 		<li class="nav-item mt-2">
-			<a href=" {{ route('loginPage') }}">
+			<a href="{{ route('loginPage') }}">
 				<button type="button" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Zaloguj</button>
 			</a>
-			<a href=" {{ route('registerPage') }} ">
+			<a href="{{ route('registerPage') }}">
 				<button type="button" class="btn btn-primary"><i class="fas fa-globe-europe"></i> Zarejestruj</button>
 			</a>
 		</li>
