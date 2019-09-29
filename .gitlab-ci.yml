@@ -1,8 +1,9 @@
-deploy:
-    stage: deploy
-    only:
-        - master
-deploy:
+image: ubuntu:18.04
+
+before_script:
+  - apt-get update -qy
+  - apt-get install -y lftp
+
+build:
   script:
-    - apt-get update -qq && apt-get install -y -qq lftp
-    - lftp -c "set ftp:ssl-allow no; open -u $USERNAME,$PASSWORD $HOST; mirror -Rev ./ ./  --ignore-time --parallel=10 --exclude-glob .git* --exclude .git/ --exclude README.md --exclude .gitignore --exclude /node_modules --exclude /public/hot --exclude /public/storage --exclude /storage/*.key --exclude /vendor --exclude .env --exclude .env.backup --exclude .phpunit.result.cache --exclude Homestead.json --exclude Homestead.yaml --exclude npm-debug.log --exclude yarn-error.log"
+    - lftp -e "open $HOST; user $USERNAME $PASSWORD; mirror -X .* -X .*/ --reverse --verbose;"
