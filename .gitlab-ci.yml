@@ -6,4 +6,4 @@ before_script:
 
 build:
   script:
-    - lftp -e "open $HOST; user $USERNAME $PASSWORD; mirror -X .* -X .*/ --reverse --verbose;"
+    - lftp -e "set ftp:ssl-allow no; open $HOST; user $USERNAME $PASSWORD; mirror -X .* -X .*/ --reverse --verbose;"
