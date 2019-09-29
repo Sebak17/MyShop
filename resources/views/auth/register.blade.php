@@ -46,5 +46,6 @@
 <script src="{{ asset('js/_auth.signup.js') }}" charset="utf-8"></script>
 <script src="{{ asset('js/_validation.js') }}" charset="utf-8"></script>
 <script src="{{ asset('js/jquery-mask-phone-number.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_search.engine.js') }}" charset="utf-8"></script>
 
 @endsection

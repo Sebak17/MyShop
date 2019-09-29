@@ -75,10 +75,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    window.onload = function () {
-        stickFooter();
-    }
-</script>
+<script src="{{ asset('js/_home.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_search.engine.js') }}" charset="utf-8"></script>
 
 @endsection

@@ -65,7 +65,21 @@ class AuthorizationController extends Controller
         $results = array();
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $results['success'] = true;
+
+            if(auth()->user()->active == 0) {
+                auth()->logout();
+
+                $results['success'] = false;
+                $results['msg'] = "Konto nie jest aktywowane!";
+            } else if(auth()->user()->banned_id != 0 ){
+                auth()->logout();
+
+                $results['success'] = false;
+                $results['msg'] = "Konto jest zablokowane!";
+            } else {
+                $results['success'] = true;
+            }   
+
         } else {
             $results['success'] = false;
             $results['msg'] = "Dane logowania są niepoprawne!";

@@ -22,6 +22,12 @@ Route::get('/not_authorizated', function () {
 	return view('auth.not_authorizated');
 })->name('not_authorizated');
 
+
+
+Route::any('/oferty', 'OffersController@offersPage')->name('offersPage');
+
+
+
 Route::prefix('panel')->group(function () {
 
     Route::get('/', 'PanelController@dashboardPage')->name('panel_main');
@@ -39,6 +45,12 @@ Route::prefix('system')->group(function () {
 
     Route::post('signUp', 'AuthorizationController@signUp')->name('system_signUp');
     Route::get('signUp', function () {
+        return redirect('/');
+    });
+
+
+    Route::post('categoriesList', 'HomeController@loadCategories')->name('system_categoriesList');
+    Route::get('categoriesList', function () {
         return redirect('/');
     });
 });

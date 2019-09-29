@@ -69,10 +69,10 @@
 		
 		@guest
 		<li class="nav-item mt-2">
-			<a href="{{ route('loginPage') }}">
+			<a class="none" href="{{ route('loginPage') }}">
 				<button type="button" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Zaloguj</button>
 			</a>
-			<a href="{{ route('registerPage') }}">
+			<a class="none" href="{{ route('registerPage') }}">
 				<button type="button" class="btn btn-primary"><i class="fas fa-globe-europe"></i> Zarejestruj</button>
 			</a>
 		</li>

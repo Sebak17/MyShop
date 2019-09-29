@@ -1,0 +1,195 @@
+@extends('core.app')
+
+@extends('core.menu')
+
+@section('content')
+
+
+<div class="container-fluid mt-3">
+	<div class="row">
+		<div class="col-sm-12 col-md-10 offset-md-1">
+			<div class="row">
+				
+				<!--
+				<div class="mt-3 col-sm-12 col-md-12 col-xl-11 offset-xl-1 col-lg-12">
+						<div class="card card-body">
+								<ol class="breadcrumb">
+										<li class="breadcrumb-item"><a href="/oferty/?category=0"><i class="fas fa-home"></i></a></li>
+										<li class="breadcrumb-item"><a href="#">Library</a></li>
+										<li class="breadcrumb-item"><a href="#">Library</a></li>
+										<li class="breadcrumb-item"><a href="#">Library</a></li>
+										<li class="breadcrumb-item"><a href="#">Library</a></li>
+										<li class="breadcrumb-item active">Data</li>
+								</ol>
+						</div>
+				</div>
+				-->
+				
+				
+				
+				<div id="left-column" class=" mt-3 col-sm-12 col-md-12 col-xl-3 offset-xl-1 col-lg-4 offset-lg-0">
+					
+					<button class="btn w-100 mb-3" data-toggle="collapse" data-target="#left-column-content">
+					<i class="fas fa-cog 1x"></i> Pokaż opcje
+					</button>
+					
+					<div id="left-column-content" class="collapse show">
+						<div class="card">
+							<div class="card-body">
+								<h5 class="card-title"><i class="fas fa-sitemap"></i> Kategorie</h5>
+								<hr />
+								
+								<div class="mt-1">
+									<table class="col-12">
+										<thead id="categoryBack">
+											<tr class="category category-item-back" category=""><td class="text-center"><i class="fas fa-level-up-alt fa-1x"></i></td><td>cofnij do <b id="prevCategory"></b></td></tr>
+										</thead>
+										<tbody id="categoriesList2">
+											
+										</tbody>
+									</table>
+
+								</div>
+
+							</div>
+						</div>
+						
+						<div class="card mt-3">
+							<div class="card-body">
+								<h5 class="card-title"><i class="fas fa-sitemap"></i> Sortuj według</h5>
+								<hr />
+								
+								<div class="sortList">
+									<select class="custom-select" id="sortType">
+										<option value="1">&nbsp;&nbsp; od najnowszych</option>
+										<option value="2">&nbsp;&nbsp; od najstarszych</option>
+										<option value="3">&nbsp;&nbsp; popularności</option>
+										<option value="4">&nbsp;&nbsp; cena rosnąco</option>
+										<option value="5">&nbsp;&nbsp; cena malejąco</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="card mt-3">
+							<div class="card-body">
+								<h4 class="card-title"><i class="fas fa-filter"></i> Filtry</h4>
+								<hr />
+								
+								<div class="filters">
+									
+									<div class="">
+										<h5><i class="fas fa-money"></i> Cena</h5>
+										<div class="row">
+											<div class="col-5">
+												<input type="number" class="form-control" placeholder="od" id="fl_price1">
+											</div>
+											<div class="col-1 mt-4" style="padding-left: 0px; padding-right: 0px;">
+												<i class="fas fa-minus fa-1x"></i>
+											</div>
+											<div class="col-5">
+												<input type="number" class="form-control" placeholder="do" id="fl_price2">
+											</div>
+										</div>
+									</div>
+									
+									<div id="customFilters">
+									</div>
+									
+									<div class="mt-2">
+										<hr />
+									</div>
+									
+									<div class="mt-2">
+										<div class="row">
+											<div class="col-12">
+												<button type="button" class="btn btn-primary w-100" id="btnFiltersApply">
+												<i class="fas fa-check"></i> Zastosuj
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				<div class="mt-3 col-sm-12 col-md-12 col-xl-8 col-lg-8">
+					<div class="page-header">
+						<h2><i class="fas fa-tasks"></i> Lista ofert</h2>
+					</div>
+					
+					<div class="card">
+						<div class="card-body" id="offersList">
+							
+							<a href="/oferta/acd" class="tdn">
+								<div class="offer-block row pt-3 pb-3 border-top border-bottom">
+									<div class="col-3 col-md-3">
+										<img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="img-thumbnail" alt="Cinque Terre">
+									</div>
+									<div class="col-5 col-md-6">
+										<h4>Obraz 100x50cm</h4>
+										
+										<p class="text-muted mb-1">100 osób kupiło</p>
+									</div>
+									
+									<div class="col-4 col-md-3">
+										<h2 class="mt-2">100.00 zł</h2>
+										
+									</div>
+									
+								</div>
+							</a>
+							
+							<a href="/oferta/abc" class="tdn">
+								<div class="offer-block row pt-3 pb-3 border-top border-bottom">
+									<div class="col-3 col-md-3">
+										<img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="img-thumbnail" alt="Cinque Terre">
+									</div>
+									<div class="col-5 col-md-6">
+										<h4>Obraz 100x50cm</h4>
+										
+										<p class="text-muted mb-1">100 osób kupiło</p>
+									</div>
+									
+									<div class="col-4 col-md-3">
+										<h2 class="mt-2">100.00 zł</h2>
+										
+									</div>
+									
+								</div>
+							</a>
+							
+							<a href="/oferta/das" class="tdn">
+								<div class="offer-block row pt-3 pb-3 border-top border-bottom">
+									<div class="col-3 col-md-3">
+										<img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="img-thumbnail" alt="Cinque Terre">
+									</div>
+									<div class="col-5 col-md-6">
+										<h4>Obraz 100x50cm</h4>
+										
+										<p class="text-muted mb-1">100 osób kupiło</p>
+									</div>
+									
+									<div class="col-4 col-md-3">
+										<h2 class="mt-2">100.00 zł</h2>
+									</div>
+									
+								</div>
+							</a>
+							
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{{ asset('js/_offers.list.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_search.engine.js') }}" charset="utf-8"></script>
+
+@endsection

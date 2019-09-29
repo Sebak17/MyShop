@@ -19,8 +19,13 @@ function loadAuthSignIn() {
         signIn();
     });
 
-    $(document).on('keypress', function (e) {
-        if (e.which == 13)
+    $('#inp_email').keyup(function (event) {
+        if (event.keyCode === 13)
+            signIn();
+    });
+
+    $('#inp_password').keyup(function (event) {
+        if (event.keyCode === 13)
             signIn();
     });
 }
