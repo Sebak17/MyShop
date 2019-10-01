@@ -16,6 +16,10 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/logowanie', 'AuthorizationController@loginPage')->name('loginPage');
 Route::get('/rejestracja', 'AuthorizationController@registerPage')->name('registerPage');
 
+Route::get('/aktywuj_konto', 'AuthorizationController@activeAccountPage')->name('activeAccountPage');
+
+Route::get('/aktywuj_konto/{hash}', 'AuthorizationController@activeAccountCheckPage')->name('activeAccountCheckPage');
+
 Route::any('/wyloguj', 'AuthorizationController@logout')->name('logout');
 
 Route::get('/not_authorizated', function () {
@@ -48,9 +52,13 @@ Route::prefix('system')->group(function () {
         return redirect('/');
     });
 
-
     Route::post('categoriesList', 'HomeController@loadCategories')->name('system_categoriesList');
     Route::get('categoriesList', function () {
+        return redirect('/');
+    });
+
+    Route::post('activateAccountMail', 'AuthorizationController@activateAccountMail')->name('system_activateAccountMail');
+    Route::get('activateAccountMail', function () {
         return redirect('/');
     });
 });

@@ -43,6 +43,20 @@ class AuthorizationController extends Controller
         return view('auth.register');
     }
 
+    public function activeAccountPage() 
+    {
+        return view('auth.active_account');
+    }
+
+    public function activeAccountCheckPage($hash)
+    {
+        if(!Security::checkHash($hash)) {
+            return redirect()->route('activeAccountPage');
+        }
+
+        echo $hash;
+    }
+
     public function signIn(Request $request)
     {
 
@@ -61,8 +75,6 @@ class AuthorizationController extends Controller
 
             return response()->json($results);
         }
-
-        $results = array();
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
@@ -153,8 +165,60 @@ class AuthorizationController extends Controller
             'activationHash' => $hash_2,
         ]);
 
+
+        // TODO - wysyłanie maila
+
         $results['success'] = true;
         $results['msg']     = "Potwierdź swoje konta na email'u!";
+        return response()->json($results);
+    }
+
+    public function activateAccountMail(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'grecaptcha' => new ValidReCaptcha,
+            'email'      => new ValidEMail
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+
+            return response()->json($results);
+        }
+
+        $user = User::where('email', '=', $request->email)->first();
+
+        if (!$user->exists()) {
+            // ERROR - EMAIL NOT FOUND
+            $results['success'] = true;
+            return response()->json($results);
+        }
+
+        if ($user->active != 0) {
+            // ERROR - IS ACTIVE
+            $results['success'] = true;
+            return response()->json($results);
+        }
+
+        if($user->info->activationMailTime > strtotime("now")) {
+            // ERROR - TIME
+            $results['success'] = true;
+            return response()->json($results);
+        }
+
+        $hash = Security::generateChecksum(rand(0, 99999), time(), $request->email, $user->district, $user->city, $user->zipcode, $user->address, $user->firstname, $user->surname, $user->phone);
+
+        $user->info->activationHash = $hash;
+        $user->info->activationMailTime = strtotime("+5 minutes");
+        $user->push();
+
+        // TODO - wysyłanie maila
+
+        $results['success'] = true;
         return response()->json($results);
     }
 

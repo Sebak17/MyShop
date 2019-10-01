@@ -50,6 +50,6 @@ class User extends Authenticatable
 
     public function info()
     {
-        return $this->hasOne('App\Info');
+        return $this->hasOne('App\UserInfo');
     }
 }

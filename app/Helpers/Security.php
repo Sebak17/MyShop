@@ -5,7 +5,7 @@ namespace App\Helpers;
 class Security
 {
 
-	public static function generatePassword($lenght = 10)
+    public static function generatePassword($lenght = 10)
     {
         $alph     = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         $password = array();
@@ -30,5 +30,14 @@ class Security
         return hash("sha256", $r);
     }
 
+    public static function checkHash($hash)
+    {
+
+        if ($hash == '' || preg_match("/^([a-f0-9]{64})$/", $hash) != 1) {
+            return false;
+        }
+
+        return true;
+    }
 
 }
