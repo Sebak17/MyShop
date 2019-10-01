@@ -54,7 +54,24 @@ class AuthorizationController extends Controller
             return redirect()->route('activeAccountPage');
         }
 
-        echo $hash;
+        $user_info = UserInfo::where('activationHash', '=', $hash)->first();
+
+        if ($user_info == null || !$user_info->exists()) {
+            return view('auth.active_account_check')->with('error', 'Kod aktywacyjny jest nieprawidłowy!');
+        }
+
+        $user = $user_info->user;
+
+        if ($user->active != 0) {
+             return view('auth.active_account_check')->with('error', 'Konto jest już aktywne!');
+        }
+
+        $user->active = 1;
+        $user->info->activationHash = null;
+        $user->info->activationMailTime = null;
+        $user->push();
+
+        return view('auth.active_account_check')->with('success', true);
     }
 
     public function signIn(Request $request)
@@ -139,7 +156,7 @@ class AuthorizationController extends Controller
 
         $user = User::create([
             'email'    => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => bcrypt($request->pass),
             'hash'     => $hash_1,
         ]);
         $user->save();
@@ -192,7 +209,7 @@ class AuthorizationController extends Controller
 
         $user = User::where('email', '=', $request->email)->first();
 
-        if (!$user->exists()) {
+        if ($user == null || !$user->exists()) {
             // ERROR - EMAIL NOT FOUND
             $results['success'] = true;
             return response()->json($results);

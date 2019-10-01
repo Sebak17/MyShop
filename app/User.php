@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\UserInfo');
     }
+
+    public function ban() 
+    {
+        return $this->hasOne('App\Ban');
+    }
 }
