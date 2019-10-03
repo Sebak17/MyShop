@@ -1,4 +1,6 @@
-var verifyToken = "";
+var verifyToken = "",
+    isVerifying = false,
+    isRequest = false;
 
 var AlertType = {
     NONE: -1,
@@ -80,9 +82,14 @@ function toObject(ar) {
 }
 
 function generateRecaptchaToken(type) {
+    if(isVerifying) 
+        return;
+
+    isVerifying = true;
     grecaptcha.execute('6Le5WrgUAAAAAPNugal1jOzvPYE4kzFXhMpZxywY', {
         action: type
     }).then(function (token) {
         verifyToken = token;
+        isVerifying = false;
     });
 }

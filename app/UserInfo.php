@@ -12,7 +12,7 @@ class UserInfo extends Model
 	public $timestamps = false;
 
 	protected $fillable = [
-        'user_id', 'firstIP', 'activationHash', 'activationMailTime', 'passwordResetHash', 'passwordResetailTime',
+        'user_id', 'firstIP', 'activationHash', 'activationMailTime', 'passwordResetHash', 'passwordResetMailTime',
     ];
 
 	public function user()

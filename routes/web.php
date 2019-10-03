@@ -20,6 +20,10 @@ Route::get('/aktywuj_konto', 'AuthorizationController@activeAccountPage')->name(
 
 Route::get('/aktywuj_konto/{hash}', 'AuthorizationController@activeAccountCheckPage')->name('activeAccountCheckPage');
 
+Route::get('/resetuj_haslo', 'AuthorizationController@resetPasswordPage')->name('resetPasswordPage');
+
+Route::get('/resetuj_haslo/{hash}', 'AuthorizationController@resetPasswordCheckPage')->name('resetPasswordCheckPage');
+
 Route::any('/wyloguj', 'AuthorizationController@logout')->name('logout');
 
 Route::get('/not_authorizated', function () {
@@ -59,6 +63,16 @@ Route::prefix('system')->group(function () {
 
     Route::post('activateAccountMail', 'AuthorizationController@activateAccountMail')->name('system_activateAccountMail');
     Route::get('activateAccountMail', function () {
+        return redirect('/');
+    });
+
+    Route::post('resetPasswordMail', 'AuthorizationController@resetPasswordMail')->name('system_resetPasswordMail');
+    Route::get('resetPasswordMail', function () {
+        return redirect('/');
+    });
+
+    Route::post('resetPasswordChange', 'AuthorizationController@resetPasswordChange')->name('system_resetPasswordChange');
+    Route::get('resetPasswordChange', function () {
         return redirect('/');
     });
 });

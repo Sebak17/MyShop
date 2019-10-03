@@ -43,14 +43,15 @@ class AuthorizationController extends Controller
         return view('auth.register');
     }
 
-    public function activeAccountPage() 
+    public function activeAccountPage()
     {
         return view('auth.active_account');
     }
 
     public function activeAccountCheckPage($hash)
     {
-        if(!Security::checkHash($hash)) {
+
+        if (!Security::checkHash($hash)) {
             return redirect()->route('activeAccountPage');
         }
 
@@ -63,15 +64,39 @@ class AuthorizationController extends Controller
         $user = $user_info->user;
 
         if ($user->active != 0) {
-             return view('auth.active_account_check')->with('error', 'Konto jest już aktywne!');
+            return view('auth.active_account_check')->with('error', 'Konto jest już aktywne!');
         }
 
-        $user->active = 1;
-        $user->info->activationHash = null;
+        $user->active                   = 1;
+        $user->info->activationHash     = null;
         $user->info->activationMailTime = null;
         $user->push();
 
         return view('auth.active_account_check')->with('success', true);
+    }
+
+    public function resetPasswordPage()
+    {
+        return view('auth.password_reset');
+    }
+
+    public function resetPasswordCheckPage(Request $request, $hash) 
+    {
+        if (!Security::checkHash($hash)) {
+            return redirect()->route('resetPasswordPage');
+        }
+
+        $user_info = UserInfo::where('passwordResetHash', '=', $hash)->first();
+
+        if ($user_info == null || !$user_info->exists()) {
+            return view('auth.active_account_check');
+        }
+
+        $user = $user_info->user;
+
+        $request->session()->put('passResetHash', $hash);
+
+        return view('auth.password_reset_check')->with('success', true);
     }
 
     public function signIn(Request $request)
@@ -95,23 +120,25 @@ class AuthorizationController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
-            if(auth()->user()->active == 0) {
+            if (auth()->user()->active == 0) {
                 auth()->logout();
 
                 $results['success'] = false;
-                $results['msg'] = "Konto nie jest aktywowane!";
-            } else if(auth()->user()->banned_id != 0 ){
+                $results['msg']     = "Konto nie jest aktywowane!";
+            } else
+
+            if (auth()->user()->banned_id != 0) {
                 auth()->logout();
 
                 $results['success'] = false;
-                $results['msg'] = "Konto jest zablokowane!";
+                $results['msg']     = "Konto jest zablokowane!";
             } else {
                 $results['success'] = true;
-            }   
+            }
 
         } else {
             $results['success'] = false;
-            $results['msg'] = "Dane logowania są niepoprawne!";
+            $results['msg']     = "Dane logowania są niepoprawne!";
         }
 
         return response()->json($results);
@@ -165,7 +192,7 @@ class AuthorizationController extends Controller
             'user_id'  => $user->id,
             'district' => $request->district,
             'city'     => $request->city,
-            'zipcode' => $request->zipcode,
+            'zipcode'  => $request->zipcode,
             'address'  => $request->address,
         ]);
 
@@ -182,7 +209,6 @@ class AuthorizationController extends Controller
             'activationHash' => $hash_2,
         ]);
 
-
         // TODO - wysyłanie maila
 
         $results['success'] = true;
@@ -194,7 +220,7 @@ class AuthorizationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'grecaptcha' => new ValidReCaptcha,
-            'email'      => new ValidEMail
+            'email'      => new ValidEMail,
         ]);
 
         $results = array();
@@ -221,7 +247,7 @@ class AuthorizationController extends Controller
             return response()->json($results);
         }
 
-        if($user->info->activationMailTime > strtotime("now")) {
+        if ($user->info->activationMailTime > strtotime("now")) {
             // ERROR - TIME
             $results['success'] = true;
             return response()->json($results);
@@ -229,11 +255,104 @@ class AuthorizationController extends Controller
 
         $hash = Security::generateChecksum(rand(0, 99999), time(), $request->email, $user->district, $user->city, $user->zipcode, $user->address, $user->firstname, $user->surname, $user->phone);
 
-        $user->info->activationHash = $hash;
+        $user->info->activationHash     = $hash;
         $user->info->activationMailTime = strtotime("+5 minutes");
         $user->push();
 
         // TODO - wysyłanie maila
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function resetPasswordMail(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'grecaptcha' => new ValidReCaptcha,
+            'email'      => new ValidEMail,
+            'phone'      => new ValidPhoneNumber,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+
+            return response()->json($results);
+        }
+
+        $user = User::where('email', '=', $request->email)->first();
+
+        if ($user == null || !$user->exists()) {
+            $results['success'] = true;
+            $results['debug'] = "EMAIL NOT FOUND";
+            return response()->json($results);
+        }
+
+        if($user->personal->phoneNumber != $request->phone) {
+            $results['success'] = true;
+            $results['debug'] = "PHONE INCORRECT";
+            return response()->json($results);
+        }
+
+        if ($user->info->passwordResetMailTime > strtotime("now")) {
+            $results['success'] = true;
+            $results['debug'] = "TIME NOT REMAIN";
+            return response()->json($results);
+        }
+
+        $hash = Security::generateChecksum(rand(0, 99999), time(), "QWEE", $user->surname, $request->email, $user->district, $user->city, $user->zipcode, $user->phone, $user->address, $user->firstname);
+
+        $user->info->passwordResetHash     = $hash;
+        $user->info->passwordResetMailTime = strtotime("+5 minutes");
+        $user->push();
+
+        // TODO - wysyłanie maila
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function resetPasswordChange(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'grecaptcha' => new ValidReCaptcha,
+            'password'      => new ValidPassword
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+
+            return response()->json($results);
+        }
+
+        if (!$request->session()->exists('passResetHash')) {
+            $results['success'] = false;
+            $results['msg'] = "Kod autoryzacji jest nieprawidłowy!";
+            return response()->json($results);
+        }
+
+        $hash = $request->session()->get('passResetHash');
+
+        $user_info = UserInfo::where('passwordResetHash', '=', $hash)->first();
+
+        if ($user_info == null || !$user_info->exists()) {
+           $results['success'] = false;
+            $results['msg'] = "Kod autoryzacji jest nieprawidłowy!";
+            return response()->json($results);
+        }
+
+        $user = $user_info->user;
+
+        $user->info->passwordResetMailTime = null;
+        $user->push();
+
 
         $results['success'] = true;
         return response()->json($results);

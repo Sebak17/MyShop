@@ -22,6 +22,7 @@
 		<script src="{{ asset('js/jquery-3.4.1.min.js') }}" charset="utf-8"></script>
 		<script src="{{ asset('js/bootstrap-4.3.1.min.js') }}" charset="utf-8"></script>
 
+		<script src="{{ asset('js/_lang.js') }}" charset="utf-8"></script>
 		<script src="{{ asset('js/_utils.js') }}" charset="utf-8"></script>
 		
 	</head>

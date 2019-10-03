@@ -51,7 +51,7 @@
                         </div>
                         
                         <div class="col text-center">
-                            <a href="/panel/resetujhaslo"><i class="fas fa-key"></i> Zresetuj hasło</a>
+                            <a href="{{ route('resetPasswordPage') }}"><i class="fas fa-key"></i> Zresetuj hasło</a>
                         </div>
                         
                     </div>

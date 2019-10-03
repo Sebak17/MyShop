@@ -21,7 +21,7 @@ class CreateUsersInfo extends Migration
             $table->string('activationHash', 64)->nullable();
             $table->integer('activationMailTime')->nullable();
             $table->string('passwordResetHash', 64)->nullable();
-            $table->integer('passwordResetailTime')->nullable();
+            $table->integer('passwordResetMailTime')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
         });
