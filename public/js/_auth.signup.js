@@ -19,12 +19,6 @@ grecaptcha.ready(function () {
     generateRecaptchaToken('login');
 });
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
 function loadAuthSignUp() {
 
     $(document).on('keypress', function (e) {
@@ -93,17 +87,17 @@ function registerProccess_1() {
     let pass2 = $("#inp_password2").val();
 
     if (!validateEmail(email)) {
-        showAlert(AlertType.ERROR, "Email jest niepoprawny!");
+        showAlert(AlertType.ERROR, Lang.EMAIL_INCORRECT);
         return;
     }
 
     if (!validatePassword(pass1)) {
-        showAlert(AlertType.ERROR, "Hasło ma błędną długość! Poprawna długość: 4-30");
+        showAlert(AlertType.ERROR, Lang.PASSWORD_NOT_IN_RANGE);
         return;
     }
 
     if (pass1 !== pass2) {
-        showAlert(AlertType.ERROR, "Hasła nie zgadzają się!");
+        showAlert(AlertType.ERROR, Lang.PASSWORDS_NOT_MATCH);
         return;
     }
 
@@ -126,27 +120,27 @@ function registerProccess_2() {
     phone = phone.replace(/\s+/g, "");
 
     if (!validatePersonalNameLength(fname)) {
-        showAlert(AlertType.ERROR, "Imię ma błędną długość! Poprawna długość: 3-16");
+        showAlert(AlertType.ERROR, Lang.FIRSTNAME_NOT_IN_RANGE);
         return;
     }
 
     if (!validatePersonalNameString(fname)) {
-        showAlert(AlertType.ERROR, "Imię może zawierać tylko litery!");
+        showAlert(AlertType.ERROR, Lang.FIRSTNAME_ONLY_LETTERS);
         return;
     }
 
     if (!validatePersonalNameLength(sname)) {
-        showAlert(AlertType.ERROR, "Nazwisko ma błędną długość! Poprawna długość: 3-16");
+        showAlert(AlertType.ERROR, Lang.SURNAME_NOT_IN_RANGE);
         return;
     }
 
     if (!validatePersonalNameString(sname)) {
-        showAlert(AlertType.ERROR, "Nazwisko może zawierać tylko litery!");
+        showAlert(AlertType.ERROR, Lang.SURNAME_ONLY_LETTERS);
         return;
     }
 
     if (!validatePhone(phone)) {
-        showAlert(AlertType.ERROR, "Błędny numer telefonu!");
+        showAlert(AlertType.ERROR, Lang.PHONENUMBER_INCORRECT);
         return;
     }
 
@@ -169,32 +163,32 @@ function registerProccess_3() {
     zipcode = zipcode.replace(/\s+/g, "");
 
     if (!validateDistrict(district)) {
-        showAlert(AlertType.ERROR, "Błędne województwo!");
+        showAlert(AlertType.ERROR, Lang.DISTRICT_INCORRECT);
         return;
     }
 
     if (!validateCityLength(city)) {
-        showAlert(AlertType.ERROR, "Miasto ma błędną długość! Poprawna długość: 2-32");
+        showAlert(AlertType.ERROR, Lang.CITY_NOT_IN_RANGE);
         return;
     }
 
     if (!validateCityString(city)) {
-        showAlert(AlertType.ERROR, "Miasto ma błędną nazwę!");
+        showAlert(AlertType.ERROR, Lang.CITY_NAME_INCORRECT);
         return;
     }
 
     if (!validateZipCode(zipcode)) {
-        showAlert(AlertType.ERROR, "Błędny kod pocztowy!");
+        showAlert(AlertType.ERROR, Lang.ZIPCODE_INCORRECT);
         return;
     }
 
     if (!validateAdressLength(address)) {
-        showAlert(AlertType.ERROR, "Adres ma błędną długość! Poprawna długość: 2-40");
+        showAlert(AlertType.ERROR, Lang.ADDRESS_NOT_IN_RANGE);
         return;
     }
 
     if (!validateAdressString(address)) {
-        showAlert(AlertType.ERROR, "Adres jest nie poprawny!");
+        showAlert(AlertType.ERROR, Lang.ADDRESS_NAME_INCORRECT);
         return;
     }
 

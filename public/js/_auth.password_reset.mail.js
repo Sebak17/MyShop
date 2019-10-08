@@ -20,27 +20,34 @@ grecaptcha.ready(function () {
     generateRecaptchaToken('login');
 });
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
 function emailResetPassword() {
+    if (isRequest) {
+        showAlert(AlertType.ERROR, Lang.REQUEST_IN_PROGRESS);
+        return;
+    }
+
     let email = $("#inp_email").val();
     let phone = $("#inp_phone").val();
 
     if (!validateEmail(email)) {
-        showAlert(AlertType.ERROR, 'Błędny adres email!');
+        showAlert(AlertType.ERROR, Lang.EMAIL_INCORRECT);
         return;
     }
 
     if (!validatePhone(phone)) {
-        showAlert(AlertType.ERROR, 'Błędny numer telefonu!');
+        showAlert(AlertType.ERROR, Lang.PHONENUMBER_INCORRECT);
         return;
     }
 
-    showAlert(AlertType.LOADING, 'Trwa wysyłanie...');
+    if (!validateRecaptcha()) {
+        showAlert(AlertType.ERROR, Lang.RECATPCHA_VERIFYING);
+        if (!isVerifying)
+            generateRecaptchaToken('login');
+        return;
+    }
+
+    isRequest = true;
+    showAlert(AlertType.LOADING, Lang.FORM_SENDING);
 
     $.ajax({
         url: "/system/resetPasswordMail",
@@ -53,17 +60,22 @@ function emailResetPassword() {
         success: function (data) {
             try {
                 if (data.success == true) {
-                    showAlert(AlertType.SUCCESS, 'Jeśli email jest prawidłowy, wiadomość została wysłana!');
+                    $("#inp_phone").val("");
+                    showAlert(AlertType.SUCCESS, Lang.REQUEST_EMAIL_SENT);
                 } else {
                     generateRecaptchaToken('login');
                     showAlert(AlertType.ERROR, data.msg);
                 }
             } catch (e) {
-                showAlert(AlertType.ERROR, 'Wystąpił błąd podczas wysyłania!');
+                showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR);
             }
         },
         error: function () {
-            showAlert(AlertType.ERROR, 'Wystąpił błąd podczas wysyłania!');
+            showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR);
+        },
+        complete: function () {
+            verifyToken = "";
+            isRequest = false;
         }
     });
 }

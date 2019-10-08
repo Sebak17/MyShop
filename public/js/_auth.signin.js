@@ -8,12 +8,6 @@ grecaptcha.ready(function () {
     generateRecaptchaToken('login');
 });
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
 function loadAuthSignIn() {
     $("#btnLogin").click(function () {
         signIn();
@@ -31,25 +25,33 @@ function loadAuthSignIn() {
 }
 
 function signIn() {
+    if (isRequest) {
+        showAlert(AlertType.ERROR, Lang.REQUEST_IN_PROGRESS);
+        return;
+    }
+
     let d_email = $("#inp_email").val();
     let d_password = $("#inp_password").val();
 
     if (!validateEmail(d_email)) {
-        showAlert(AlertType.ERROR, 'Błędny adres email!');
+        showAlert(AlertType.ERROR, Lang.EMAIL_INCORRECT);
         return;
     }
 
-    if (d_password.length < 4) {
-        showAlert(AlertType.ERROR, 'Błędne hasło!');
+    if (!validatePassword(d_password)) {
+        showAlert(AlertType.ERROR, Lang.PASSWORD_NOT_IN_RANGE);
         return;
     }
 
-    if (verifyToken.length < 4) {
-        showAlert(AlertType.ERROR, 'Błędny token!');
+    if(!validateRecaptcha()) {
+        showAlert(AlertType.ERROR, Lang.RECATPCHA_VERIFYING);
+        if(!isVerifying)
+            generateRecaptchaToken('login');
         return;
     }
 
-    showAlert(AlertType.LOADING, 'Trwa logowanie...');
+    isRequest = true;
+    showAlert(AlertType.LOADING, Lang.LOGIN_IN_PROGRESS);
 
     $.ajax({
         url: "/system/signIn",
@@ -62,19 +64,23 @@ function signIn() {
         success: function (data) {
             try {
                 if (data.success == true) {
-                    showAlert(AlertType.SUCCESS, 'Zalogowano pomyślnie!');
+                    showAlert(AlertType.SUCCESS, Lang.LOGIN_SUCCESS);
                     window.location.href = "/panel";
                 } else {
-                    $("#password").val("");
+                    $("#inp_password").val("");
                     generateRecaptchaToken('login');
                     showAlert(AlertType.ERROR, data.msg);
                 }
             } catch (e) {
-                showAlert(AlertType.ERROR, 'Wystąpił błąd podczas logowania!');
+                showAlert(AlertType.ERROR, Lang.LOGIN_ERROR);
             }
         },
         error: function () {
-            showAlert(AlertType.ERROR, 'Wystąpił błąd podczas logowania!');
+            showAlert(AlertType.ERROR, Lang.LOGIN_ERROR);
+        },
+        complete: function() {
+            verifyToken = "";
+            isRequest = false;
         }
     });
 }

@@ -17,12 +17,6 @@ $(document).ready(function () {
     });
 });
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
 function parseURL() {
     let url = new URL(window.location.href);
 
@@ -71,9 +65,6 @@ function applyFilters() {
 
 
     window.location.href = generateURL();
-    // window.history.pushState('', 'MojeZakupy', generateURL());
-
-    loadOffers();
 }
 
 function generateURL() {
@@ -160,17 +151,17 @@ function loadOffers() {
                     $("#offersList").html(data.offers);
                 } else {
                     $("#offersList").html(String.raw `<div class="alert hidden" id="alert"></div>`);
-                    showAlert(1, '<i class="fa fa-exclamation" aria-hidden="true"></i> ' + data.msg);
+                    showAlert(AlertType.ERROR, data.msg);
                 }
 
             } catch (e) {
                 $("#offersList").html(String.raw `<div class="alert hidden" id="alert"></div>`);
-                showAlert(1, '<i class="fa fa-exclamation" aria-hidden="true"></i> Wystąpił błąd podczas ładowania ofert!');
+                showAlert(AlertType.ERROR, Lang.OFFERSLIST_ERROR_LOADING);
             }
         },
         error: function () {
             $("#offersList").html(String.raw `<div class="alert hidden" id="alert"></div>`);
-            showAlert(1, '<i class="fa fa-exclamation" aria-hidden="true"></i> Wystąpił błąd podczas ładowania ofert!');
+            showAlert(AlertType.ERROR, Lang.OFFERSLIST_ERROR_LOADING);
         }
     });
 

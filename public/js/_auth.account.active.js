@@ -1,7 +1,7 @@
-window.onload = function() {
-	stickFooter();
+window.onload = function () {
+    stickFooter();
 
-	$("#btnActive").click(function () {
+    $("#btnActive").click(function () {
         emailActivation();
     });
 
@@ -15,46 +15,56 @@ grecaptcha.ready(function () {
     generateRecaptchaToken('login');
 });
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
 function emailActivation() {
-	let email = $("#inp_email").val();
-
-    if (!validateEmail(email)) {
-        showAlert(AlertType.ERROR, 'Błędny adres email!');
+    if (isRequest) {
+        showAlert(AlertType.ERROR, Lang.REQUEST_IN_PROGRESS);
         return;
     }
 
-    showAlert(AlertType.LOADING, 'Trwa sprawdzanie danych...');
+    let email = $("#inp_email").val();
+
+    if (!validateEmail(email)) {
+        showAlert(AlertType.ERROR, Lang.EMAIL_INCORRECT);
+        return;
+    }
+
+    if (!validateRecaptcha()) {
+        showAlert(AlertType.ERROR, Lang.RECATPCHA_VERIFYING);
+        if (!isVerifying)
+            generateRecaptchaToken('login');
+        return;
+    }
+
+    isRequest = true;
+    showAlert(AlertType.LOADING, Lang.FORM_SENDING);
 
     $.ajax({
         url: "/system/activateAccountMail",
         method: "POST",
         data: {
             email: email,
-			grecaptcha: verifyToken
+            grecaptcha: verifyToken
         },
-        success: function(data) {
+        success: function (data) {
             try {
                 if (data.success == true) {
-                	$("#inp_email").val("");
-                    showAlert(AlertType.SUCCESS, 'Jeśli email jest prawidłowy, wiadomość została wysłana!');
+                    $("#inp_email").val("");
+                    showAlert(AlertType.SUCCESS, Lang.REQUEST_EMAIL_SENT);
                 } else {
-                	 generateRecaptchaToken('login');
-                	
+                    generateRecaptchaToken('login');
                     showAlert(AlertType.ERROR, data.msg);
                 }
 
             } catch (e) {
-                showAlert(AlertType.ERROR, 'Wystąpił błąd podczas wysyłania!');
+                showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR);
             }
         },
-        error: function() {
-            showAlert(AlertType.ERROR, 'Wystąpił błąd podczas wysyłania!');
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR);
+        },
+        complete: function () {
+            verifyToken = "";
+            isRequest = false;
         }
     });
 }
