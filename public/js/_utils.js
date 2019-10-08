@@ -2,6 +2,12 @@ var verifyToken = "",
     isVerifying = false,
     isRequest = false;
 
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 var AlertType = {
     NONE: -1,
     SUCCESS: 1,
