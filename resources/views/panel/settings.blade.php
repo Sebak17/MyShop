@@ -37,7 +37,7 @@
 					<input type="number" class="form-control" id="inp_data_phone" maxlength="9" value="{{ Auth::user()->personal->phoneNumber }}">
 				</div>
 				<div class="form-group">
-					<button type="button" class="btn btn-primary float-right" id="btn_changeData0">
+					<button type="button" class="btn btn-primary float-right" id="btn_changeDataPersonal">
 					<i class="fa fa-wrench"></i> Zmień dane
 					</button>
 				</div>
@@ -92,7 +92,7 @@
 				
 				
 				<div class="form-group">
-					<button type="button" class="btn btn-primary float-right" id="btn_changeData1">
+					<button type="button" class="btn btn-primary float-right" id="btn_changeDataLocation">
 					<i class="fa fa-wrench"></i> Zmień dane
 					</button>
 				</div>

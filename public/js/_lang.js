@@ -35,5 +35,12 @@ var Lang = {
     LOGIN_ERROR: "Wystąpił błąd podczas logowania!",
     LOGIN_SUCCESS: "Zalogowano pomyślnie!",
 
+    SETTINGS_DATA_IN_PROGRESS: "Trwa zmiana danych...",
+    SETTINGS_DATA_SUCCESS: "Dane zostały zmienione!",
+    SETTINGS_DATA_ERROR: "Wystąpił błąd podczas zmieniania!",
+
+    SETTINGS_PASSWORD_IN_PROGRESS: "Trwa zmienianie hasła...",
+    SETTINGS_PASSWORD_SUCCESS: "Hasło zostało zmienione!",
+
     OFFERSLIST_ERROR_LOADING: "Wystąpił błąd podczas ładowania ofert!",
 };

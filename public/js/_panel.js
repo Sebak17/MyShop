@@ -1,164 +1,198 @@
 function loadSite_Settings() {
-    $("#btn_changeData0").click(function() {
-        settings_changeData0();
+    $("#btn_changeDataPersonal").click(function () {
+        settings_changeDataPersonal();
     });
 
-    $("#btn_changeData1").click(function() {
-        settings_changeData1();
+    $("#btn_changeDataLocation").click(function () {
+        settings_changeDataLocation();
     });
 
-    $("#btn_changePass").click(function() {
+    $("#btn_changePass").click(function () {
         settings_changePass();
     });
 }
 
-function settings_changeData0() {
+function settings_changeDataPersonal() {
 
-	let d_fname = $("#inp_data_fname").val();
-	let d_sname = $("#inp_data_sname").val();
-	let d_phone = $("#inp_data_phone").val();
+    if (isRequest) {
+        showAlert(AlertType.ERROR, Lang.REQUEST_IN_PROGRESS, '#alert01');
+        return;
+    }
 
-	d_fname = d_fname.replace(/\s+/g, "");
+    let d_fname = $("#inp_data_fname").val();
+    let d_sname = $("#inp_data_sname").val();
+    let d_phone = $("#inp_data_phone").val();
+
+    d_fname = d_fname.replace(/\s+/g, "");
     d_sname = d_sname.replace(/\s+/g, "");
+    d_phone = d_phone.replace(/\s+/g, "");
 
-    if (d_fname.length < 3 || d_fname.length > 16) {
-        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Imię ma błędną długość! Poprawna długość: 3-16`, '#alert01');
+    if (!validatePersonalNameLength(d_fname)) {
+        showAlert(AlertType.ERROR, Lang.FIRSTNAME_NOT_IN_RANGE, '#alert01');
         return;
     }
 
-    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/.test(d_fname)) {
-        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Imię może zawierać tylko litery!`, '#alert01');
+    if (!validatePersonalNameString(d_fname)) {
+        showAlert(AlertType.ERROR, Lang.FIRSTNAME_ONLY_LETTERS, '#alert01');
         return;
     }
 
-    if (d_sname.length < 3 || d_sname.length > 16) {
-        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Nazwisko ma błędną długość! Poprawna długość: 3-16`, '#alert01');
+    if (!validatePersonalNameLength(d_sname)) {
+        showAlert(AlertType.ERROR, Lang.SURNAME_NOT_IN_RANGE, '#alert01');
         return;
     }
 
-    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/.test(d_sname)) {
-        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Nazwisko może zawierać tylko litery!`, '#alert01');
+    if (!validatePersonalNameString(d_sname)) {
+        showAlert(AlertType.ERROR, Lang.SURNAME_ONLY_LETTERS, '#alert01');
         return;
     }
 
-    if (d_phone.length != 9 || isNaN(parseInt(d_phone))) {
-        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Błędny numer telefonu!`, '#alert01');
+    if (!validatePhone(d_phone)) {
+        showAlert(AlertType.ERROR, Lang.PHONENUMBER_INCORRECT, '#alert01');
         return;
     }
 
-	showAlert(2, String.raw`<i class="fas fa-circle-notch fa-spin"></i> Trwa zmiana danych...`, '#alert01');
+    isRequest = true;
+    showAlert(AlertType.LOADING, Lang.SETTINGS_DATA_IN_PROGRESS, '#alert01');
 
-	$.ajax({
+    $.ajax({
         url: "/system/panelChangeDataPersonal",
         method: "POST",
         data: {
-			fname: d_fname,
-			sname: d_sname,
-			phone: d_phone
+            fname: d_fname,
+            sname: d_sname,
+            phone: d_phone
         },
-        success: function(data) {
+        success: function (data) {
             try {
-                data = JSON.parse(data);
-
                 if (data.success == true) {
-                    showAlert(0, String.raw`<i class="fas fa-check"></i> Dane zostały zmienione!`, '#alert01');
-					window.location.href = "/panel/ustawienia";
+                    showAlert(AlertType.SUCCESS, Lang.SETTINGS_DATA_SUCCESS, '#alert01');
+                    window.location.href = "/panel/ustawienia";
                 } else {
                     if (data.msg != '')
-                        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> ` + data.msg, '#alert01');
+                        showAlert(AlertType.ERROR, data.msg, '#alert01');
                     else
-                        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Wystąpił błąd podczas zmieniania!`, '#alert01');
+                        showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert01');
                 }
             } catch (e) {
-                showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Wystąpił błąd podczas zmieniania!`, '#alert01');
+                showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert01');
             }
         },
-        error: function() {
-            showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Wystąpił błąd podczas zmieniania!`, '#alert01');
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert01');
+        },
+        complete: function () {
+            isRequest = false;
         }
     });
 }
 
-function settings_changeData1() {
+function settings_changeDataLocation() {
 
-	let d_district = $("#inp_data_district").val();
+    if (isRequest) {
+        showAlert(AlertType.ERROR, Lang.REQUEST_IN_PROGRESS, '#alert02');
+        return;
+    }
+
+    let d_district = $("#inp_data_district").val();
     let d_city = $("#inp_data_city").val();
     let d_zipcode = $("#inp_data_zipcode").val();
     let d_address = $("#inp_data_address").val();
 
-	d_zipcode = d_zipcode.replace(/\s+/g, "");
+    d_zipcode = d_zipcode.replace(/\s+/g, "");
 
-    if (d_district > 16 || d_district < 1) {
-        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Błędne województwo!`);
+    if (!validateDistrict(d_district)) {
+        showAlert(AlertType.ERROR, Lang.DISTRICT_INCORRECT, '#alert02');
         return;
     }
 
-    if (d_city.length < 2 || d_city.length > 32) {
-        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Miasto ma błędną długość! Poprawna długość: 2-32`, '#alert02');
+    if (!validateCityLength(d_city)) {
+        showAlert(AlertType.ERROR, Lang.CITY_NOT_IN_RANGE, '#alert02');
         return;
     }
 
-    if (!/\b\d{2}-\d{3}\b/.test(d_zipcode)) {
-        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Błędny kod pocztowy!`, '#alert02');
+    if (!validateCityString(d_city)) {
+        showAlert(AlertType.ERROR, Lang.CITY_NAME_INCORRECT, '#alert02');
         return;
     }
 
-    if (d_address.length < 4 || d_address.length > 40) {
-        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Adres ma błędną długość! Poprawna długość: 2-40`, '#alert02');
+    if (!validateZipCode(d_zipcode)) {
+        showAlert(AlertType.ERROR, Lang.ZIPCODE_INCORRECT, '#alert02');
         return;
     }
 
-	showAlert(2, String.raw`<i class="fas fa-circle-notch fa-spin"></i> Trwa zmiana danych...`, '#alert02');
+    if (!validateAdressLength(d_address)) {
+        showAlert(AlertType.ERROR, Lang.ADDRESS_NOT_IN_RANGE, '#alert02');
+        return;
+    }
 
-	$.ajax({
+    if (!validateAdressString(d_address)) {
+        showAlert(AlertType.ERROR, Lang.ADDRESS_NAME_INCORRECT, '#alert02');
+        return;
+    }
+
+    isRequest = true;
+    showAlert(AlertType.LOADING, Lang.SETTINGS_DATA_IN_PROGRESS, '#alert02');
+
+    $.ajax({
         url: "/system/panelChangeDataLocation",
         method: "POST",
         data: {
-			district: d_district,
-			city: d_city,
-			zipcode: d_zipcode,
-			address: d_address
+            district: d_district,
+            city: d_city,
+            zipcode: d_zipcode,
+            address: d_address
         },
-        success: function(data) {
+        success: function (data) {
             try {
                 data = JSON.parse(data);
 
                 if (data.success == true) {
-                    showAlert(0, String.raw`<i class="fas fa-check"></i> Dane zostały zmienione!`, '#alert02');
-					window.location.href = "/panel/ustawienia";
+                    showAlert(AlertType.SUCCESS, Lang.SETTINGS_DATA_SUCCESS, '#alert02');
+                    window.location.href = "/panel/ustawienia";
                 } else {
                     if (data.msg != '')
-                        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> ` + data.msg, '#alert02');
+                        showAlert(AlertType.ERROR, data.msg, '#alert02');
                     else
-                        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Wystąpił błąd podczas zmieniania!`, '#alert02');
+                        showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert02');
                 }
             } catch (e) {
-                showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Wystąpił błąd podczas zmieniania!`, '#alert02');
+                showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert02');
             }
         },
-        error: function() {
-            showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Wystąpił błąd podczas zmieniania!`, '#alert02');
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert02');
+        },
+        complete: function () {
+            isRequest = false;
         }
     });
 }
 
 function settings_changePass() {
 
+    if (isRequest) {
+        showAlert(AlertType.ERROR, Lang.REQUEST_IN_PROGRESS, '#alert03');
+        return;
+    }
+
     let d_pass0 = $("#inp_pass0").val();
     let d_pass1 = $("#inp_pass1").val();
     let d_pass2 = $("#inp_pass2").val();
 
     if (d_pass1.length < 4 || d_pass1.length > 20) {
-        showAlert(1, String.raw`<i class="fas fa-check"></i> Hasło ma błędną długość! Poprawna długość: 4-20`, '#alert03');
+        showAlert(AlertType.ERROR, Lang.PASSWORD_NOT_IN_RANGE, '#alert03');
         return;
     }
 
     if (d_pass1 !== d_pass2) {
-        showAlert(1, String.raw`<i class="fas fa-check"></i> Hasła nie zgadzają się!`, '#alert03');
+        showAlert(AlertType.ERROR, Lang.PASSWORDS_NOT_MATCH,'#alert03');
         return;
     }
 
-    showAlert(2, String.raw`<i class="fas fa-circle-notch fa-spin"></i> Trwa zmienianie hasła...`, '#alert03');
+    isRequest = true;
+    showAlert(AlertType.LOADING, Lang.SETTINGS_PASSWORD_IN_PROGRESS, '#alert03');
+
 
     $.ajax({
         url: "/system/panelChangePassword",
@@ -167,7 +201,7 @@ function settings_changePass() {
             pass0: d_pass0,
             pass1: d_pass1
         },
-        success: function(data) {
+        success: function (data) {
             try {
                 data = JSON.parse(data);
 
@@ -175,19 +209,22 @@ function settings_changePass() {
                     $("#inp_pass0").val("");
                     $("#inp_pass1").val("");
                     $("#inp_pass2").val("");
-                    showAlert(0, String.raw`<i class="fas fa-check"></i> Hasło zostało zmienione!`, '#alert03');
+                    showAlert(AlertType.SUCCESS, Lang.SETTINGS_PASSWORD_SUCCESS, '#alert03');
                 } else {
                     if (data.msg != '')
-                        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> ` + data.msg, '#alert03');
+                        showAlert(AlertType.ERROR, data.msg, '#alert03');
                     else
-                        showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Wystąpił błąd podczas zmieniania!`, '#alert03');
+                        showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert03');
                 }
             } catch (e) {
-                showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Wystąpił błąd podczas zmieniania!`, '#alert03');
+                showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert03');
             }
         },
-        error: function() {
-            showAlert(1, String.raw`<i class="fas fa-exclamation"></i> Wystąpił błąd podczas zmieniania!`, '#alert03');
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert03');
+        },
+        complete: function () {
+            isRequest = false;
         }
     });
 
