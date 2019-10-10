@@ -3,6 +3,7 @@ var Lang = {
 
     PASSWORDS_NOT_MATCH: "Hasła się nie zgadzają!",
     PASSWORD_NOT_IN_RANGE: "Hasło ma błędną długość! Poprawna długość: 4-30",
+    PASSWORDS_IDENTICAL: "Nowe hasło jest identyczne z poprzednim!",
 
     EMAIL_INCORRECT: "Adres e-mail jest niepoprawny!",
     

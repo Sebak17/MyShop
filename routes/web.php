@@ -76,3 +76,22 @@ Route::prefix('system')->group(function () {
         return redirect('/');
     });
 });
+
+Route::prefix('systemUser')->group(function () {
+
+    Route::post('changeDataPersonal', 'PanelSystemController@changeDataPersonal')->name('systemUser_changeDataPersonal');
+    Route::get('changeDataPersonal', function () {
+        return redirect('/');
+    });
+
+    Route::post('changeDataLocation', 'PanelSystemController@changeDataLocation')->name('systemUser_changeDataLocation');
+    Route::get('changeDataLocation', function () {
+        return redirect('/');
+    });
+
+    Route::post('changePassword', 'PanelSystemController@changePassword')->name('systemUser_changePassword');
+    Route::get('changePassword', function () {
+        return redirect('/');
+    });
+
+});

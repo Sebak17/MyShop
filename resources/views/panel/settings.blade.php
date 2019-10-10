@@ -130,6 +130,7 @@
 	</div>
 </div>
 
+<script src="{{ asset('js/_validation.js') }}" charset="utf-8"></script>
 <script type="text/javascript">
 	window.onload = function() {
 		settings_selectDistrict({{ Auth::user()->location->district }});

@@ -8,7 +8,7 @@ function loadSite_Settings() {
     });
 
     $("#btn_changePass").click(function () {
-        settings_changePass();
+        settings_changePassword();
     });
 }
 
@@ -56,7 +56,7 @@ function settings_changeDataPersonal() {
     showAlert(AlertType.LOADING, Lang.SETTINGS_DATA_IN_PROGRESS, '#alert01');
 
     $.ajax({
-        url: "/system/panelChangeDataPersonal",
+        url: "/systemUser/changeDataPersonal",
         method: "POST",
         data: {
             fname: d_fname,
@@ -69,7 +69,7 @@ function settings_changeDataPersonal() {
                     showAlert(AlertType.SUCCESS, Lang.SETTINGS_DATA_SUCCESS, '#alert01');
                     window.location.href = "/panel/ustawienia";
                 } else {
-                    if (data.msg != '')
+                    if (typeof data.msg != 'undefined' && data.msg != '')
                         showAlert(AlertType.ERROR, data.msg, '#alert01');
                     else
                         showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert01');
@@ -135,7 +135,7 @@ function settings_changeDataLocation() {
     showAlert(AlertType.LOADING, Lang.SETTINGS_DATA_IN_PROGRESS, '#alert02');
 
     $.ajax({
-        url: "/system/panelChangeDataLocation",
+        url: "/systemUser/changeDataLocation",
         method: "POST",
         data: {
             district: d_district,
@@ -145,13 +145,11 @@ function settings_changeDataLocation() {
         },
         success: function (data) {
             try {
-                data = JSON.parse(data);
-
                 if (data.success == true) {
                     showAlert(AlertType.SUCCESS, Lang.SETTINGS_DATA_SUCCESS, '#alert02');
                     window.location.href = "/panel/ustawienia";
                 } else {
-                    if (data.msg != '')
+                    if (typeof data.msg != 'undefined' && data.msg != '')
                         showAlert(AlertType.ERROR, data.msg, '#alert02');
                     else
                         showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert02');
@@ -169,49 +167,55 @@ function settings_changeDataLocation() {
     });
 }
 
-function settings_changePass() {
+function settings_changePassword() {
 
     if (isRequest) {
         showAlert(AlertType.ERROR, Lang.REQUEST_IN_PROGRESS, '#alert03');
         return;
     }
 
-    let d_pass0 = $("#inp_pass0").val();
-    let d_pass1 = $("#inp_pass1").val();
-    let d_pass2 = $("#inp_pass2").val();
+    let d_pass_old = $("#inp_pass0").val();
+    let d_pass_new1 = $("#inp_pass1").val();
+    let d_pass_new2 = $("#inp_pass2").val();
 
-    if (d_pass1.length < 4 || d_pass1.length > 20) {
+    if (!validatePassword(d_pass_new1)) {
         showAlert(AlertType.ERROR, Lang.PASSWORD_NOT_IN_RANGE, '#alert03');
         return;
     }
 
-    if (d_pass1 !== d_pass2) {
+    if (d_pass_new1 !== d_pass_new2) {
         showAlert(AlertType.ERROR, Lang.PASSWORDS_NOT_MATCH,'#alert03');
+        return;
+    }
+
+    if(d_pass_old === d_pass_new1) {
+        showAlert(AlertType.ERROR, Lang.PASSWORDS_IDENTICAL, '#alert03');
         return;
     }
 
     isRequest = true;
     showAlert(AlertType.LOADING, Lang.SETTINGS_PASSWORD_IN_PROGRESS, '#alert03');
 
-
     $.ajax({
-        url: "/system/panelChangePassword",
+        url: "/systemUser/changePassword",
         method: "POST",
         data: {
-            pass0: d_pass0,
-            pass1: d_pass1
+            password_old: d_pass_old,
+            password_new: d_pass_new1
         },
         success: function (data) {
             try {
-                data = JSON.parse(data);
-
                 if (data.success == true) {
                     $("#inp_pass0").val("");
                     $("#inp_pass1").val("");
                     $("#inp_pass2").val("");
                     showAlert(AlertType.SUCCESS, Lang.SETTINGS_PASSWORD_SUCCESS, '#alert03');
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
                 } else {
-                    if (data.msg != '')
+                    if (typeof data.msg != 'undefined' && data.msg != '')
                         showAlert(AlertType.ERROR, data.msg, '#alert03');
                     else
                         showAlert(AlertType.ERROR, Lang.SETTINGS_DATA_ERROR, '#alert03');
