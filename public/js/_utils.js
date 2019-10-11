@@ -92,7 +92,7 @@ function generateRecaptchaToken(type) {
         return;
 
     isVerifying = true;
-    grecaptcha.execute('6Le5WrgUAAAAAPNugal1jOzvPYE4kzFXhMpZxywY', {
+    grecaptcha.execute('6LcPML0UAAAAAB_m-gflm8u-YAx_7YHTasyWpkIf', {
         action: type
     }).then(function (token) {
         verifyToken = token;
