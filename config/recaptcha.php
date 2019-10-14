@@ -2,8 +2,8 @@
 
 return [
 
-    'public_key' => "6Le5WrgUAAAAAPNugal1jOzvPYE4kzFXhMpZxywY",
-    'private_key' => "6Le5WrgUAAAAAP24_gg--EoQ-3ifDTxld9CyP-BW",
+    'public_key' => "6LcPML0UAAAAAB_m-gflm8u-YAx_7YHTasyWpkIf",
+    'private_key' => env('RECAPTCHA_PRIVATE'),
 
 
 ];
