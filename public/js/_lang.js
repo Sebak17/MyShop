@@ -6,6 +6,7 @@ var Lang = {
     PASSWORDS_IDENTICAL: "Nowe hasło jest identyczne z poprzednim!",
 
     EMAIL_INCORRECT: "Adres e-mail jest niepoprawny!",
+    LOGIN_INCORRECT: "Login jest niepoprawny!",
     
     PHONENUMBER_INCORRECT: "Numer telefonu jest niepoprawny!",
 

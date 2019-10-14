@@ -63,6 +63,14 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
+function validateLogin(login) {
+    if (!/^[a-zA-Z0-9]+$/.test(login))
+        return false;
+    if (login.length < 4 || login.length > 20)
+        return false;
+    return true;
+}
+
 function validateRecaptcha() {
     if(verifyToken == '' || isVerifying)
         return false;

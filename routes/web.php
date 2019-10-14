@@ -95,3 +95,22 @@ Route::prefix('systemUser')->group(function () {
     });
 
 });
+
+Route::prefix('admin')->group(function () {
+
+    Route::get('/', function () {
+        return redirect('/');
+    });
+
+    Route::get('login', 'AdminAuthController@loginPage')->name('admin_loginPage');
+
+});
+
+Route::prefix('systemAdmin')->group(function () {
+
+    Route::post('signIn', 'AdminAuthController@signIn')->name('systemAdmin_signIn');
+    Route::get('signIn', function () {
+        return redirect('/');
+    });
+
+});
