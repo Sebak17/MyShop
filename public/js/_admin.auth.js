@@ -54,7 +54,7 @@ function signIn() {
     showAlert(AlertType.LOADING, Lang.LOGIN_IN_PROGRESS);
 
     $.ajax({
-        url: "/system/signIn",
+        url: "/systemAdmin/signIn",
         method: "POST",
         data: {
             login: d_login,
