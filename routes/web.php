@@ -104,12 +104,35 @@ Route::prefix('admin')->group(function () {
 
     Route::get('login', 'AdminAuthController@loginPage')->name('admin_loginPage');
 
+    Route::get('panel', 'AdminController@dashboardPage')->name('admin_dashboardPage');
+
+    Route::get('kategorie', 'AdminController@categoriesPage')->name('admin_categoriesPage');
 });
 
 Route::prefix('systemAdmin')->group(function () {
 
     Route::post('signIn', 'AdminAuthController@signIn')->name('systemAdmin_signIn');
     Route::get('signIn', function () {
+        return redirect('/');
+    });
+
+    Route::post('categoryList', 'AdminSystemController@categoryList')->name('systemAdmin_categoryList');
+    Route::get('categoryList', function () {
+        return redirect('/');
+    });
+
+    Route::post('categoryAdd', 'AdminSystemController@categoryAdd')->name('systemAdmin_categoryAdd');
+    Route::get('categoryAdd', function () {
+        return redirect('/');
+    });
+
+    Route::post('categoryRemove', 'AdminSystemController@categoryRemove')->name('systemAdmin_categoryRemove');
+    Route::get('categoryRemove', function () {
+        return redirect('/');
+    });
+
+    Route::post('categoryChangeOrder', 'AdminSystemController@categoryChangeOrder')->name('systemAdmin_categoryChangeOrder');
+    Route::get('categoryChangeOrder', function () {
         return redirect('/');
     });
 

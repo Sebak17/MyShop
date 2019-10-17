@@ -72,7 +72,24 @@ function validateLogin(login) {
 }
 
 function validateRecaptcha() {
-    if(verifyToken == '' || isVerifying)
+    if (verifyToken == '' || isVerifying)
         return false;
+    return true;
+}
+
+function validateCategoryName(name) {
+    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+$/.test(name))
+        return false;
+    if (name.length < 4 || name.length > 20)
+        return false;
+
+    return true;
+}
+
+function validateIconFA(iconName) {
+    if(!(/^[a-zA-Z0-9-]+$/.test(iconName)))
+        return false;
+    if(iconName.length <= 0)
+        return true;
     return true;
 }

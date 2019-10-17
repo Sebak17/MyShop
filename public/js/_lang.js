@@ -26,6 +26,8 @@ var Lang = {
 	ADDRESS_NAME_INCORRECT: "Adres jest niepoprawny!",
 	ADDRESS_NOT_IN_RANGE: "Adres ma błędną długość! Poprawna długość: 2-40",
 
+    ICON_FA_ERROR: "Błędna ikona",
+
     FORM_SENDING: "Trwa wysyłanie...",
     FORM_SENDING_ERROR: "Wystąpił błąd podczas wysyłania!",
 
@@ -45,4 +47,18 @@ var Lang = {
     SETTINGS_PASSWORD_SUCCESS: "Hasło zostało zmienione!",
 
     OFFERSLIST_ERROR_LOADING: "Wystąpił błąd podczas ładowania ofert!",
+
+    CATEGORY_CHOOSE: "Najpierw musisz wybrać kategorie!",
+    CATEGORY_NAME_ERROR: "Błędna nazwa kategorii!",
+    CATEGORY_MAIN_LOADING_ERROR: "Wystąpił błąd podczas ładowania!",
+
+    CATEGORY_FORM_ADD_SUCCESS: "Kategoria została dodana pomyślnie!",
+    CATEGORY_FORM_ADD_ERROR: "Wystąpił błąd podczas dodawania!",
+
+    CATEGORY_FORM_EDIT_SUCCESS: "Kategoria została dodana pomyślnie!",
+    CATEGORY_FORM_EDIT_ERROR: "Wystąpił błąd podczas edycji!",
+
+    CATEGORY_FORM_REMOVE_SUCCESS: "Kategoria została usunięta pomyślnie!",
+    CATEGORY_FORM_REMOVE_ERROR: "Wystąpił bład podczas usuwania!",
+
 };

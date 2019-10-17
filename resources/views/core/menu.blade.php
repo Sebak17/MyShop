@@ -67,7 +67,7 @@
 		
 		@endauth
 		
-		@guest
+		@if(!Auth::guard('web')->check() && !Auth::guard('admin')->check())
 		<li class="nav-item mt-2">
 			<a class="none" href="{{ route('loginPage') }}">
 				<button type="button" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Zaloguj</button>
@@ -76,7 +76,7 @@
 				<button type="button" class="btn btn-primary"><i class="fas fa-globe-europe"></i> Zarejestruj</button>
 			</a>
 		</li>
-		@endguest
+		@endif
 		
 		
 	</ul>
