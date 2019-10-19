@@ -18,6 +18,7 @@ class CreateAdmins extends Migration
             $table->string('login');
             $table->string('password');
             $table->mediumInteger('level');
+            $table->rememberToken();
         });
     }
 
