@@ -102,6 +102,10 @@ Route::prefix('admin')->group(function () {
         return redirect('/');
     });
 
+    Route::get('not_authorizated', function () {
+        return view('admin.not_authorizated');
+    });
+
     Route::get('login', 'AdminAuthController@loginPage')->name('admin_loginPage');
 
     Route::get('panel', 'AdminController@dashboardPage')->name('admin_dashboardPage');
