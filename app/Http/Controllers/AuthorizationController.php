@@ -19,14 +19,18 @@ use App\UserInfo;
 use App\UserLocation;
 use App\UserPersonal;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthorizationController extends Controller
 {
-
+    use ThrottlesLogins;
     use AuthenticatesUsers;
+
+    protected $maxAttempts  = 5;
+    protected $decayMinutes = 1;
 
     public function __construct()
     {
@@ -81,8 +85,9 @@ class AuthorizationController extends Controller
         return view('auth.password_reset');
     }
 
-    public function resetPasswordCheckPage(Request $request, $hash) 
+    public function resetPasswordCheckPage(Request $request, $hash)
     {
+
         if (!Security::checkHash($hash)) {
             return redirect()->route('resetPasswordPage');
         }
@@ -119,6 +124,15 @@ class AuthorizationController extends Controller
             return response()->json($results);
         }
 
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+
+            $results['msg'] = "Za dużo prób logowania! Poczekaj " . $this->limiter()->availableIn($this->throttleKey($request)) . " sekund!";
+            return response()->json($results);
+        }
+
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
             if (auth()->user()->active == 0) {
@@ -138,6 +152,8 @@ class AuthorizationController extends Controller
             }
 
         } else {
+            $this->incrementLoginAttempts($request);
+
             $results['success'] = false;
             $results['msg']     = "Dane logowania są niepoprawne!";
         }
@@ -288,19 +304,19 @@ class AuthorizationController extends Controller
 
         if ($user == null || !$user->exists()) {
             $results['success'] = true;
-            $results['debug'] = "EMAIL NOT FOUND";
+            $results['debug']   = "EMAIL NOT FOUND";
             return response()->json($results);
         }
 
-        if($user->personal->phoneNumber != $request->phone) {
+        if ($user->personal->phoneNumber != $request->phone) {
             $results['success'] = true;
-            $results['debug'] = "PHONE INCORRECT";
+            $results['debug']   = "PHONE INCORRECT";
             return response()->json($results);
         }
 
         if ($user->info->passwordResetMailTime > strtotime("now")) {
             $results['success'] = true;
-            $results['debug'] = "TIME NOT REMAIN";
+            $results['debug']   = "TIME NOT REMAIN";
             return response()->json($results);
         }
 
@@ -320,7 +336,7 @@ class AuthorizationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'grecaptcha' => new ValidReCaptcha,
-            'password'      => new ValidPassword
+            'password'   => new ValidPassword,
         ]);
 
         $results = array();
@@ -335,7 +351,7 @@ class AuthorizationController extends Controller
 
         if (!$request->session()->exists('passResetHash')) {
             $results['success'] = false;
-            $results['msg'] = "Kod autoryzacji jest nieprawidłowy!";
+            $results['msg']     = "Kod autoryzacji jest nieprawidłowy!";
             return response()->json($results);
         }
 
@@ -344,8 +360,8 @@ class AuthorizationController extends Controller
         $user_info = UserInfo::where('passwordResetHash', '=', $hash)->first();
 
         if ($user_info == null || !$user_info->exists()) {
-           $results['success'] = false;
-            $results['msg'] = "Kod autoryzacji jest nieprawidłowy!";
+            $results['success'] = false;
+            $results['msg']     = "Kod autoryzacji jest nieprawidłowy!";
             return response()->json($results);
         }
 
@@ -353,7 +369,6 @@ class AuthorizationController extends Controller
 
         $user->info->passwordResetMailTime = null;
         $user->push();
-
 
         $results['success'] = true;
         return response()->json($results);
