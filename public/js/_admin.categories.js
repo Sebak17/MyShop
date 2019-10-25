@@ -343,6 +343,10 @@ function category_bindTree() {
                 let obj = category_searchTreeByID(id);
                 $("#fmEditName").val(obj.name);
                 $("#fmEditIcon").val(obj.icon);
+
+                $("#_currentCatID").html(obj.id);
+                $("#_currentCatName").html(obj.name);
+
             } else {
                 $("#fmEditName").val("");
                 $("#fmEditIcon").val("");
