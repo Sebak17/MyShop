@@ -280,4 +280,9 @@
     
 </div>
 
+
+<script src="{{ asset('js/Chart.min.js') }}"></script>
+        <script src="{{ asset('vendor/sb-admin-2/chart-area-demo.js') }}"></script>
+        <script src="{{ asset('vendor/sb-admin-2/chart-pie-demo.js') }}"></script>
+
 @endsection
