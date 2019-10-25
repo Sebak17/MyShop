@@ -25,4 +25,14 @@ class AdminController extends Controller
         return view('admin.categories');
     }
 
+    public function productsListPage()
+    {
+        return view('admin.products_list');
+    }
+
+    public function productsAddPage()
+    {
+        return view('admin.products_add');
+    }
+
 }
