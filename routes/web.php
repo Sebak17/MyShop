@@ -111,6 +111,9 @@ Route::prefix('admin')->group(function () {
     Route::get('panel', 'AdminController@dashboardPage')->name('admin_dashboardPage');
 
     Route::get('kategorie', 'AdminController@categoriesPage')->name('admin_categoriesPage');
+
+    Route::get('produkty/lista', 'AdminController@productsListPage')->name('admin_productsListPage');
+    Route::get('produkty/dodaj', 'AdminController@productsAddPage')->name('admin_productsAddPage');
 });
 
 Route::prefix('systemAdmin')->group(function () {
@@ -137,6 +140,16 @@ Route::prefix('systemAdmin')->group(function () {
 
     Route::post('categoryChangeOrder', 'AdminSystemController@categoryChangeOrder')->name('systemAdmin_categoryChangeOrder');
     Route::get('categoryChangeOrder', function () {
+        return redirect('/');
+    });
+
+    Route::post('productAddImage', 'AdminSystemController@productAddImage')->name('systemAdmin_productAddImage');
+    Route::get('productAddImage', function () {
+        return redirect('/');
+    });
+
+    Route::post('productLoadOldImages', 'AdminSystemController@productLoadOldImages')->name('systemAdmin_productLoadOldImages');
+    Route::get('productLoadOldImages', function () {
         return redirect('/');
     });
 
