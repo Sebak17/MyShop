@@ -51,6 +51,7 @@ var Lang = {
     CATEGORY_CHOOSE: "Najpierw musisz wybrać kategorie!",
     CATEGORY_NAME_ERROR: "Błędna nazwa kategorii!",
     CATEGORY_MAIN_LOADING_ERROR: "Wystąpił błąd podczas ładowania!",
+    CATEGORY_ID_ERROR: "Kategoria jest błędna!",
 
     CATEGORY_FORM_ADD_SUCCESS: "Kategoria została dodana pomyślnie!",
     CATEGORY_FORM_ADD_ERROR: "Wystąpił błąd podczas dodawania!",
@@ -60,5 +61,13 @@ var Lang = {
 
     CATEGORY_FORM_REMOVE_SUCCESS: "Kategoria została usunięta pomyślnie!",
     CATEGORY_FORM_REMOVE_ERROR: "Wystąpił bład podczas usuwania!",
+
+    PRODUCT_FORM_ERROR: "Wystąpił błąd podczas dodawania produktu!",
+    PRODUCT_FORM_SUCCESS: "Produkt został dodany pomyślnie!",
+
+    PRODUCT_NAME_ERROR: "Nazwa produktu jest niepoprawna! (4-40)",
+    PRODUCT_PRICE_ERROR: "Cena produktu jest niepoprawna!",
+    PRODUCT_DESCRIPTION_ERROR: "Opis produktu jest niepoprawny! (4-400)",
+
 
 };
