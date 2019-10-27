@@ -17,6 +17,15 @@
 				
 				
 				<table class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Nazwa produktu</th>
+							<th>Cena</th>
+							<th>Opcje</th>
+						</tr>
+						
+					</thead>
 					<tbody id="productsList">
 					</tbody>
 				</table>
