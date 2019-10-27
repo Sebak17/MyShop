@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Product;
+
 class AdminController extends Controller
 {
 
@@ -33,6 +36,25 @@ class AdminController extends Controller
     public function productsAddPage()
     {
         return view('admin.products_add');
+    }
+
+    public function productsEditPage(Request $request, $id)
+    {
+        if(!is_numeric($id)) {
+            return redirect()->route('admin_dashboardPage');
+        }
+
+
+        $product = Product::where('id', $id)->first();
+
+        if($product == null) {
+            return redirect()->route('admin_dashboardPage');
+        }
+
+        $request->session()->put('ADMIN_PRODUCT_EDIT_ID', $id);
+
+
+        return view('admin.products_edit');
     }
 
 }
