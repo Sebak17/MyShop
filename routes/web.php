@@ -114,6 +114,7 @@ Route::prefix('admin')->group(function () {
 
     Route::get('produkty/lista', 'AdminController@productsListPage')->name('admin_productsListPage');
     Route::get('produkty/dodaj', 'AdminController@productsAddPage')->name('admin_productsAddPage');
+    Route::get('produkty/edytuj/{id}', 'AdminController@productsEditPage')->name('admin_productsEditPage');
 });
 
 Route::prefix('systemAdmin')->group(function () {
@@ -160,6 +161,31 @@ Route::prefix('systemAdmin')->group(function () {
 
     Route::post('productLoadOldImages', 'AdminSystemController@productLoadOldImages')->name('systemAdmin_productLoadOldImages');
     Route::get('productLoadOldImages', function () {
+        return redirect('/');
+    });
+
+    Route::post('productLoadCurrent', 'AdminSystemController@productLoadCurrent')->name('systemAdmin_productLoadCurrent');
+    Route::get('productLoadCurrent', function () {
+        return redirect('/');
+    });
+
+    Route::post('productEdit', 'AdminSystemController@productEdit')->name('systemAdmin_productEdit');
+    Route::get('productEdit', function () {
+        return redirect('/');
+    });
+
+    Route::post('productEditImageList', 'AdminSystemController@productEditImageList')->name('systemAdmin_productEditImageList');
+    Route::get('productEditImageList', function () {
+        return redirect('/');
+    });
+
+    Route::post('productEditImageAdd', 'AdminSystemController@productEditImageAdd')->name('systemAdmin_productEditImageAdd');
+    Route::get('productEditImageAdd', function () {
+        return redirect('/');
+    });
+
+    Route::post('productEditImageRemove', 'AdminSystemController@productEditImageRemove')->name('systemAdmin_productEditImageRemove');
+    Route::get('productEditImageRemove', function () {
         return redirect('/');
     });
 
