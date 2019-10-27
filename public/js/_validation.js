@@ -122,7 +122,7 @@ function validateProductPrice(price) {
     return true;
 }
 function validateProductDescription(description) {
-    if (description.length < 4 || description.length > 400)
+    if (description.length < 4)
         return false;
 
     return true;

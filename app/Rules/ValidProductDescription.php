@@ -29,9 +29,9 @@ class ValidProductDescription implements Rule
             return false;
         }
 
-        if (mb_strlen($value) > 400) {
-            return false;
-        }
+        // if (mb_strlen($value) > 400) {
+        //     return false;
+        // }
 
         return true;
     }
@@ -43,6 +43,6 @@ class ValidProductDescription implements Rule
      */
     public function message()
     {
-        return 'Opis pruduktu jest niepoprawny! (4-400)';
+        return 'Opis pruduktu jest niepoprawny!';
     }
 }
