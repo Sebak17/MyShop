@@ -143,6 +143,16 @@ Route::prefix('systemAdmin')->group(function () {
         return redirect('/');
     });
 
+    Route::post('productLoadList', 'AdminSystemController@productLoadList')->name('systemAdmin_productLoadList');
+    Route::get('productLoadList', function () {
+        return redirect('/');
+    });
+
+    Route::post('productCreate', 'AdminSystemController@productCreate')->name('systemAdmin_productCreate');
+    Route::get('productCreate', function () {
+        return redirect('/');
+    });
+
     Route::post('productAddImage', 'AdminSystemController@productAddImage')->name('systemAdmin_productAddImage');
     Route::get('productAddImage', function () {
         return redirect('/');
