@@ -62,7 +62,7 @@ function productAdd() {
         },
         success: function (data) {
             if (data.success == true) {
-                showAlert(AlertType.SUCCESS, Lang.PRODUCT_FORM_SUCCESS);
+                showAlert(AlertType.SUCCESS, Lang.PRODUCT_FORM_ADD_SUCCESS);
 
                 setTimeout(function () {
                     window.location.href = "/admin/produkty/lista";
@@ -71,11 +71,11 @@ function productAdd() {
                 if (data.msg != null)
                     showAlert(AlertType.ERROR, data.msg);
                 else
-                    showAlert(AlertType.ERROR, Lang.PRODUCT_FORM_ERROR);
+                    showAlert(AlertType.ERROR, Lang.PRODUCT_FORM_ADD_ERROR);
             }
         },
         error: function () {
-            showAlert(AlertType.ERROR, Lang.PRODUCT_FORM_ERROR);
+            showAlert(AlertType.ERROR, Lang.PRODUCT_FORM_ADD_ERROR);
         }
     });
 }
