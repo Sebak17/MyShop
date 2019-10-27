@@ -7,6 +7,7 @@ use App\Product;
 use App\ProductImage;
 use App\Rules\ValidProductCategory;
 use App\Rules\ValidProductDescription;
+use App\Rules\ValidProductImage;
 use App\Rules\ValidProductName;
 use App\Rules\ValidProductPrice;
 use Illuminate\Http\Request;
@@ -181,7 +182,9 @@ class AdminSystemController extends Controller
     public function productLoadList(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'        => new ValidProductName
+            'name'     => new ValidProductName,
+            'minPrice' => new ValidProductPrice,
+            'maxPrice' => new ValidProductPrice,
         ]);
 
         $results = array();
@@ -200,26 +203,234 @@ class AdminSystemController extends Controller
 
         foreach ($products as $prod) {
 
-            if($useParams) {
+            if ($useParams) {
 
-                if($request->name != "" && !preg_match("/(" . $request->name . ")/i", $prod['title']))
+                if ($request->name != "" && !preg_match("/(" . $request->name . ")/i", $prod['title'])) {
                     continue;
+                }
+
+                if ($request->minPrice != "" && $prod['price'] < $request->minPrice) {
+                    continue;
+                }
+
+                if ($request->maxPrice != "" && $prod['price'] > $request->maxPrice) {
+                    continue;
+                }
+
             }
 
             $list[$i] = array();
 
             $list[$i]['id']    = $prod['id'];
             $list[$i]['name']  = $prod['title'];
+            $list[$i]['price'] = $prod['price'];
 
-            $list[$i]['image1']  = $prod->images[0]->name;
+            $list[$i]['image1'] = (count($prod->images) > 0 ? $prod->images[0]->name : null);
 
             $i++;
         }
 
         $results['success'] = true;
-        $results['list']   = $list;
+        $results['list']    = $list;
 
         return response()->json($results);
     }
+
+    public function productLoadCurrent(Request $request)
+    {
+        $results = array();
+
+        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
+
+        $product = Product::where('id', $current_id)->first();
+
+        if ($product == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $results['product'] = array();
+
+        $results['product']['name']        = $product['title'];
+        $results['product']['description'] = $product['description'];
+        $results['product']['price']       = $product['price'];
+        $results['product']['category_id'] = $product['category_id'];
+
+        $results['product']['images'] = array();
+
+        foreach ($product->images as $image) {
+
+            array_push($results['product']['images'], $image->name);
+        }
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function productEdit(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'name'        => new ValidProductName,
+            'price'       => new ValidProductPrice,
+            'description' => new ValidProductDescription,
+            'category'    => new ValidProductCategory,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+
+            return response()->json($results);
+        }
+
+        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
+
+        $product = Product::where('id', $current_id)->first();
+
+        if ($product == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $product->title       = $request->name;
+        $product->price       = $request->price;
+        $product->description = $request->description;
+        $product->category_id = $request->category;
+
+        $product->save();
+
+        $results['success'] = true;
+
+        return response()->json($results);
+    }
+
+    public function productEditImageList(Request $request)
+    {
+
+        $results = array();
+
+
+        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
+
+        $product = Product::where('id', $current_id)->first();
+
+        if ($product == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $results['images'] = array();
+
+        foreach ($product->images as $image) {
+
+            array_push($results['images'], $image->name);
+        }
+        
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function productEditImageAdd(Request $request)
+    {
+        $results = array();
+
+        if (!$request->hasFile('images')) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'images'   => 'required',
+            'images.*' => 'mimes:png,jpeg',
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
+
+        $product = Product::where('id', $current_id)->first();
+
+        if ($product == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $files = $request->file('images');
+
+        foreach ($files as $file) {
+            $ar   = explode("/", $file->store('public/products_images'));
+            $hash = end($ar);
+
+            ProductImage::create([
+                'product_id' => $product->id,
+                'name'       => $hash,
+            ]);
+        }
+
+        $results['success'] = true;
+
+        return response()->json($results);
+    }
+
+    public function productEditImageRemove(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => new ValidProductImage,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+
+            return response()->json($results);
+        }
+
+        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
+
+        $product = Product::where('id', $current_id)->first();
+
+        if ($product == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $productImage = ProductImage::where('name', $request->name)->first();
+
+        if ($productImage == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        if ($product->id != $productImage->product_id) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $productImage->delete();
+
+        if (Storage::exists("public/products_images/" . $request->name)) {
+            Storage::delete("public/products_images/" . $request->name);
+        }
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    
 
 }
