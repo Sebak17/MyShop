@@ -86,10 +86,44 @@ function validateCategoryName(name) {
     return true;
 }
 
+function validateCategoryID(id) {
+    if (!/^[0-9]+$/.test(id))
+        return false;
+
+    if (isNaN(parseInt(id)) || id < 0)
+        return false;
+
+    return true;
+}
+
 function validateIconFA(iconName) {
     if(!(/^[a-zA-Z0-9-]+$/.test(iconName)))
         return false;
     if(iconName.length <= 0)
         return true;
+    return true;
+}
+
+function validateProductName(name) {
+    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+$/.test(name))
+        return false;
+    if (name.length < 4 || name.length > 40)
+        return false;
+
+    return true;
+}
+function validateProductPrice(price) {
+    if (!/^[0-9.]+$/.test(price))
+        return false;
+
+    if (isNaN(parseFloat(price)) || price <= 0 || price > 999999)
+        return false;
+
+    return true;
+}
+function validateProductDescription(description) {
+    if (description.length < 4 || description.length > 400)
+        return false;
+
     return true;
 }
