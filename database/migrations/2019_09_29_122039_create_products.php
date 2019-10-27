@@ -18,12 +18,10 @@ class CreateProducts extends Migration
             $table->float('price', 8, 2);
             $table->string('title', 40);
             $table->text('description');
-            $table->text('images');
+            $table->enum('status', ['INVISIBLE', 'IN_STOCK', 'INACCESSIBLE']);
             $table->unsignedBigInteger('category_id')->nullable();
 
-             $table->tinyInteger('visible');
-
-             $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
         });
     }
 

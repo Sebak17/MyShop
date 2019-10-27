@@ -6,9 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+
+	protected $table = 'products';
+
+	public $timestamps = false;
    
 	protected $fillable = [
-        'price', 'title', 'description', 'images', 'category_id',
+        'price', 'title', 'description', 'status', 'category_id',
     ];
+
+    public function images()
+    {
+        return $this->hasMany('App\ProductImage');
+    }
 
 }
