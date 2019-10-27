@@ -3,13 +3,14 @@ var imageIndexs = 1,
 
 window.onload = function () {
 
-    loadPreviousImages();
+    loadCategories();
+    loadProductImages();
 
-    $("#btnAdd").click(function () {
+    $("#btn_productAdd").click(function () {
         productAdd();
     });
 
-    $("#offerImageInput").click(function (event) {
+    $("#btnImageInput").click(function (event) {
         $("#offerUpload").trigger('click');
     });
 
@@ -24,13 +25,97 @@ window.onload = function () {
 function productAdd() {
 
     let d_name = $('#inp_name').val();
+    let d_price = $('#inp_price').val();
     let d_description = $('#inp_description').val();
     let d_category = $('#inp_category').val();
 
+    if(!validateProductName(d_name)) {
+        showAlert(AlertType.ERROR, Lang.PRODUCT_NAME_ERROR);
+        return;
+    }
+
+    if(!validateProductPrice(d_price)) {
+        showAlert(AlertType.ERROR, Lang.PRODUCT_PRICE_ERROR);
+        return;
+    }
+
+    if(!validateProductDescription(d_description)) {
+        showAlert(AlertType.ERROR, Lang.PRODUCT_DESCRIPTION_ERROR);
+        return;
+    }
+
+    if(!validateCategoryID(d_category)) {
+        showAlert(AlertType.ERROR, Lang.CATEGORY_ID_ERROR);
+        return;
+    }
+
     showAlert(AlertType.LOADING, Lang.FORM_SENDING);
+
+    $.ajax({
+        url: "/systemAdmin/productCreate",
+        method: "POST",
+        data: {
+            name: d_name,
+            price: parseFloat(d_price),
+            description: d_description,
+            category: d_category,
+        },
+        success: function (data) {
+            if (data.success == true) {
+                showAlert(AlertType.SUCCESS, Lang.PRODUCT_FORM_SUCCESS);
+
+                setTimeout(function () {
+                    window.location.href = "/admin/produkty/lista";
+                }, 1000);
+            } else {
+                if (data.msg != null)
+                    showAlert(AlertType.ERROR, data.msg);
+                else
+                    showAlert(AlertType.ERROR, Lang.PRODUCT_FORM_ERROR);
+            }
+        },
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.PRODUCT_FORM_ERROR);
+        }
+    });
 }
 
-function loadPreviousImages() {
+function loadCategories() {
+    $.ajax({
+        url: "/systemAdmin/categoryList",
+        method: "POST",
+        success: function (data) {
+            if (data.success == true) {
+
+                let list = "";
+
+                for (idx in data.list1) {
+                    let obj = data.list1[idx];
+
+                    let overName = "";
+
+                    if (typeof obj.overcategory !== 'undefined') {
+                        for (s_idx in data.list1) {
+                            let s_obj = data.list1[s_idx];
+                            if (s_obj.id == obj.overcategory)
+                                overName = s_obj.name + " > ";
+                        }
+                    }
+
+
+                    list += String.raw `<option value="` + obj.id + `">` + overName + obj.name + `</option>`;
+
+                }
+
+
+                $('#inp_category').html(list);
+            }
+        },
+        error: function () {}
+    });
+}
+
+function loadProductImages() {
     $.ajax({
         url: "/systemAdmin/productLoadOldImages",
         method: "POST",
@@ -41,12 +126,17 @@ function loadPreviousImages() {
 
                 for (let i = 0; i < data.images.length; i++) {
 
-                    boxes += String.raw `<div class="offer-photo of-image ml-2" id="offerImage_` + i + `">
-                            						<img src="/storage/tmp_images/` + data.images[i] + `" width="196px" height="146px">
-                            					</div>`;
+                    boxes += String.raw `<tr id="rowImage_` + i + `">
+                                            <td>
+                                                <img class="img-fluid" width="196px" height="146px" src="/storage/tmp_images/` + data.images[i] + `">
+                                            </td>
+                                            <td class="align-middle">
+                                                <button class="btn btn-danger"><i class="fas fa-minus"></i> Usuń zdjęcie</button>
+                                            </td>
+                                        </tr>`;
 
                 }
-                $('#imagesList').html(boxes);
+                $('#tableImageList').html(boxes);
             }
         },
         error: function () {}
@@ -68,19 +158,7 @@ function uploadImages(input) {
         processData: false,
         success: function (data) {
             if (data.success == true) {
-                $('#offerUpload').val('');
-
-                let boxes = '';
-
-                for (let i = 0; i < data.images.length; i++) {
-
-                    boxes += String.raw `<div class="offer-photo of-image ml-2" id="offerImage_` + i + `">
-                            						<img src="/storage/tmp_images/` + data.images[i] + `" width="196px" height="146px">
-                            					</div>`;
-
-
-                }
-                $('#imagesList').html(boxes);
+                loadProductImages();
             }
         },
         error: function () {}
