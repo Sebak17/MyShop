@@ -56,9 +56,8 @@ class AdminSystemController extends Controller
 
     }
 
-    public function productAddImage(Request $request)
+    public function productAddImageUpload(Request $request)
     {
-
         $results = array();
 
         if (!$request->hasFile('images')) {
@@ -75,7 +74,7 @@ class AdminSystemController extends Controller
 
         if ($validator->fails()) {
             $results['success'] = false;
-
+            $results['error'] = "validator";
             $results['msg'] = $validator->errors()->first();
             return response()->json($results);
         }
@@ -91,6 +90,40 @@ class AdminSystemController extends Controller
 
         $results['success'] = true;
 
+        return response()->json($results);
+    }
+
+    public function productAddImageRemove(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => new ValidProductImage,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+
+            return response()->json($results);
+        }
+
+        if (!is_array($request->session()->get('tmp_images'))) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        if (!Storage::exists("public/tmp_images/" . $request->name)) {
+            $results['success'] = false;
+            $results['msg'] = "Plik nie istnieje!";
+            return response()->json($results);
+        }
+
+        Storage::delete("public/tmp_images/" . $request->name);
+        $request->session()->put('tmp_images', array_diff($request->session()->get('tmp_images'), [$request->name]));
+
+        $results['success'] = true;
         return response()->json($results);
     }
 
@@ -313,7 +346,6 @@ class AdminSystemController extends Controller
 
         $results = array();
 
-
         $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
 
         $product = Product::where('id', $current_id)->first();
@@ -329,7 +361,6 @@ class AdminSystemController extends Controller
 
             array_push($results['images'], $image->name);
         }
-        
 
         $results['success'] = true;
         return response()->json($results);
@@ -430,7 +461,5 @@ class AdminSystemController extends Controller
         $results['success'] = true;
         return response()->json($results);
     }
-
-    
 
 }

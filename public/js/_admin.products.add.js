@@ -131,12 +131,13 @@ function loadProductImages() {
                                                 <img class="img-fluid" width="196px" height="146px" src="/storage/tmp_images/` + data.images[i] + `">
                                             </td>
                                             <td class="align-middle">
-                                                <button class="btn btn-danger"><i class="fas fa-minus"></i> Usuń zdjęcie</button>
+                                                <button class="btn btn-danger" data-btn-remove="` + data.images[i] + `"><i class="fas fa-minus"></i> Usuń zdjęcie</button>
                                             </td>
                                         </tr>`;
 
                 }
                 $('#tableImageList').html(boxes);
+                bindImagesRemove();
             }
         },
         error: function () {}
@@ -150,7 +151,7 @@ function uploadImages(input) {
     }
 
     $.ajax({
-        url: "/systemAdmin/productAddImage",
+        url: "/systemAdmin/productAddImageUpload",
         method: "POST",
         data: formData,
         cache: false,
@@ -165,12 +166,25 @@ function uploadImages(input) {
     });
 }
 
-function bindImages() {
-    $("#imagesList").find('div').each(function () {
-        let el = $(this);
 
-        el.click(function () {
-            alert(el.children('img').attr('src'));
+function bindImagesRemove() {
+
+    $("[data-btn-remove]").each(function (index) {
+        $(this).click(function () {
+            $.ajax({
+                url: "/systemAdmin/productAddImageRemove",
+                method: "POST",
+                data: {
+                    name: $(this).attr("data-btn-remove"),
+                },
+                success: function (data) {
+                    if (data.success == true) {
+                        loadProductImages();
+                    }
+                },
+                error: function () {}
+            });
         });
     });
+
 }
