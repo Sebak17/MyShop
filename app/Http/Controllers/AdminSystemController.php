@@ -480,4 +480,31 @@ class AdminSystemController extends Controller
         return response()->json($results);
     }
 
+
+
+    //
+    //      CATEGORIES MANAGER SITES
+    //
+
+    public function categoryAdd(Request $request)
+    {
+        
+    }
+
+    public function categoryRemove(Request $request)
+    {
+        
+    }
+
+    public function categoryEdit(Request $request)
+    {
+        
+    }
+
+    public function categoryChangeOrder(Request $request)
+    {
+        
+    }
+
+
 }

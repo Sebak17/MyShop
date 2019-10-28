@@ -119,15 +119,31 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('systemAdmin')->group(function () {
 
-    Route::post('signIn', 'AdminAuthController@signIn')->name('systemAdmin_signIn');
-    Route::get('signIn', function () {
-        return redirect('/');
-    });
+    //
+    //      GENERAL
+    //
 
     Route::post('categoryList', 'AdminSystemController@categoryList')->name('systemAdmin_categoryList');
     Route::get('categoryList', function () {
         return redirect('/');
     });
+
+
+
+    //
+    //      AUTH
+    //
+
+    Route::post('signIn', 'AdminAuthController@signIn')->name('systemAdmin_signIn');
+    Route::get('signIn', function () {
+        return redirect('/');
+    });
+
+
+
+    //
+    //      CATEGORIES MANAGER SITES
+    //
 
     Route::post('categoryAdd', 'AdminSystemController@categoryAdd')->name('systemAdmin_categoryAdd');
     Route::get('categoryAdd', function () {
@@ -139,10 +155,21 @@ Route::prefix('systemAdmin')->group(function () {
         return redirect('/');
     });
 
+    Route::post('categoryEdit', 'AdminSystemController@categoryEdit')->name('systemAdmin_categoryEdit');
+    Route::get('categoryEdit', function () {
+        return redirect('/');
+    });
+
     Route::post('categoryChangeOrder', 'AdminSystemController@categoryChangeOrder')->name('systemAdmin_categoryChangeOrder');
     Route::get('categoryChangeOrder', function () {
         return redirect('/');
     });
+
+
+
+    //
+    //      PRODUCT CREATE SITES
+    //
 
     Route::post('productLoadList', 'AdminSystemController@productLoadList')->name('systemAdmin_productLoadList');
     Route::get('productLoadList', function () {
@@ -169,6 +196,12 @@ Route::prefix('systemAdmin')->group(function () {
     Route::get('productLoadOldImages', function () {
         return redirect('/');
     });
+
+    
+
+    //
+    //      PRODUCT EDIT SITES
+    //
 
     Route::post('productLoadCurrent', 'AdminSystemController@productLoadCurrent')->name('systemAdmin_productLoadCurrent');
     Route::get('productLoadCurrent', function () {
