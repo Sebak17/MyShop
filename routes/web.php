@@ -154,8 +154,14 @@ Route::prefix('systemAdmin')->group(function () {
         return redirect('/');
     });
 
-    Route::post('productAddImage', 'AdminSystemController@productAddImage')->name('systemAdmin_productAddImage');
-    Route::get('productAddImage', function () {
+    Route::post('productAddImageUpload', 'AdminSystemController@productAddImageUpload')->name('systemAdmin_productAddImageUpload');
+    Route::get('productAddImageUpload', function () {
+        return redirect('/');
+    });
+
+
+    Route::post('productAddImageRemove', 'AdminSystemController@productAddImageRemove')->name('systemAdmin_productAddImageRemove');
+    Route::get('productAddImageRemove', function () {
         return redirect('/');
     });
 
