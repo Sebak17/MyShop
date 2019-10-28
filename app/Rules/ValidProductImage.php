@@ -26,7 +26,7 @@ class ValidProductImage implements Rule
     public function passes($attribute, $value)
     {
 
-        if (strlen($value) != 44) {
+        if (strlen($value) < 20) {
             return false;
         }
 
