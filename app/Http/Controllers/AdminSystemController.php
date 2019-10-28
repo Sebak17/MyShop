@@ -22,6 +22,12 @@ class AdminSystemController extends Controller
         $this->middleware('auth:admin');
     }
 
+
+
+    //
+    //      GENERAL
+    //
+
     public function categoryList()
     {
 
@@ -55,6 +61,69 @@ class AdminSystemController extends Controller
         return response()->json($results);
 
     }
+
+    public function productLoadList(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'     => new ValidProductName,
+            'minPrice' => new ValidProductPrice,
+            'maxPrice' => new ValidProductPrice,
+        ]);
+
+        $results = array();
+
+        $useParams = false;
+
+        if (!$validator->fails()) {
+            $useParams = true;
+        }
+
+        $list = array();
+
+        $products = Product::get();
+
+        $i = 0;
+
+        foreach ($products as $prod) {
+
+            if ($useParams) {
+
+                if ($request->name != "" && !preg_match("/(" . $request->name . ")/i", $prod['title'])) {
+                    continue;
+                }
+
+                if ($request->minPrice != "" && $prod['price'] < $request->minPrice) {
+                    continue;
+                }
+
+                if ($request->maxPrice != "" && $prod['price'] > $request->maxPrice) {
+                    continue;
+                }
+
+            }
+
+            $list[$i] = array();
+
+            $list[$i]['id']    = $prod['id'];
+            $list[$i]['name']  = $prod['title'];
+            $list[$i]['price'] = $prod['price'];
+
+            $list[$i]['image1'] = (count($prod->images) > 0 ? $prod->images[0]->name : null);
+
+            $i++;
+        }
+
+        $results['success'] = true;
+        $results['list']    = $list;
+
+        return response()->json($results);
+    }
+
+
+
+    //
+    //      PRODUCT CREATE SITES
+    //
 
     public function productAddImageUpload(Request $request)
     {
@@ -212,62 +281,11 @@ class AdminSystemController extends Controller
         return response()->json($results);
     }
 
-    public function productLoadList(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name'     => new ValidProductName,
-            'minPrice' => new ValidProductPrice,
-            'maxPrice' => new ValidProductPrice,
-        ]);
 
-        $results = array();
 
-        $useParams = false;
-
-        if (!$validator->fails()) {
-            $useParams = true;
-        }
-
-        $list = array();
-
-        $products = Product::get();
-
-        $i = 0;
-
-        foreach ($products as $prod) {
-
-            if ($useParams) {
-
-                if ($request->name != "" && !preg_match("/(" . $request->name . ")/i", $prod['title'])) {
-                    continue;
-                }
-
-                if ($request->minPrice != "" && $prod['price'] < $request->minPrice) {
-                    continue;
-                }
-
-                if ($request->maxPrice != "" && $prod['price'] > $request->maxPrice) {
-                    continue;
-                }
-
-            }
-
-            $list[$i] = array();
-
-            $list[$i]['id']    = $prod['id'];
-            $list[$i]['name']  = $prod['title'];
-            $list[$i]['price'] = $prod['price'];
-
-            $list[$i]['image1'] = (count($prod->images) > 0 ? $prod->images[0]->name : null);
-
-            $i++;
-        }
-
-        $results['success'] = true;
-        $results['list']    = $list;
-
-        return response()->json($results);
-    }
+    //
+    //      PRODUCT EDIT SITES
+    //
 
     public function productLoadCurrent(Request $request)
     {
