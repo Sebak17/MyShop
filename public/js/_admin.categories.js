@@ -25,6 +25,10 @@ function category_bindKeys() {
         category_btn_changeOrder();
     });
 
+    $("#btnEditModal").click(function () {
+        $("#modalEdit").modal();
+    });
+
     $("#btnModalListSave").click(function () {
         category_btn_listSave();
     });
@@ -235,25 +239,24 @@ function category_load() {
                     for (idx in data.list1) {
                         let obj = data.list1[idx];
 
-                        if (obj.overcategory == null || obj.overcategory == 0) {
-                            categoriesTree[obj.order] = {
+                        let _newObject = {
                                 name: obj.name,
                                 id: obj.id,
                                 icon: obj.icon,
+                                active: obj.active,
+                                visible: obj.visible,
                                 subcategories: []
                             };
+
+                        if (obj.overcategory == null || obj.overcategory == 0) {
+                            categoriesTree[obj.order] = _newObject;
                         } else {
                             let oc = category_searchTreeByID(obj.overcategory);
 
                             if (oc == null)
                                 continue;
 
-                            oc.subcategories[obj.order] = {
-                                name: obj.name,
-                                id: obj.id,
-                                icon: obj.icon,
-                                subcategories: []
-                            };
+                            oc.subcategories[obj.order] = _newObject;
                         }
 
 
@@ -358,6 +361,8 @@ function category_bindTree() {
 
                 $("#_currentCatID").html(obj.id);
                 $("#_currentCatName").html(obj.name);
+                $("#_currentCatVisible").html( (obj.visible ? "Tak" : "Nie" ) );
+                $("#_currentCatActive").html( (obj.active ? "Tak" : "Nie" ) );
 
             } else {
                 $("#fmEditName").val("");

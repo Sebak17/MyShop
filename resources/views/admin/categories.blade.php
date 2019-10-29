@@ -52,6 +52,14 @@
 							<td>Nazwa:</td>
 							<td><strong id="_currentCatName">?</strong></td>
 						</tr>
+						<tr>
+							<td>Widoczny:</td>
+							<td><strong id="_currentCatVisible">?</strong></td>
+						</tr>
+						<tr>
+							<td>Aktywny:</td>
+							<td><strong id="_currentCatActive">?</strong></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -63,6 +71,7 @@
 			
 			<div class="form-group text-center">
 				<button type="button" id="btnChangeOrder" class="btn btn-info">Zmień kolejność <i class="fas fa-list"></i></button>
+				<button type="button" id="btnEditModal" class="btn btn-primary">Edytuj <i class="fas fa-edit"></i></button>
 				<button type="button" id="btnRemove" class="btn btn-danger">Usuń <i class="fas fa-times-circle"></i></button>
 			</div>
 			
@@ -119,6 +128,7 @@
 	</div>
 </div>
 
+	<!-- Categories order modal -->
 <div class="modal fade" id="modalChangeList">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -134,6 +144,28 @@
 			
 		</div>
 	</div>
+</div>
+
+<!-- Category edit modal -->
+<div class="modal fade" id="modalEdit">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title">Edytowanie kategorii</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        Modal body..
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 </div>

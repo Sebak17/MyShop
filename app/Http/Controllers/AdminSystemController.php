@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Product;
 use App\ProductImage;
+use App\Rules\ValidCategoryName;
+use App\Rules\ValidIconFA;
+use App\Rules\ValidID;
 use App\Rules\ValidProductCategory;
 use App\Rules\ValidProductDescription;
 use App\Rules\ValidProductImage;
@@ -22,8 +25,6 @@ class AdminSystemController extends Controller
         $this->middleware('auth:admin');
     }
 
-
-
     //
     //      GENERAL
     //
@@ -35,11 +36,14 @@ class AdminSystemController extends Controller
 
         $list1 = array();
 
-        $categories = Category::where('active', 1)->get();
+        $categories = Category::all();
 
         $i = 0;
 
         foreach ($categories as $cat) {
+
+            if($cat['overcategory'] == -1)
+                continue;
 
             $list1[$i] = array();
 
@@ -47,6 +51,8 @@ class AdminSystemController extends Controller
             $list1[$i]['name']  = $cat['name'];
             $list1[$i]['order'] = $cat['orderID'];
             $list1[$i]['icon']  = $cat['icon'];
+            $list1[$i]['active']  = $cat['active'];
+            $list1[$i]['visible']  = $cat['visible'];
 
             if ($cat['overcategory'] != 0) {
                 $list1[$i]['overcategory'] = $cat['overcategory'];
@@ -119,8 +125,6 @@ class AdminSystemController extends Controller
         return response()->json($results);
     }
 
-
-
     //
     //      PRODUCT CREATE SITES
     //
@@ -143,8 +147,7 @@ class AdminSystemController extends Controller
 
         if ($validator->fails()) {
             $results['success'] = false;
-            $results['error'] = "validator";
-            $results['msg'] = $validator->errors()->first();
+            $results['msg']     = $validator->errors()->first();
             return response()->json($results);
         }
 
@@ -185,7 +188,7 @@ class AdminSystemController extends Controller
 
         if (!Storage::exists("public/tmp_images/" . $request->name)) {
             $results['success'] = false;
-            $results['msg'] = "Plik nie istnieje!";
+            $results['msg']     = "Plik nie istnieje!";
             return response()->json($results);
         }
 
@@ -280,8 +283,6 @@ class AdminSystemController extends Controller
 
         return response()->json($results);
     }
-
-
 
     //
     //      PRODUCT EDIT SITES
@@ -480,31 +481,113 @@ class AdminSystemController extends Controller
         return response()->json($results);
     }
 
-
-
     //
     //      CATEGORIES MANAGER SITES
     //
 
     public function categoryAdd(Request $request)
     {
-        
+        $validator = Validator::make($request->all(), [
+            'name'  => new ValidCategoryName,
+            'icon'  => new ValidIconFA,
+            'ovcat' => new ValidID,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg']     = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $orderID = count(Category::where('overcategory', $request->ovcat)->get()) + 1;
+
+        Category::create([
+            'name'         => $request->name,
+            'orderID'      => $orderID,
+            'overcategory' => $request->ovcat,
+            'active'       => 1,
+            'visible'      => 1,
+            'icon'         => $request->icon,
+        ]);
+
+        $results['success'] = true;
+        return response()->json($results);
     }
 
     public function categoryRemove(Request $request)
     {
-        
+        $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg']     = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $category = Category::where('id', $request->id)->first();
+
+        if ($category == null) {
+            $results['success'] = false;
+            $request['msg'] = "Nie znaleziono produktu!";
+            return response()->json($results);
+        }
+
+        $categories = Category::where('overcategory', $request->id)->get();
+
+        foreach ($categories as $cat) {
+            $cat->overcategory = -1;
+            $cat->save();
+        }
+
+        $category->delete();
+
+        $results['success'] = true;
+        return response()->json($results);
     }
 
     public function categoryEdit(Request $request)
     {
-        
+        $validator = Validator::make($request->all(), [
+            'id'   => new ValidID,
+            'name' => new ValidCategoryName,
+            'icon' => new ValidIconFA,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg']     = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $category = Category::where('id', $request->id)->first();
+
+        if ($category == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $category->name = $request->name;
+        $category->icon = $request->icon;
+        $category->save();
+
+        $results['success'] = true;
+        return response()->json($results);
     }
 
     public function categoryChangeOrder(Request $request)
     {
-        
-    }
+        $results = array();
 
+        $results['success'] = false;
+        return response()->json($results);
+    }
 
 }
