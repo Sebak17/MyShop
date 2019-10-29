@@ -128,6 +128,16 @@ Route::prefix('systemAdmin')->group(function () {
         return redirect('/');
     });
 
+    Route::post('productLoadList', 'AdminSystemController@productLoadList')->name('systemAdmin_productLoadList');
+    Route::get('productLoadList', function () {
+        return redirect('/');
+    });
+
+    Route::post('dashboardData', 'AdminSystemController@dashboardData')->name('systemAdmin_dashboardData');
+    Route::get('dashboardData', function () {
+        return redirect('/');
+    });
+
 
 
     //
@@ -170,11 +180,6 @@ Route::prefix('systemAdmin')->group(function () {
     //
     //      PRODUCT CREATE SITES
     //
-
-    Route::post('productLoadList', 'AdminSystemController@productLoadList')->name('systemAdmin_productLoadList');
-    Route::get('productLoadList', function () {
-        return redirect('/');
-    });
 
     Route::post('productCreate', 'AdminSystemController@productCreate')->name('systemAdmin_productCreate');
     Route::get('productCreate', function () {

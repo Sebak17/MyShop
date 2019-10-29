@@ -125,6 +125,21 @@ class AdminSystemController extends Controller
         return response()->json($results);
     }
 
+    public function dashboardData(Request $request)
+    {
+        $results = array();
+
+
+        $results['total'] = array();
+        $results['total']['earningsAll'] = 0;
+        $results['total']['earningsMonth'] = 0;
+        $results['total']['products'] = count(Product::all());
+        $results['total']['reports'] = 0;
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
     //
     //      PRODUCT CREATE SITES
     //
