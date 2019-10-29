@@ -9,7 +9,11 @@ class Category extends Model
 
 	protected $table = 'categories';
 
+	public $timestamps = false;
+
     protected $fillable = [
         'name', 'orderID', 'overcategory', 'active', 'visible', 'icon',
     ];
+
+
 }
