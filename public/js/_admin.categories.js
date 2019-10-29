@@ -1,5 +1,5 @@
 var categoriesTree = {},
-    categoriesList = [],
+    categoriesListRaw = [],
     selCategory = -1;
 
 window.onload = function () {
@@ -230,6 +230,8 @@ function category_load() {
         success: function (data) {
             try {
                 if (data.success == true) {
+                    categoriesListRaw = data.list1;
+
                     for (idx in data.list1) {
                         let obj = data.list1[idx];
 
@@ -260,13 +262,6 @@ function category_load() {
                     category_showTree();
                     category_bindTree();
 
-                    categoriesList[0] = "#";
-                    for (idx in data.list1) {
-                        let obj = data.list1[idx];
-
-                        categoriesList[obj.id] = obj.name;
-                    }
-
                     category_loadForm();
                 } else
                     showAlert(AlertType.ERROR, Lang.CATEGORY_MAIN_LOADING_ERROR, '#alertMain');
@@ -282,13 +277,30 @@ function category_load() {
 }
 
 function category_loadForm() {
-    let data = "";
+    let list = "";
 
-    for (idx in categoriesList) {
-        data += '<option value="' + idx + '">' + categoriesList[idx] + '</option>';
+    list += String.raw `<option value="0">#</option>`;
+
+    for (idx in categoriesListRaw) {
+        let obj = categoriesListRaw[idx];
+
+        let overName = "";
+
+        if (typeof obj.overcategory !== 'undefined') {
+            for (s_idx in categoriesListRaw) {
+                let s_obj = categoriesListRaw[s_idx];
+                if (s_obj.id == obj.overcategory)
+                    overName = s_obj.name + " > ";
+            }
+        }
+
+
+        list += String.raw `<option value="` + obj.id + `">` + overName + obj.name + `</option>`;
+
     }
 
-    $("#fmAddList").html(data);
+
+    $('#fmAddList').html(list);
 }
 
 function category_showTree() {
