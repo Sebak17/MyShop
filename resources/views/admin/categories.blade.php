@@ -39,9 +39,9 @@
 		<div class="card card-body mb-3">
 			<legend><i class="fas fa-info"></i> Informacje o kategorii</legend>
 			<hr />
-
+			
 			<div>
-
+				
 				<table class="w-75">
 					<tbody>
 						<tr>
@@ -63,10 +63,10 @@
 					</tbody>
 				</table>
 			</div>
-
+			
 			<hr />
 			<h6 class="text-center mb-3"><i class="fas fa-wrench"></i> Opcje kategorii</h6>
-
+			
 			<div class="alert d-none" id="alert03"></div>
 			
 			<div class="form-group text-center">
@@ -103,32 +103,10 @@
 			</div>
 			
 		</div>
-		
-		<div class="card card-body mb-3">
-			<legend><i class="fas fa-edit"></i> Edytuj kategorię</legend>
-			<hr />
-			
-			<div class="alert d-none" id="alert02"></div>
-			
-			<div class="form-group">
-				<label for="fmEditName">Nazwę kategorii:</label>
-				<input id="fmEditName" type="text" class="form-control">
-			</div>
-			
-			<div class="form-group">
-				<label for="fmEditIcon">Ikona kategorii:</label>
-				<input id="fmEditIcon" type="text" class="form-control">
-			</div>
-			
-			
-			<div class="form-group">
-				<button type="button" id="btnEdit" class="btn btn-primary float-right">Edytuj <i class="fas fa-edit"></i></button>
-			</div>
-		</div>
 	</div>
 </div>
 
-	<!-- Categories order modal -->
+<!-- Categories order modal -->
 <div class="modal fade" id="modalChangeList">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -148,24 +126,35 @@
 
 <!-- Category edit modal -->
 <div class="modal fade" id="modalEdit">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h4 class="modal-title">Edytowanie kategorii</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        Modal body..
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-      </div>
-
-    </div>
-  </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-edit"></i> Edytowanie kategorii</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="alert d-none" id="alert02"></div>
+				
+				<div class="form-group">
+					<label for="fmEditName">Nazwę kategorii:</label>
+					<input id="fmEditName" type="text" class="form-control">
+				</div>
+				
+				<div class="form-group">
+					<label for="fmEditIcon">Ikona kategorii:</label>
+					<input id="fmEditIcon" type="text" class="form-control">
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
+				<button type="button" class="btn btn-success" id="btnEdit">Edytuj <i class="fas fa-edit"></i></button>
+			</div>
+			
+		</div>
+	</div>
 </div>
 
 </div>

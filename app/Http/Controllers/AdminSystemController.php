@@ -584,9 +584,27 @@ class AdminSystemController extends Controller
 
     public function categoryChangeOrder(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'newids'    => "required|array",
+            'newids.*'   => new ValidID,
+        ]);
+
         $results = array();
 
-        $results['success'] = false;
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg']     = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        foreach ($request->newids as $id => $index) {
+            
+            $category = Category::where('id', $id)->first();
+            $category->orderID = $index;
+            $category->save();
+        }
+
+        $results['success'] = true;
         return response()->json($results);
     }
 
