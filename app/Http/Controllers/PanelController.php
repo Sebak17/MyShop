@@ -16,6 +16,11 @@ class PanelController extends Controller
 		return view('panel.dashboard');
 	}
 
+	public function ordersPage()
+	{
+		return view('panel.orders');
+	}
+
 	public function settingsPage()
 	{
 		return view('panel.settings');

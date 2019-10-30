@@ -40,6 +40,8 @@ Route::prefix('panel')->group(function () {
 
     Route::get('/', 'PanelController@dashboardPage')->name('panel_main');
 
+    Route::get('/zamowienia', 'PanelController@ordersPage')->name('panel_orders');
+
     Route::get('/ustawienia', 'PanelController@settingsPage')->name('panel_settings');
 });
 
