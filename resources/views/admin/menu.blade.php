@@ -33,21 +33,28 @@
 		<li class="nav-item">
 			<a class="nav-link" href="{{ route('admin_categoriesPage') }}">
 				<i class="fas fa-fw fa-align-left"></i>
-				<span>Kategorie</span></a>
-			</li>
-			
-			<li class="nav-item">
-				<a class="nav-link" href="tables.html">
-					<i class="fas fa-fw fa-cogs"></i>
-					<span>Ustawienia</span></a>
-				</li>
-				
-				<!-- Divider -->
-				<hr class="sidebar-divider d-none d-md-block">
-				
-				<!-- Sidebar Toggler (Sidebar) -->
-				<div class="text-center d-none d-md-inline">
-					<button class="rounded-circle border-0" id="sidebarToggle"></button>
-				</div>
-				
-			</ul>
+				<span>Kategorie</span>
+			</a>
+		</li>
+		
+		<li class="nav-item">
+			<a class="nav-link" href="">
+				<i class="fas fa-fw fa-user-injured"></i>
+				<span>Zgłoszenia</span>
+			</a>
+		</li>
+		
+		<li class="nav-item">
+			<a class="nav-link" href="">
+				<i class="fas fa-fw fa-cogs"></i>
+				<span>Ustawienia</span>
+			</a>
+		</li>
+		
+		<hr class="sidebar-divider d-none d-md-block">
+		
+		<div class="text-center d-none d-md-inline">
+			<button class="rounded-circle border-0" id="sidebarToggle"></button>
+		</div>
+		
+	</ul>

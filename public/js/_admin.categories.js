@@ -26,7 +26,7 @@ function category_bindKeys() {
     });
 
     $("#btnEditModal").click(function () {
-        $("#modalEdit").modal();
+        category_btn_editModal();
     });
 
     $("#btnModalListSave").click(function () {
@@ -78,6 +78,14 @@ function category_btn_add() {
             showAlert(AlertType.ERROR, Lang.CATEGORY_FORM_ADD_ERROR, '#alert01');
         }
     });
+}
+
+function category_btn_editModal() {
+    if (selCategory <= 0) {
+        return;
+    }
+    
+    $("#modalEdit").modal();
 }
 
 function category_btn_edit() {

@@ -125,6 +125,21 @@ class AdminSystemController extends Controller
         return response()->json($results);
     }
 
+    public function dashboardData(Request $request)
+    {
+        $results = array();
+
+
+        $results['total'] = array();
+        $results['total']['earningsAll'] = 0;
+        $results['total']['earningsMonth'] = 0;
+        $results['total']['products'] = count(Product::all());
+        $results['total']['reports'] = 0;
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
     //
     //      PRODUCT CREATE SITES
     //
@@ -584,9 +599,27 @@ class AdminSystemController extends Controller
 
     public function categoryChangeOrder(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'newids'    => "required|array",
+            'newids.*'   => new ValidID,
+        ]);
+
         $results = array();
 
-        $results['success'] = false;
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg']     = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        foreach ($request->newids as $id => $index) {
+            
+            $category = Category::where('id', $id)->first();
+            $category->orderID = $index;
+            $category->save();
+        }
+
+        $results['success'] = true;
         return response()->json($results);
     }
 
