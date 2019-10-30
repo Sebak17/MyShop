@@ -1,10 +1,7 @@
-@extends('core.app')
-
+@extends('panel.app')
 @extends('core.menu')
 
-@extends('panel.main')
-
-@section('content_sub')
+@section('content')
 
 <div class="page-header">
 	<h2><i class="fas fa-cog"></i> Ustawienia</h2>
@@ -131,11 +128,10 @@
 </div>
 
 <script src="{{ asset('js/_validation.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_panel.settings.js') }}" charset="utf-8"></script>
+
 <script type="text/javascript">
-	window.onload = function() {
-		settings_selectDistrict({{ Auth::user()->location->district }});
-		loadSite_Settings();
-	};
+	var _userDisctrict = {{ Auth::user()->location->district }};
 </script>
 
 @endsection

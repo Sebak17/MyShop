@@ -35,14 +35,34 @@
 				<i class="fas fa-fw fa-align-left"></i>
 				<span>Kategorie</span>
 			</a>
+		
+
+		<hr class="sidebar-divider d-none d-md-block">
+
+		<li class="nav-item">
+			<a class="nav-link" href="">
+				<i class="fas fa-fw fa-receipt"></i>
+				<span>Zamówienia</span>
+			</a>
 		</li>
 		
+		<li class="nav-item">
+			<a class="nav-link" href="">
+				<i class="fas fa-fw fa-users"></i>
+				<span>Użytkownicy</span>
+			</a>
+		</li>
+
+		</li>
+
 		<li class="nav-item">
 			<a class="nav-link" href="">
 				<i class="fas fa-fw fa-user-injured"></i>
 				<span>Zgłoszenia</span>
 			</a>
 		</li>
+
+		<hr class="sidebar-divider d-none d-md-block">
 		
 		<li class="nav-item">
 			<a class="nav-link" href="">
