@@ -1,4 +1,5 @@
-function loadSite_Settings() {
+window.onload = function() {
+
     $("#btn_changeDataPersonal").click(function () {
         settings_changeDataPersonal();
     });
@@ -10,6 +11,8 @@ function loadSite_Settings() {
     $("#btn_changePass").click(function () {
         settings_changePassword();
     });
+
+    settings_selectDistrict(_userDisctrict);
 }
 
 function settings_changeDataPersonal() {
