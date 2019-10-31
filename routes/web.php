@@ -13,6 +13,8 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('/koszyk', 'HomeController@basketPage')->name('basketPage');
+
 Route::get('/logowanie', 'AuthorizationController@loginPage')->name('loginPage');
 Route::get('/rejestracja', 'AuthorizationController@registerPage')->name('registerPage');
 
@@ -27,14 +29,10 @@ Route::get('/resetuj_haslo/{hash}', 'AuthorizationController@resetPasswordCheckP
 Route::any('/wyloguj', 'AuthorizationController@logout')->name('logout');
 
 Route::get('/not_authorizated', function () {
-	return view('auth.not_authorizated');
+    return view('auth.not_authorizated');
 })->name('not_authorizated');
 
-
-
 Route::any('/oferty', 'OffersController@offersPage')->name('offersPage');
-
-
 
 Route::prefix('panel')->group(function () {
 
@@ -45,8 +43,20 @@ Route::prefix('panel')->group(function () {
     Route::get('/ustawienia', 'PanelController@settingsPage')->name('panel_settings');
 });
 
-
 Route::prefix('system')->group(function () {
+
+    //
+    //      GENERAL
+    //
+
+    Route::post('categoriesList', 'HomeSystemController@loadCategories')->name('system_categoriesList');
+    Route::get('categoriesList', function () {
+        return redirect('/');
+    });
+
+    //
+    //      AUTH
+    //
 
     Route::post('signIn', 'AuthorizationController@signIn')->name('system_signIn');
     Route::get('signIn', function () {
@@ -55,11 +65,6 @@ Route::prefix('system')->group(function () {
 
     Route::post('signUp', 'AuthorizationController@signUp')->name('system_signUp');
     Route::get('signUp', function () {
-        return redirect('/');
-    });
-
-    Route::post('categoriesList', 'HomeController@loadCategories')->name('system_categoriesList');
-    Route::get('categoriesList', function () {
         return redirect('/');
     });
 
@@ -140,8 +145,6 @@ Route::prefix('systemAdmin')->group(function () {
         return redirect('/');
     });
 
-
-
     //
     //      AUTH
     //
@@ -150,8 +153,6 @@ Route::prefix('systemAdmin')->group(function () {
     Route::get('signIn', function () {
         return redirect('/');
     });
-
-
 
     //
     //      CATEGORIES MANAGER SITES
@@ -177,8 +178,6 @@ Route::prefix('systemAdmin')->group(function () {
         return redirect('/');
     });
 
-
-
     //
     //      PRODUCT CREATE SITES
     //
@@ -193,7 +192,6 @@ Route::prefix('systemAdmin')->group(function () {
         return redirect('/');
     });
 
-
     Route::post('productAddImageRemove', 'AdminSystemController@productAddImageRemove')->name('systemAdmin_productAddImageRemove');
     Route::get('productAddImageRemove', function () {
         return redirect('/');
@@ -203,8 +201,6 @@ Route::prefix('systemAdmin')->group(function () {
     Route::get('productLoadOldImages', function () {
         return redirect('/');
     });
-
-    
 
     //
     //      PRODUCT EDIT SITES
