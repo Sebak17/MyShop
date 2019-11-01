@@ -13,6 +13,7 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('/ulubione', 'HomeController@favoritesPage')->name('favoritesPage');
 Route::get('/koszyk', 'HomeController@basketPage')->name('basketPage');
 
 Route::get('/logowanie', 'AuthorizationController@loginPage')->name('loginPage');

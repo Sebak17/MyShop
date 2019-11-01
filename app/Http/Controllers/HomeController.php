@@ -15,4 +15,9 @@ class HomeController extends Controller
         return view('home/basket');
     }
 
+    public function favoritesPage()
+    {
+    	
+    }
+
 }
