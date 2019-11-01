@@ -26,13 +26,13 @@
 		
 		@auth('web')
 		<li class="nav-item h-100 col-3 col-md-2">
-			<a href="/ulubione">
+			<a href="{{ route('favoritesPage') }}">
 				<i class="fas fa-heart fa-2x"></i>
 			</a>
 		</li>
 		
 		<li class="nav-item h-100 col-3 col-md-2">
-			<a href="/koszyk">
+			<a href="{{ route('basketPage') }}">
 				<i class="fas fa-shopping-basket fa-2x"></i>
 			</a>
 		</li>
@@ -44,13 +44,13 @@
 			</a>
 			
 			<div class="dropdown-menu">
-				<a class="dropdown-item" href="/panel">
+				<a class="dropdown-item" href="{{ route('panel_main') }}">
 					<i class="fas fa-solar-panel"></i> Panel
 				</a>
-				<a class="dropdown-item" href="/panel/moje_zamowienia">
+				<a class="dropdown-item" href="{{ route('panel_orders') }}">
 					<i class="fas fa-credit-card"></i> Moje zamówienia
 				</a>
-				<a class="dropdown-item" href="/panel/ustawienia">
+				<a class="dropdown-item" href="{{ route('panel_settings') }}">
 					<i class="fas fa-cog fa-spin"></i> Ustawienia
 				</a>
 				<a class="dropdown-item" href="{{ route('logout') }}">
