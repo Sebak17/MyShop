@@ -78,6 +78,13 @@ function bindElementsInList() {
             if(product === null)
             	return;
 
+            if(newAmount > 100) {
+                $(this).val(product.amount)
+                showAlert(AlertType.ERROR, Lang.TOO_MANY_ITEMS);
+                return;
+            }
+
+
             product.amount = newAmount;
 
             let newPrice = rePrice(parseInt(newAmount) * parseFloat(product.price));

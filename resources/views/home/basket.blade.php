@@ -30,6 +30,8 @@
             <div class="card card-body">
                 <legend><i class="fas fa-balance-scale"></i> Podsumowanie</legend>
                 <hr />
+
+                <div class="alert text-center d-none" id="alert"></div>
                 
                 <div class="row text-center">
                     <div class="col-6 lead">Suma:</div>
