@@ -6,8 +6,6 @@ $(document).ready(function () {
 
     parseURL();
 
-    loadCategories();
-
     $("#btnFiltersApply").click(function () {
         applyFilters();
     });
@@ -15,6 +13,8 @@ $(document).ready(function () {
     $("#sortType").change(function () {
         sortType = parseInt($("#sortType").val());
     });
+
+    bindCategoryList();
 });
 
 function parseURL() {
@@ -89,82 +89,6 @@ function generateURL() {
     url = url.replace("&", "?");
 
     return "/oferty/" + url;
-}
-
-function loadCategories() {
-    $.ajax({
-        url: "/system/categoriesList",
-        method: "POST",
-        data: {
-            id: categoryID
-        },
-        success: function (data) {
-            try {
-                if (data.success == true) {
-
-                    let m = "";
-                    for (ix in data.categories) {
-                        let obj = data.categories[ix];
-
-                        m += String.raw `<tr class="category category-item" category="` + obj.id + `"><td class="text-center"><i class="fas ` + obj.icon + ` fa-1x"></i></td><td>` + obj.name + `</td></tr>`;
-                    }
-
-                    $("#categoriesList2").html(m);
-
-                    if (categoryID == 0)
-                        $("#categoryBack").addClass('d-none');
-                    else {
-                        if (typeof data.overcategory != 'undefined') {
-                            $("#prevCategory").html(data.overcategory.name);
-                            $(".category-item-back").attr('category', data.overcategory.id);
-                        }
-                        $("#categoryBack").removeClass('d-none');
-                    }
-
-
-
-
-                    bindCategoryList();
-
-                }
-            } catch (e) {}
-        },
-        error: function () {}
-    });
-
-
-}
-
-function loadOffers() {
-
-    $.ajax({
-        url: "/system/offersList",
-        method: "POST",
-        data: {
-            filters: toObject(filtersValues),
-            sortType: sortType,
-            categoryID: categoryID
-        },
-        success: function (data) {
-            try {
-                if (data.success == true) {
-                    $("#offersList").html(data.offers);
-                } else {
-                    $("#offersList").html(String.raw `<div class="alert hidden" id="alert"></div>`);
-                    showAlert(AlertType.ERROR, data.msg);
-                }
-
-            } catch (e) {
-                $("#offersList").html(String.raw `<div class="alert hidden" id="alert"></div>`);
-                showAlert(AlertType.ERROR, Lang.OFFERSLIST_ERROR_LOADING);
-            }
-        },
-        error: function () {
-            $("#offersList").html(String.raw `<div class="alert hidden" id="alert"></div>`);
-            showAlert(AlertType.ERROR, Lang.OFFERSLIST_ERROR_LOADING);
-        }
-    });
-
 }
 
 function bindCategoryList() {

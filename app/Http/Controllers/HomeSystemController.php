@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Validator;
 
 class HomeSystemController extends Controller
 {
-    
-	public function loadCategories(Request $request)
+
+    public function loadCategories(Request $request)
     {
 
-        $response = array();
+        $results = array();
 
         $overcategory_id = 0;
 
@@ -44,32 +44,36 @@ class HomeSystemController extends Controller
 
         if ($overcategory != null) {
 
+            $results['currentCategory'] = $overcategory->name;
+
             $overcategory = Category::where('active', 1)->where('visible', 1)->where('id', $overcategory->overcategory)->first();
 
             if ($overcategory != null) {
-                $response['overcategory'] = [
+                $results['overcategory'] = [
                     'id'   => $overcategory->id,
                     'name' => $overcategory->name,
                 ];
             } else {
-                $response['overcategory'] = [
+                $results['overcategory'] = [
                     'id'   => 0,
                     'name' => 'Wszystkich kategorii',
                 ];
             }
 
         } else {
-            $response['overcategory'] = [
+            $results['currentCategory'] = "Wszystkie kategorie";
+
+            $results['overcategory'] = [
                 'id'   => 0,
                 'name' => 'Wszystkich kategorii',
             ];
         }
 
-        $response['categories'] = $list;
-        $response['success']    = true;
+        $results['categories'] = $list;
+        $results['success']    = true;
 
-        return response()->json($response);
+        return response()->json($results);
 
     }
-    
+
 }
