@@ -10,23 +10,6 @@
 		<div class="col-sm-12 col-md-10 offset-md-1">
 			<div class="row">
 				
-				<!--
-				<div class="mt-3 col-sm-12 col-md-12 col-xl-11 offset-xl-1 col-lg-12">
-						<div class="card card-body">
-								<ol class="breadcrumb">
-										<li class="breadcrumb-item"><a href="/oferty/?category=0"><i class="fas fa-home"></i></a></li>
-										<li class="breadcrumb-item"><a href="#">Library</a></li>
-										<li class="breadcrumb-item"><a href="#">Library</a></li>
-										<li class="breadcrumb-item"><a href="#">Library</a></li>
-										<li class="breadcrumb-item"><a href="#">Library</a></li>
-										<li class="breadcrumb-item active">Data</li>
-								</ol>
-						</div>
-				</div>
-				-->
-				
-				
-				
 				<div id="left-column" class=" mt-3 col-sm-12 col-md-12 col-xl-3 offset-xl-1 col-lg-4 offset-lg-0">
 					
 					<button class="btn w-100 mb-3" data-toggle="collapse" data-target="#left-column-content">
@@ -39,18 +22,29 @@
 								<h5 class="card-title"><i class="fas fa-sitemap"></i> Kategorie</h5>
 								<hr />
 								
+								<p>
+									Aktualna: <strong>{{ $currentCategory }}</strong>
+								</p>
+								
+								<hr />
+								
 								<div class="mt-1">
 									<table class="col-12">
+										@if (isset($overCategory) && $overCategory != 0)
 										<thead id="categoryBack">
-											<tr class="category category-item-back" category=""><td class="text-center"><i class="fas fa-level-up-alt fa-1x"></i></td><td>cofnij do <b id="prevCategory"></b></td></tr>
+											<tr class="category category-item-back" category="{{ $overCategory['id'] }}"><td class="text-center"><i class="fas fa-level-up-alt fa-1x"></i></td><td>cofnij do <b>{{ $overCategory['name'] }}</b></td></tr>
 										</thead>
+										@endif
+										
 										<tbody id="categoriesList2">
-											
+											@foreach ($categoriesList as $category)
+											<tr class="category category-item" category="{{ $category['id'] }}"><td class="text-center"><i class="fas {{ $category['icon'] }} fa-1x"></i></td><td>{{ $category['name'] }}</td></tr>
+											@endforeach
 										</tbody>
 									</table>
-
+									
 								</div>
-
+								
 							</div>
 						</div>
 						
@@ -122,64 +116,32 @@
 					</div>
 					
 					<div class="card">
-						<div class="card-body" id="offersList">
-							
-							<a href="/oferta/acd" class="tdn">
+						<div class="card-body" id="productsList">
+							@if (count($productsList) == 0)
+								
+							@endif
+
+							@foreach ($productsList as $product)
+							<a href="/oferta/{{ $product['id'] }}" class="tdn">
 								<div class="offer-block row pt-3 pb-3 border-top border-bottom">
 									<div class="col-3 col-md-3">
-										<img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="img-thumbnail" alt="Cinque Terre">
+										<img src="/storage/products_images/{{ $product['image'] }}" class="img-thumbnail offers-list-image" alt="{{ $product['name'] }}">
 									</div>
 									<div class="col-5 col-md-6">
-										<h4>Obraz 100x50cm</h4>
-										
-										<p class="text-muted mb-1">100 osób kupiło</p>
+										<h4>{{ $product['name'] }}</h4>
+										@if ($product['buyers'] > 0)
+											<p class="text-muted mb-1">{{ $product['buyers'] }} osób kupiło</p>
+										@endif
 									</div>
 									
 									<div class="col-4 col-md-3">
-										<h2 class="mt-2">100.00 zł</h2>
+										<h2 class="mt-2">{{ $product['price'] }} zł</h2>
 										
 									</div>
 									
 								</div>
 							</a>
-							
-							<a href="/oferta/abc" class="tdn">
-								<div class="offer-block row pt-3 pb-3 border-top border-bottom">
-									<div class="col-3 col-md-3">
-										<img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="img-thumbnail" alt="Cinque Terre">
-									</div>
-									<div class="col-5 col-md-6">
-										<h4>Obraz 100x50cm</h4>
-										
-										<p class="text-muted mb-1">100 osób kupiło</p>
-									</div>
-									
-									<div class="col-4 col-md-3">
-										<h2 class="mt-2">100.00 zł</h2>
-										
-									</div>
-									
-								</div>
-							</a>
-							
-							<a href="/oferta/das" class="tdn">
-								<div class="offer-block row pt-3 pb-3 border-top border-bottom">
-									<div class="col-3 col-md-3">
-										<img src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="img-thumbnail" alt="Cinque Terre">
-									</div>
-									<div class="col-5 col-md-6">
-										<h4>Obraz 100x50cm</h4>
-										
-										<p class="text-muted mb-1">100 osób kupiło</p>
-									</div>
-									
-									<div class="col-4 col-md-3">
-										<h2 class="mt-2">100.00 zł</h2>
-									</div>
-									
-								</div>
-							</a>
-							
+							@endforeach
 							
 						</div>
 					</div>
