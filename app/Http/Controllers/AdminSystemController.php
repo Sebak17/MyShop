@@ -112,7 +112,7 @@ class AdminSystemController extends Controller
 
             $list[$i]['id']    = $prod['id'];
             $list[$i]['name']  = $prod['title'];
-            $list[$i]['price'] = $prod['price'];
+            $list[$i]['price'] = number_format((float) $prod['price'], 2, '.', '');
 
             $list[$i]['image1'] = (count($prod->images) > 0 ? $prod->images[0]->name : null);
 

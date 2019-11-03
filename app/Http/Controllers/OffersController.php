@@ -112,7 +112,7 @@ class OffersController extends Controller
             $product           = array();
             $product['id']     = $value->id;
             $product['name']   = $value->title;
-            $product['price']  = $value->price;
+            $product['price']  = number_format((float) $value->price, 2, '.', '');
             $product['buyers'] = rand(0, 100);
             $product['image']  = (count($value->images) > 0 ? $value->images[0]->name : null);
 
