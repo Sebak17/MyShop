@@ -58,7 +58,10 @@ class OffersController extends Controller
             array_push($categoriesList, $ar);
         }
 
-        $currentCategory = "Wszystkie kategorie";
+        $currentCategory = [
+            'id'   => 0,
+            'name' => "Wszystkie kategorie",
+        ];
 
         $overcategory = Category::where('active', 1)->where('visible', 1)->where('id', $req_category)->first();
 
@@ -69,7 +72,10 @@ class OffersController extends Controller
 
         if ($overcategory != null) {
 
-            $currentCategory = $overcategory->name;
+            $currentCategory = [
+                'id'   => $overcategory->id,
+                'name' => $overcategory->name,
+            ];
 
             $overcategory = Category::where('active', 1)->where('visible', 1)->where('id', $overcategory->overcategory)->first();
 
@@ -126,29 +132,44 @@ class OffersController extends Controller
             case 2:
                 break;
             case 3:
-            	usort($productsData, function ($a, $b) {
-                	if($a['buyers'] == $b['buyers'])
-                		return 0;
-                	if($a['buyers'] < $b['buyers'])
-                    	return 1;
+                usort($productsData, function ($a, $b) {
+
+                    if ($a['buyers'] == $b['buyers']) {
+                        return 0;
+                    }
+
+                    if ($a['buyers'] < $b['buyers']) {
+                        return 1;
+                    }
+
                     return -1;
                 });
                 break;
             case 4:
-            	usort($productsData, function ($a, $b) {
-                	if($a['price'] == $b['price'])
-                		return 0;
-                	if($a['price'] > $b['price'])
-                    	return 1;
+                usort($productsData, function ($a, $b) {
+
+                    if ($a['price'] == $b['price']) {
+                        return 0;
+                    }
+
+                    if ($a['price'] > $b['price']) {
+                        return 1;
+                    }
+
                     return -1;
                 });
                 break;
             case 5:
                 usort($productsData, function ($a, $b) {
-                	if($a['price'] == $b['price'])
-                		return 0;
-                	if($a['price'] < $b['price'])
-                    	return 1;
+
+                    if ($a['price'] == $b['price']) {
+                        return 0;
+                    }
+
+                    if ($a['price'] < $b['price']) {
+                        return 1;
+                    }
+
                     return -1;
                 });
                 break;

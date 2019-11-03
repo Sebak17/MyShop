@@ -23,14 +23,14 @@
 								<hr />
 								
 								<p>
-									Aktualna: <strong>{{ $currentCategory }}</strong>
+									Aktualna: <strong>{{ $currentCategory['name'] }}</strong>
 								</p>
 								
 								<hr />
 								
 								<div class="mt-1">
 									<table class="col-12">
-										@if (isset($overCategory) && $overCategory != 0)
+										@if (isset($overCategory) && $currentCategory['id'] != 0)
 										<thead id="categoryBack">
 											<tr class="category category-item-back" category="{{ $overCategory['id'] }}"><td class="text-center"><i class="fas fa-level-up-alt fa-1x"></i></td><td>cofnij do <b>{{ $overCategory['name'] }}</b></td></tr>
 										</thead>
@@ -118,7 +118,7 @@
 					<div class="card">
 						<div class="card-body" id="productsList">
 							@if (count($productsList) == 0)
-								
+
 							@endif
 
 							@foreach ($productsList as $product)
