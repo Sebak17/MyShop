@@ -68,7 +68,7 @@ var Lang = {
     PRODUCT_FORM_EDIT_SUCCESS: "Produkt został zaktualizowany!",
     PRODUCT_FORM_EDIT_ERROR: "Wystąpił błąd podczas edycji produktu!",
 
-    PRODUCT_NAME_ERROR: "Nazwa produktu jest niepoprawna! (4-40)",
+    PRODUCT_NAME_ERROR: "Nazwa produktu jest niepoprawna! (4-120)",
     PRODUCT_PRICE_ERROR: "Cena produktu jest niepoprawna!",
     PRODUCT_DESCRIPTION_ERROR: "Opis produktu jest niepoprawny!",
 

@@ -105,9 +105,9 @@ function validateIconFA(iconName) {
 }
 
 function validateProductName(name) {
-    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+$/.test(name))
+    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9()- ]+$/.test(name))
         return false;
-    if (name.length < 4 || name.length > 40)
+    if (name.length < 4 || name.length > 120)
         return false;
 
     return true;

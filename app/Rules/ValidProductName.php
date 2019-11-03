@@ -29,11 +29,11 @@ class ValidProductName implements Rule
             return false;
         }
 
-        if (mb_strlen($value) > 40) {
+        if (mb_strlen($value) > 120) {
             return false;
         }
 
-        if (!preg_match("/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9- ]+$/", $value)) {
+        if (!preg_match("/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9()- ]+$/", $value)) {
             return false;
         }
 
@@ -47,6 +47,6 @@ class ValidProductName implements Rule
      */
     public function message()
     {
-        return 'Nazwa pruduktu jest niepoprawna! (4-40)';
+        return 'Nazwa pruduktu jest niepoprawna! (4-120)';
     }
 }
