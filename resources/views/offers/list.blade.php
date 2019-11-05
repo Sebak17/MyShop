@@ -118,9 +118,11 @@
 					<div class="card">
 						<div class="card-body" id="productsList">
 							@if (count($productsList) == 0)
-
+							<div class="text-center">
+								<h4><i class="fas fa-search"></i> Nie znaleziono żadnych ofert!</h4>
+							</div>
 							@endif
-
+							
 							@foreach ($productsList as $product)
 							<a href="/oferta/{{ $product['id'] }}" class="tdn">
 								<div class="offer-block row pt-3 pb-3 border-top border-bottom">
@@ -130,7 +132,7 @@
 									<div class="col-5 col-md-6">
 										<h4>{{ $product['name'] }}</h4>
 										@if ($product['buyers'] > 0)
-											<p class="text-muted mb-1">{{ $product['buyers'] }} osób kupiło</p>
+										<p class="text-muted mb-1">{{ $product['buyers'] }} osób kupiło</p>
 										@endif
 									</div>
 									
