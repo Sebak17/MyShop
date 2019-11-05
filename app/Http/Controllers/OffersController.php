@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Product;
+use App\Helpers\CategoriesHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,6 +46,10 @@ class OffersController extends Controller
         }
 
         $categories = Category::where('active', 1)->where('visible', 1)->where('overcategory', $req_category)->orderBy('orderID', 'ASC')->get();
+        $allCategories = Category::where('active', 1)->where('visible', 1)->get();
+
+
+        $allSubCategories = CategoriesHelper::getAllSubCategories($allCategories, $req_category);
 
         $categoriesList = array();
 
@@ -97,9 +102,20 @@ class OffersController extends Controller
                 continue;
             }
 
-            if ($req_category != 0 && $value->category_id != $req_category) {
-                continue;
+            
+            if ($req_category != 0) {
+                $isOkay = false;
+                foreach ($allSubCategories as $cat) {
+                    if($cat->id == $value->category_id)
+                        $isOkay = true;
+                }
             }
+
+            if($req_category == $value->category_id)
+                $isOkay = true;
+
+            if(isset($isOkay) && !$isOkay)
+                continue;
 
             if ($req_priceMin != "" && $value->price < $req_priceMin) {
                 continue;
