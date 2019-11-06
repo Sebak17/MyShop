@@ -25,8 +25,13 @@ class ValidID implements Rule
      */
     public function passes($attribute, $value)
     {
-        if(!is_numeric($value))
+        if (!is_numeric($value)) {
             return false;
+        }
+
+        if (!preg_match("/^[0-9]+$/", $value)) {
+            return false;
+        }
 
         return true;
     }
@@ -40,4 +45,5 @@ class ValidID implements Rule
     {
         return 'Bład identyfikatora!';
     }
+
 }
