@@ -11,10 +11,15 @@
 |
  */
 
+Route::get('/zzz', 'PanelSystemController@zzz');
+
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/ulubione', 'HomeController@favoritesPage')->name('favoritesPage');
 Route::get('/koszyk', 'HomeController@basketPage')->name('basketPage');
+
+Route::get('/produkt', 'OffersController@productPage')->name('productPage');
+
 
 Route::get('/logowanie', 'AuthorizationController@loginPage')->name('loginPage');
 Route::get('/rejestracja', 'AuthorizationController@registerPage')->name('registerPage');
@@ -86,6 +91,16 @@ Route::prefix('system')->group(function () {
 });
 
 Route::prefix('systemUser')->group(function () {
+
+    Route::post('loadBasketProducts', 'PanelSystemController@loadBasketProducts')->name('systemUser_loadBasketProducts');
+    Route::get('loadBasketProducts', function () {
+        return redirect('/');
+    });
+
+    Route::post('addToBasket', 'PanelSystemController@addProductToBasket')->name('systemUser_addToBasket');
+    Route::get('addToBasket', function () {
+        return redirect('/');
+    });
 
     Route::post('changeDataPersonal', 'PanelSystemController@changeDataPersonal')->name('systemUser_changeDataPersonal');
     Route::get('changeDataPersonal', function () {
