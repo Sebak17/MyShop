@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use App\Product;
 use App\Helpers\CategoriesHelper;
+use App\Product;
+use App\Rules\ValidID;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,9 +46,8 @@ class OffersController extends Controller
 
         }
 
-        $categories = Category::where('active', 1)->where('visible', 1)->where('overcategory', $req_category)->orderBy('orderID', 'ASC')->get();
+        $categories    = Category::where('active', 1)->where('visible', 1)->where('overcategory', $req_category)->orderBy('orderID', 'ASC')->get();
         $allCategories = Category::where('active', 1)->where('visible', 1)->get();
-
 
         $allSubCategories = CategoriesHelper::getAllSubCategories($allCategories, $req_category);
 
@@ -102,20 +102,26 @@ class OffersController extends Controller
                 continue;
             }
 
-            
             if ($req_category != 0) {
                 $isOkay = false;
+
                 foreach ($allSubCategories as $cat) {
-                    if($cat->id == $value->category_id)
+
+                    if ($cat->id == $value->category_id) {
                         $isOkay = true;
+                    }
+
                 }
+
             }
 
-            if($req_category == $value->category_id)
+            if ($req_category == $value->category_id) {
                 $isOkay = true;
+            }
 
-            if(isset($isOkay) && !$isOkay)
+            if (isset($isOkay) && !$isOkay) {
                 continue;
+            }
 
             if ($req_priceMin != "" && $value->price < $req_priceMin) {
                 continue;
@@ -192,6 +198,54 @@ class OffersController extends Controller
         }
 
         return view('offers.list')->with('categoriesList', $categoriesList)->with('currentCategory', $currentCategory)->with('overCategory', $overCategoryInfo)->with('productsList', $productsData);
+    }
+
+    public function productPage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('home');
+        }
+
+        $product = Product::where('id', $request->id)->first();
+
+        if ($product == null) {
+            return "Not found!";
+        }
+
+        $categoriesPath = "";
+        $currCategoryID = $product->category_id;
+
+        do {
+
+            $category = Category::where('id', $currCategoryID)->first();
+
+            $categoriesPath = '<li class="breadcrumb-item"><a href="oferty?category=' . $currCategoryID . '">' . $category->name . '</a></li>' . $categoriesPath;
+
+            $currCategoryID = $category->overcategory;
+
+        } while($currCategoryID != 0);
+
+        $categoriesPath = '<li class="breadcrumb-item"><a href="oferty?category=0"><i class="fas fa-home"></i></a></li>' . $categoriesPath;
+
+
+        $status = "<strong class='text-muted'>BRAK DANYCH</strong>";
+
+        switch ($product->status) {
+            case "IN_STOCK":
+                $status = "<strong class='text-success'>DOSTĘPNY</strong>";
+                break;
+            case "INACCESSIBLE":
+                $status = "<strong class='text-danger'>BRAK NA MAGAZYNIE</strong>";
+                break;
+        }
+
+        $request->session()->put('CURRECT_PRODUCT_PAGE', $product->id);
+
+        return view('offers.item')->with('categoriesPath', $categoriesPath)->with('product', $product)->with('status', $status);
     }
 
 }

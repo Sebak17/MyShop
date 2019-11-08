@@ -124,7 +124,7 @@
 							@endif
 							
 							@foreach ($productsList as $product)
-							<a href="/oferta/{{ $product['id'] }}" class="tdn">
+							<a href="/produkt?id={{ $product['id'] }}" class="tdn">
 								<div class="offer-block row pt-3 pb-3 border-top border-bottom">
 									<div class="col-3 col-md-3">
 										<img src="/storage/products_images/{{ $product['image'] }}" class="img-thumbnail offers-list-image" alt="{{ $product['name'] }}">

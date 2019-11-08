@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Hash;
 use App\Http\Controllers\Controller;
+use App\Product;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
-use App\Rules\ValidEMail;
 use App\Rules\ValidFirstName;
 use App\Rules\ValidPassword;
 use App\Rules\ValidPhoneNumber;
-use App\Rules\ValidReCaptcha;
 use App\Rules\ValidSurName;
 use App\Rules\ValidZipCode;
+use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Session;
 
 class PanelSystemController extends Controller
 {
@@ -25,6 +25,82 @@ class PanelSystemController extends Controller
     {
         $this->middleware('auth');
     }
+
+    //
+    //      PRODUCTS SYSTEM
+    //
+
+    public function addProductToBasket(Request $request)
+    {
+        $results = array();
+
+        if (!$request->session()->exists('CURRECT_PRODUCT_PAGE')) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $product_id = $request->session()->get('CURRECT_PRODUCT_PAGE');
+
+        $product = Product::where('id', $product_id)->first();
+
+        if ($product == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $basketData = $request->session()->get('BASKET_DATA');
+        if($basketData == null)
+            $basketData = array();
+
+
+        if(isset($basketData[$product->id])) {
+            $basketData[$product->id] =  $basketData[$product->id] + 1;
+        } else {
+            $basketData[$product->id] = 1;
+        }
+
+
+        $request->session()->put('BASKET_DATA', $basketData);
+        $request->session()->save();
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function loadBasketProducts(Request $request)
+    {
+        $results = array();
+
+        $results['products'] = array();
+
+        foreach ($request->session()->get('BASKET_DATA', []) as $key => $value) {
+
+            $product = Product::where('id', $key)->first();
+            if($product == null)
+                continue;
+
+            $data = array();
+
+            $data['id'] = $key;
+            $data['name'] = $product->title;
+            $data['price'] = $product->price;
+            $data['amount'] = $value;
+
+            array_push($results['products'], $data);
+        }
+        
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function zzz(Request $request)
+    {
+        dd($request->session()->all());
+    }
+
+    //
+    //      USER DATA SETTINGS
+    //
 
     public function changeDataPersonal(Request $request)
     {
@@ -78,9 +154,9 @@ class PanelSystemController extends Controller
         $user = Auth::user();
 
         $user->location->district = $request->district;
-        $user->location->city = $request->city;
-        $user->location->zipcode = $request->zipcode;
-        $user->location->address = $request->address;
+        $user->location->city     = $request->city;
+        $user->location->zipcode  = $request->zipcode;
+        $user->location->address  = $request->address;
 
         $user->push();
 
@@ -105,8 +181,8 @@ class PanelSystemController extends Controller
             return response()->json($results);
         }
 
-        if($request->password_old == $request->password_new) {
-        	$results['success'] = false;
+        if ($request->password_old == $request->password_new) {
+            $results['success'] = false;
 
             $results['msg'] = "Hasło są identyczne!";
 
@@ -115,8 +191,8 @@ class PanelSystemController extends Controller
 
         $user = Auth::user();
 
-        if(!Hash::check($request->password_old, $user->password)) {
-        	$results['success'] = false;
+        if (!Hash::check($request->password_old, $user->password)) {
+            $results['success'] = false;
 
             $results['msg'] = "Hasło jest niepoprawne!";
 

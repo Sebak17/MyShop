@@ -2,39 +2,14 @@ var products = [];
 
 window.onload = function () {
 
-	stickFooter();
-
-    products.push({
-        id: 1,
-        name: "Chleb",
-        price: 3.50,
-        amount: 2,
-    });
-
-    products.push({
-        id: 2,
-        name: "Bułka",
-        price: 0.99,
-        amount: 5,
-    });
-
-    products.push({
-        id: 3,
-        name: "Rogalik",
-        price: 2.49,
-        amount: 3,
-    });
-
-    products.push({
-        id: 4,
-        name: "Ciasto",
-        price: 16.99,
-        amount: 2,
-    });
+    stickFooter();
 
     loadProducts();
-    updateSummary();
+}
 
+function reloadLocalData() {
+    displayList();
+    updateSummary();
 }
 
 function displayList() {
@@ -42,22 +17,24 @@ function displayList() {
 
     products.forEach(function (item, index) {
         list += String.raw `
-							<tr class="row" data-id="` + item.id + `">
-								<td class="col-5 col-sm-6 col-md-7 col-lg-6">
-									<a href=""><h5>` + item.name + `</h5></a>
-								</td>
-								<td class="col-3 col-sm-2 col-md-2 col-lg-2">
-									<h5>`+ item.price +` zł</h5>
-								</td>
-								<td class="col-2 col-sm-2 col-md-1 col-lg-2">
-									<input type="number" class="form-control form-control-sm text-center" value="` + item.amount + `" data-product-amount="">
-								</td>
-								<td class="col-2 col-sm-2 col-md-2 col-lg-2">
-									<h5 data-price-final="">` + rePrice(parseInt(item.amount) * parseFloat(item.price)) + ` zł</h5>
-								</td>
-								
-							</tr>
-							`;
+                            <tr class="row" data-id="` + item.id + `">
+                                <td class="col-4 col-sm-5 col-md-6 col-lg-5">
+                                    <a href="/produkt?id=`+ item.id + `"><h5>` + item.name + `</h5></a>
+                                </td>
+                                <td class="col-3 col-sm-2 col-md-2 col-lg-2">
+                                    <h5>` + item.price + ` zł</h5>
+                                </td>
+                                <td class="col-2 col-sm-2 col-md-1 col-lg-2">
+                                    <input type="number" class="form-control form-control-sm text-center" value="` + item.amount + `" data-product-amount="">
+                                </td>
+                                <td class="col-2 col-sm-2 col-md-2 col-lg-2">
+                                    <h5 data-price-final="">` + rePrice(parseInt(item.amount) * parseFloat(item.price)) + ` zł</h5>
+                                </td>
+                                <td class="col-1 col-sm-1 col-md-1 col-lg-1">
+                                    <button class="btn btn-danger btn-sm" data-btn-delete><i class="fas fa-times-circle"></i></button>
+                                </td>                                
+                            </tr>
+                            `;
     });
 
     $("#productsList").html(list);
@@ -75,12 +52,17 @@ function bindElementsInList() {
 
             let product = getProductByID(id);
 
-            if(product === null)
-            	return;
+            if (product === null)
+                return;
 
-            if(newAmount > 100) {
+            if (newAmount > 100) {
                 $(this).val(product.amount)
                 showAlert(AlertType.ERROR, Lang.TOO_MANY_ITEMS);
+                return;
+            }
+
+            if (newAmount <= 0) {
+                $(this).val(product.amount)
                 return;
             }
 
@@ -95,20 +77,56 @@ function bindElementsInList() {
         })
     });
 
+    $("[data-btn-delete]").each(function (index) {
+        $(this).click(function () {
+
+            let id = parseInt($(this).parent().parent().attr('data-id'));
+
+            let product = getProductByID(id);
+
+            products = arrayRemove(products, product);
+
+            reloadLocalData();
+        })
+    });
+
+}
+
+function updateBasket() {
+    reloadLocalData();
 }
 
 function loadProducts() {
-    displayList();
+    $.ajax({
+        url: "/systemUser/loadBasketProducts",
+        method: "POST",
+        success: function (data) {
+            if (data.success == true) {
+
+                Object.values(data.products).forEach(function (item, key) {
+                    products.push({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        amount: item.amount,
+                    });
+                });
+                reloadLocalData()
+            }
+        },
+        error: function () {}
+    });
+
 }
 
 function updateSummary() {
-	let sumPrice = 0;
-	products.forEach(function (item, index) {
-		sumPrice += rePrice(parseInt(item.amount) * parseFloat(item.price));
-	});
-	sumPrice = rePrice(sumPrice);
+    let sumPrice = 0;
+    products.forEach(function (item, index) {
+        sumPrice += rePrice(parseInt(item.amount) * parseFloat(item.price));
+    });
+    sumPrice = rePrice(sumPrice);
 
-	$("#summaryPrice").html(sumPrice + " zł");
+    $("#summaryPrice").html(sumPrice + " zł");
 }
 
 function getProductByID(id) {
@@ -123,5 +141,5 @@ function getProductByID(id) {
 }
 
 function rePrice(price) {
-	return Math.round(price * 100) / 100;
+    return Math.round(price * 100) / 100;
 }
