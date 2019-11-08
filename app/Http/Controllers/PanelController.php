@@ -14,7 +14,9 @@ class PanelController extends Controller
         return view('home/basket');
     }
 
-    public function favoritesPage() {}
+    public function favoritesPage() {
+        return view('home/favorites');
+    }
 
     public function dashboardPage()
     {
