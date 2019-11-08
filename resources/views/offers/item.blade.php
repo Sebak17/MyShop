@@ -55,6 +55,11 @@
 						
 						<div class="row">
 							<div class="col text-right">
+								<div class="alert alert-dismissible alert-success text-left d-none" id="alert">
+									<button type="button" class="close" data-dismiss="alert">&times;</button>
+									<span></span>
+								</div>
+								
 								<div class="form-group">
 									@if($product->status != "INACCESSIBLE")
 									@if(Auth::guard('web')->check())

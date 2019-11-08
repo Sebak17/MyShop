@@ -48,6 +48,9 @@ Route::group([], function () {
 Route::group([], function () {
     Route::get('/ulubione', 'PanelController@favoritesPage')->name('favoritesPage');
     Route::get('/koszyk', 'PanelController@shoppingCartPage')->name('shoppingCartPage');
+
+    Route::get('/zamowienie/informacje', 'PanelController@shoppingCartInformation')->name('shoppingCartInformation');
+    Route::get('/zamowienie/potwierdz', 'PanelController@shoppingCartConfirm')->name('shoppingCartConfirm');
 });
 
 //
@@ -126,6 +129,11 @@ Route::prefix('systemUser')->group(function () {
 
     Route::post('updateShoppingCart', 'PanelSystemController@updateShoppingCart')->name('systemUser_updateShoppingCart');
     Route::get('updateShoppingCart', function () {
+        return redirect('/');
+    });
+
+    Route::post('confirmShoppingCart', 'PanelSystemController@confirmShoppingCart')->name('systemUser_confirmShoppingCart');
+    Route::get('confirmShoppingCart', function () {
         return redirect('/');
     });
 

@@ -8,9 +8,9 @@
     <div class="row">
         <div class="col-12 col-lg-7 offset-lg-1">
             <div class="card card-body mb-3">
-                
+
                 <legend><i class="fas fa-shopping-basket"></i> Lista przedmiotów</legend>
-                
+
                 <table class="table table-striped">
                     <thead>
                         <tr class="d-flex">
@@ -26,25 +26,25 @@
                 </table>
             </div>
         </div>
-        
+
         <div class="col-12 col-lg-3">
             <div class="card card-body">
                 <legend><i class="fas fa-balance-scale"></i> Podsumowanie</legend>
                 <hr />
 
                 <div class="alert text-center d-none" id="alert"></div>
-                
+
                 <div class="row text-center">
                     <div class="col-6 lead">Suma:</div>
                     <div class="col-6 lead"><strong id="summaryPrice">?</strong></div>
                 </div>
-                
+
                 <hr />
-                
+
                 <div class="form-group text-right">
-                    <button class="btn btn-success">Kupuje <i class="fas fa-shopping-cart"></i></button>
+                     <button class="btn btn-success" id="btnNext">Kupuje <i class="fas fa-shopping-cart"></i></button>
                 </div>
-                
+
             </div>
         </div>
     </div>

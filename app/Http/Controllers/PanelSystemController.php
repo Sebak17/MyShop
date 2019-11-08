@@ -8,6 +8,7 @@ use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
 use App\Rules\ValidFirstName;
+use App\Rules\ValidID;
 use App\Rules\ValidPassword;
 use App\Rules\ValidPhoneNumber;
 use App\Rules\ValidSurName;
@@ -97,8 +98,82 @@ class PanelSystemController extends Controller
 
     public function updateShoppingCart(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'products'          => 'required|array',
+            'products.*.id'     => new ValidID,
+            'products.*.amount' => 'required|integer|between:1,100',
+        ]);
+
         $results = array();
 
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $shoppingCartData = $request->session()->get('SHOPPINGCART_DATA');
+
+        if ($shoppingCartData == null) {
+            $shoppingCartData = array();
+        }
+
+        foreach ($request->products as $value) {
+            $product = Product::where('id', $value['id'])->first();
+
+            if ($product == null) {
+                continue;
+            }
+
+            $shoppingCartData[$value['id']] = $value['amount'];
+        }
+
+        $request->session()->put('SHOPPINGCART_DATA', $shoppingCartData);
+        $request->session()->save();
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function confirmShoppingCart(Request $request)
+    {
+        $results = array();
+
+        if (!$request->session()->exists('SHOPPINGCART_DATA')) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $shoppingCartData = $request->session()->get('SHOPPINGCART_DATA');
+
+        if (empty($shoppingCartData)) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $newShoppingCartData = array();
+
+        foreach ($shoppingCartData as $key => $value) {
+
+            $product = Product::where('id', $key)->first();
+
+            if($product == null)
+                continue;
+
+            if(!is_int($value) || $value <= 0 || $value > 100 )
+                continue;
+
+            $newShoppingCartData[$key] = $value;
+        }
+
+        $request->session()->put('SHOPPINGCART_STATUS', "INFORMATION");
+        $request->session()->put('SHOPPINGCART_DATA', $newShoppingCartData);
+        $request->session()->save();
+
+
+        $results['url']     = route('shoppingCartInformation');
+        $results['success'] = true;
         return response()->json($results);
     }
 
