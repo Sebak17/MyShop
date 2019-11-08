@@ -35,7 +35,7 @@ function addProductToShoppingCart() {
         method: "POST",
         success: function (data) {
             if (data.success == true) {
-
+                showAlertDismissible(AlertType.SUCCESS, Lang.PRODUCT_ADDED_TO_SHOPPINGCART);
             }
         },
         error: function () {

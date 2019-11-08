@@ -74,4 +74,6 @@ var Lang = {
 
     TOO_MANY_ITEMS: "Maksymalna ilość przedmiotów to 100!",
 
+    PRODUCT_ADDED_TO_SHOPPINGCART: "Produkt został dodany do koszyka!",
+
 };
