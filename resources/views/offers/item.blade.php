@@ -39,7 +39,7 @@
 				
 				<div class="col-6 mb-3">
 					<div class="card card-body">
-						<legend>{{ $product->title }}</legend>
+						<legend><i class="far fa-star" id="_favoriteIcon" data-favorite="false"></i> {{ $product->title }}</legend>
 						
 						<hr />
 						
@@ -79,8 +79,38 @@
 						<hr />
 						
 						<div>
-							{{ $product->description }}
+							{!! nl2br($product->description) !!}
 						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-12">
+					<div class="card card-body">
+						<legend><i class="fas fa-info"></i> Opis produktu</legend>
+						<hr />
+						
+						<table class="table table-striped">
+							<tbody>
+								<tr>
+									<td>Test</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td>Test</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td>Test</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td>Test</td>
+									<td>1</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
