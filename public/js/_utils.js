@@ -87,8 +87,14 @@ function toObject(ar) {
     return o;
 }
 
+function arrayRemove(arr, value) {
+    return arr.filter(function (ele) {
+        return ele != value;
+    });
+}
+
 function generateRecaptchaToken(type) {
-    if(isVerifying) 
+    if (isVerifying)
         return;
 
     isVerifying = true;
