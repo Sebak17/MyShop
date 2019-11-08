@@ -59,6 +59,51 @@ function showAlert(type, text = '', id = '', useIcon = true) {
     }
 }
 
+function showAlertDismissible(type, text = '', id = '', useIcon = false) {
+
+    if (id == '')
+        id = "#alert";
+
+    $(id).removeClass('alert-success');
+    $(id).removeClass('alert-warning');
+    $(id).removeClass('alert-danger');
+
+    if (type != -1)
+        $(id).removeClass('d-none');
+
+    console.log(id + ">span");
+
+    switch (type) {
+        case -1:
+            $(id + ">span").html("");
+            $(id).addClass('d-none');
+            break;
+        case 1:
+            if (useIcon)
+                text = String.raw `<i class="fas fa-check"></i> ` + text;
+            $(id + ">span").html(text);
+            $(id).addClass('alert-success');
+            break;
+        case 2:
+            if (useIcon)
+                text = String.raw `<i class="fas fa-exclamation"></i> ` + text;
+            $(id).addClass('alert-danger');
+            $(id + ">span").html(text);
+            break;
+        case 3:
+            if (useIcon)
+                text = String.raw `` + text;
+            $(id + ">span").html(text);
+            $(id).addClass('alert-warning');
+            break;
+
+        case 9:
+            $(id + ">span").html(String.raw `<i class="fas fa-circle-notch fa-spin"></i> ` + text);
+            $(id).addClass('alert-warning');
+            break;
+    }
+}
+
 function stickFooter() {
 
     $("#footer").addClass("fixed-bottom");
