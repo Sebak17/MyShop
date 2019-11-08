@@ -51,7 +51,7 @@
 </div>
 
 <script src="{{ asset('js/_search.engine.js') }}" charset="utf-8"></script>
-<script src="{{ asset('js/_orders.basket.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_orders.shoppingcart.js') }}" charset="utf-8"></script>
 
 
 @endsection

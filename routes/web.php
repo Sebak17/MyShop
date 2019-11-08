@@ -47,7 +47,7 @@ Route::group([], function () {
 
 Route::group([], function () {
     Route::get('/ulubione', 'PanelController@favoritesPage')->name('favoritesPage');
-    Route::get('/koszyk', 'PanelController@basketPage')->name('basketPage');
+    Route::get('/koszyk', 'PanelController@shoppingCartPage')->name('shoppingCartPage');
 });
 
 //
@@ -114,13 +114,18 @@ Route::prefix('system')->group(function () {
 
 Route::prefix('systemUser')->group(function () {
 
-    Route::post('loadBasketProducts', 'PanelSystemController@loadBasketProducts')->name('systemUser_loadBasketProducts');
-    Route::get('loadBasketProducts', function () {
+    Route::post('loadShoppingCartProducts', 'PanelSystemController@loadShoppingCartProducts')->name('systemUser_loadShoppingCartProducts');
+    Route::get('loadShoppingCartProducts', function () {
         return redirect('/');
     });
 
-    Route::post('addToBasket', 'PanelSystemController@addProductToBasket')->name('systemUser_addToBasket');
-    Route::get('addToBasket', function () {
+    Route::post('addToShoppingCart', 'PanelSystemController@addProductToShoppingCart')->name('systemUser_addToShoppingCart');
+    Route::get('addToShoppingCart', function () {
+        return redirect('/');
+    });
+
+    Route::post('updateShoppingCart', 'PanelSystemController@updateShoppingCart')->name('systemUser_updateShoppingCart');
+    Route::get('updateShoppingCart', function () {
         return redirect('/');
     });
 

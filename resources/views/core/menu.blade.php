@@ -32,7 +32,7 @@
 		</li>
 		
 		<li class="nav-item h-100 col-3 col-md-2">
-			<a href="{{ route('basketPage') }}">
+			<a href="{{ route('shoppingCartPage') }}">
 				<i class="fas fa-shopping-basket fa-2x"></i>
 			</a>
 		</li>

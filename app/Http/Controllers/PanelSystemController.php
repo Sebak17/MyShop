@@ -30,7 +30,7 @@ class PanelSystemController extends Controller
     //      PRODUCTS SYSTEM
     //
 
-    public function addProductToBasket(Request $request)
+    public function addProductToShoppingCart(Request $request)
     {
         $results = array();
 
@@ -48,32 +48,32 @@ class PanelSystemController extends Controller
             return response()->json($results);
         }
 
-        $basketData = $request->session()->get('BASKET_DATA');
+        $shoppingCartData = $request->session()->get('SHOPPINGCART_DATA');
 
-        if ($basketData == null) {
-            $basketData = array();
+        if ($shoppingCartData == null) {
+            $shoppingCartData = array();
         }
 
-        if (isset($basketData[$product->id])) {
-            $basketData[$product->id] = $basketData[$product->id] + 1;
+        if (isset($shoppingCartData[$product->id])) {
+            $shoppingCartData[$product->id] = $shoppingCartData[$product->id] + 1;
         } else {
-            $basketData[$product->id] = 1;
+            $shoppingCartData[$product->id] = 1;
         }
 
-        $request->session()->put('BASKET_DATA', $basketData);
+        $request->session()->put('SHOPPINGCART_DATA', $shoppingCartData);
         $request->session()->save();
 
         $results['success'] = true;
         return response()->json($results);
     }
 
-    public function loadBasketProducts(Request $request)
+    public function loadShoppingCartProducts(Request $request)
     {
         $results = array();
 
         $results['products'] = array();
 
-        foreach ($request->session()->get('BASKET_DATA', []) as $key => $value) {
+        foreach ($request->session()->get('SHOPPINGCART_DATA', []) as $key => $value) {
 
             $product = Product::where('id', $key)->first();
 
@@ -95,9 +95,11 @@ class PanelSystemController extends Controller
         return response()->json($results);
     }
 
-    public function zzz(Request $request)
+    public function updateShoppingCart(Request $request)
     {
-        dd($request->session()->all());
+        $results = array();
+
+        return response()->json($results);
     }
 
     //

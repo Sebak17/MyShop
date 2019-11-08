@@ -9,13 +9,13 @@ class PanelController extends Controller
         $this->middleware('auth');
     }
 
-    public function basketPage()
+    public function shoppingCartPage()
     {
-        return view('home/basket');
+        return view('home.shoppingcart');
     }
 
     public function favoritesPage() {
-        return view('home/favorites');
+        return view('home.favorites');
     }
 
     public function dashboardPage()

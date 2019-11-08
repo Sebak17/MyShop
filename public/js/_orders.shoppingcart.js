@@ -74,6 +74,7 @@ function bindElementsInList() {
             $(this).parent().parent().find('[data-price-final]').html(newPrice + " zł");
 
             updateSummary();
+            updateShoppingCart();
         })
     });
 
@@ -87,18 +88,31 @@ function bindElementsInList() {
             products = arrayRemove(products, product);
 
             reloadLocalData();
+            updateShoppingCart();
         })
     });
 
 }
 
-function updateBasket() {
-    reloadLocalData();
+function updateShoppingCart() {
+    $.ajax({
+        url: "/systemUser/updateShoppingCart",
+        method: "POST",
+        data: {
+
+        },
+        success: function (data) {
+            if (data.success == true) {
+
+            }
+        },
+        error: function () {}
+    });
 }
 
 function loadProducts() {
     $.ajax({
-        url: "/systemUser/loadBasketProducts",
+        url: "/systemUser/loadShoppingCartProducts",
         method: "POST",
         success: function (data) {
             if (data.success == true) {

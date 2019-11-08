@@ -58,7 +58,7 @@
 								<div class="form-group">
 									@if($product->status != "INACCESSIBLE")
 									@if(Auth::guard('web')->check())
-									<button class="btn btn-primary" id="btnBasketAdd"><i class="fas fa-plus"></i> Dodaj do koszyka</button>
+									<button class="btn btn-primary" id="btnShoppingCartAdd"><i class="fas fa-plus"></i> Dodaj do koszyka</button>
 									@else
 									<button class="btn btn-warning" data-toggle="tooltip" data-placement="right" title="Musisz się zalogować!" disabled><i class="fas fa-plus"></i> Dodaj do koszyka</button>
 									@endif

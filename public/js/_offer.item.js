@@ -1,7 +1,7 @@
 $( document ).ready(function() {
 	
-	$('#btnBasketAdd').click(function() {
-		addProductToBasket();
+	$('#btnShoppingCartAdd').click(function() {
+		addProductToShoppingCart();
 	});
 
     $("[data-favorite]").click(function() {
@@ -28,10 +28,10 @@ function changeFavoriteStatus(b) {
 
 }
 
-function addProductToBasket() {
+function addProductToShoppingCart() {
 
 	$.ajax({
-        url: "/systemUser/addToBasket",
+        url: "/systemUser/addToShoppingCart",
         method: "POST",
         success: function (data) {
             if (data.success == true) {
