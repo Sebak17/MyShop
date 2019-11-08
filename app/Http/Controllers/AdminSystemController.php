@@ -42,17 +42,18 @@ class AdminSystemController extends Controller
 
         foreach ($categories as $cat) {
 
-            if($cat['overcategory'] == -1)
+            if ($cat['overcategory'] == -1) {
                 continue;
+            }
 
             $list1[$i] = array();
 
-            $list1[$i]['id']    = $cat['id'];
-            $list1[$i]['name']  = $cat['name'];
-            $list1[$i]['order'] = $cat['orderID'];
-            $list1[$i]['icon']  = $cat['icon'];
+            $list1[$i]['id']      = $cat['id'];
+            $list1[$i]['name']    = $cat['name'];
+            $list1[$i]['order']   = $cat['orderID'];
+            $list1[$i]['icon']    = $cat['icon'];
             $list1[$i]['active']  = $cat['active'];
-            $list1[$i]['visible']  = $cat['visible'];
+            $list1[$i]['visible'] = $cat['visible'];
 
             if ($cat['overcategory'] != 0) {
                 $list1[$i]['overcategory'] = $cat['overcategory'];
@@ -129,12 +130,11 @@ class AdminSystemController extends Controller
     {
         $results = array();
 
-
-        $results['total'] = array();
-        $results['total']['earningsAll'] = 0;
+        $results['total']                  = array();
+        $results['total']['earningsAll']   = 0;
         $results['total']['earningsMonth'] = 0;
-        $results['total']['products'] = count(Product::all());
-        $results['total']['reports'] = 0;
+        $results['total']['products']      = count(Product::all());
+        $results['total']['reports']       = 0;
 
         $results['success'] = true;
         return response()->json($results);
@@ -549,7 +549,7 @@ class AdminSystemController extends Controller
 
         if ($category == null) {
             $results['success'] = false;
-            $request['msg'] = "Nie znaleziono produktu!";
+            $request['msg']     = "Nie znaleziono produktu!";
             return response()->json($results);
         }
 
@@ -600,8 +600,8 @@ class AdminSystemController extends Controller
     public function categoryChangeOrder(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'newids'    => "required|array",
-            'newids.*'   => new ValidID,
+            'newids'   => "required|array",
+            'newids.*' => new ValidID,
         ]);
 
         $results = array();
@@ -613,8 +613,8 @@ class AdminSystemController extends Controller
         }
 
         foreach ($request->newids as $id => $index) {
-            
-            $category = Category::where('id', $id)->first();
+
+            $category          = Category::where('id', $id)->first();
             $category->orderID = $index;
             $category->save();
         }

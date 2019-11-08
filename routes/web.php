@@ -11,34 +11,48 @@
 |
  */
 
-Route::get('/zzz', 'PanelSystemController@zzz');
-
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/ulubione', 'HomeController@favoritesPage')->name('favoritesPage');
-Route::get('/koszyk', 'HomeController@basketPage')->name('basketPage');
+Route::any('/oferty', 'HomeController@offersPage')->name('offersPage');
+Route::get('/produkt', 'HomeController@productPage')->name('productPage');
 
-Route::get('/produkt', 'OffersController@productPage')->name('productPage');
+//
+//      AUTH SITES
+//
 
+Route::group([], function () {
 
-Route::get('/logowanie', 'AuthorizationController@loginPage')->name('loginPage');
-Route::get('/rejestracja', 'AuthorizationController@registerPage')->name('registerPage');
+    Route::get('/not_authorizated', function () {
+        return view('auth.not_authorizated');
+    })->name('not_authorizated');
 
-Route::get('/aktywuj_konto', 'AuthorizationController@activeAccountPage')->name('activeAccountPage');
+    Route::get('/logowanie', 'AuthorizationController@loginPage')->name('loginPage');
+    Route::get('/rejestracja', 'AuthorizationController@registerPage')->name('registerPage');
 
-Route::get('/aktywuj_konto/{hash}', 'AuthorizationController@activeAccountCheckPage')->name('activeAccountCheckPage');
+    Route::get('/aktywuj_konto', 'AuthorizationController@activeAccountPage')->name('activeAccountPage');
 
-Route::get('/resetuj_haslo', 'AuthorizationController@resetPasswordPage')->name('resetPasswordPage');
+    Route::get('/aktywuj_konto/{hash}', 'AuthorizationController@activeAccountCheckPage')->name('activeAccountCheckPage');
 
-Route::get('/resetuj_haslo/{hash}', 'AuthorizationController@resetPasswordCheckPage')->name('resetPasswordCheckPage');
+    Route::get('/resetuj_haslo', 'AuthorizationController@resetPasswordPage')->name('resetPasswordPage');
 
-Route::any('/wyloguj', 'AuthorizationController@logout')->name('logout');
+    Route::get('/resetuj_haslo/{hash}', 'AuthorizationController@resetPasswordCheckPage')->name('resetPasswordCheckPage');
 
-Route::get('/not_authorizated', function () {
-    return view('auth.not_authorizated');
-})->name('not_authorizated');
+    Route::any('/wyloguj', 'AuthorizationController@logout')->name('logout');
 
-Route::any('/oferty', 'OffersController@offersPage')->name('offersPage');
+});
+
+//
+//      AUTHED USER SITES
+//
+
+Route::group([], function () {
+    Route::get('/ulubione', 'PanelController@favoritesPage')->name('favoritesPage');
+    Route::get('/koszyk', 'PanelController@basketPage')->name('basketPage');
+});
+
+//
+//      PANEL SITES
+//
 
 Route::prefix('panel')->group(function () {
 
@@ -48,6 +62,10 @@ Route::prefix('panel')->group(function () {
 
     Route::get('/ustawienia', 'PanelController@settingsPage')->name('panel_settings');
 });
+
+//
+//      SYSTEM - GENERAL
+//
 
 Route::prefix('system')->group(function () {
 
@@ -90,6 +108,10 @@ Route::prefix('system')->group(function () {
     });
 });
 
+//
+//      SYSTEM - AUTHED USER
+//
+
 Route::prefix('systemUser')->group(function () {
 
     Route::post('loadBasketProducts', 'PanelSystemController@loadBasketProducts')->name('systemUser_loadBasketProducts');
@@ -119,6 +141,10 @@ Route::prefix('systemUser')->group(function () {
 
 });
 
+//
+//      SYSTEM - ADMIN SITES
+//
+
 Route::prefix('admin')->group(function () {
 
     Route::get('/', function () {
@@ -139,6 +165,10 @@ Route::prefix('admin')->group(function () {
     Route::get('produkty/dodaj', 'AdminController@productsAddPage')->name('admin_productsAddPage');
     Route::get('produkty/edytuj/{id}', 'AdminController@productsEditPage')->name('admin_productsEditPage');
 });
+
+//
+//      SYSTEM - ADMIN
+//
 
 Route::prefix('systemAdmin')->group(function () {
 
@@ -246,5 +276,4 @@ Route::prefix('systemAdmin')->group(function () {
     Route::get('productEditImageRemove', function () {
         return redirect('/');
     });
-
 });

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Product;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -40,19 +40,18 @@ class AdminController extends Controller
 
     public function productsEditPage(Request $request, $id)
     {
-        if(!is_numeric($id)) {
+
+        if (!is_numeric($id)) {
             return redirect()->route('admin_dashboardPage');
         }
 
-
         $product = Product::where('id', $id)->first();
 
-        if($product == null) {
+        if ($product == null) {
             return redirect()->route('admin_dashboardPage');
         }
 
         $request->session()->put('ADMIN_PRODUCT_EDIT_ID', $id);
-
 
         return view('admin.products_edit');
     }

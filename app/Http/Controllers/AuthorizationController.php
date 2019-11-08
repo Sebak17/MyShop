@@ -128,7 +128,6 @@ class AuthorizationController extends Controller
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
-
             $results['msg'] = "Za dużo prób logowania! Poczekaj " . $this->limiter()->availableIn($this->throttleKey($request)) . " sekund!";
             return response()->json($results);
         }

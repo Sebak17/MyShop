@@ -49,16 +49,16 @@ class PanelSystemController extends Controller
         }
 
         $basketData = $request->session()->get('BASKET_DATA');
-        if($basketData == null)
+
+        if ($basketData == null) {
             $basketData = array();
+        }
 
-
-        if(isset($basketData[$product->id])) {
-            $basketData[$product->id] =  $basketData[$product->id] + 1;
+        if (isset($basketData[$product->id])) {
+            $basketData[$product->id] = $basketData[$product->id] + 1;
         } else {
             $basketData[$product->id] = 1;
         }
-
 
         $request->session()->put('BASKET_DATA', $basketData);
         $request->session()->save();
@@ -76,19 +76,21 @@ class PanelSystemController extends Controller
         foreach ($request->session()->get('BASKET_DATA', []) as $key => $value) {
 
             $product = Product::where('id', $key)->first();
-            if($product == null)
+
+            if ($product == null) {
                 continue;
+            }
 
             $data = array();
 
-            $data['id'] = $key;
-            $data['name'] = $product->title;
-            $data['price'] = $product->price;
+            $data['id']     = $key;
+            $data['name']   = $product->title;
+            $data['price']  = $product->price;
             $data['amount'] = $value;
 
             array_push($results['products'], $data);
         }
-        
+
         $results['success'] = true;
         return response()->json($results);
     }
