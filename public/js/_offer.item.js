@@ -33,6 +33,9 @@ function addProductToShoppingCart() {
 	$.ajax({
         url: "/systemUser/addToShoppingCart",
         method: "POST",
+        data: {
+            id: $("[data-id]").attr("data-id"),
+        },
         success: function (data) {
             if (data.success == true) {
                 showAlertDismissible(AlertType.SUCCESS, Lang.PRODUCT_ADDED_TO_SHOPPINGCART);

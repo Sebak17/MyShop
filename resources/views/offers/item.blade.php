@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="container-fluid mt-3">
+<div class="container-fluid mt-3" data-id="{{ $product->id }}">
 	<div class="row">
 		<div class="col-sm-12 col-md-10 offset-md-1">
 			<div class="row">

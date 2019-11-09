@@ -248,8 +248,6 @@ class HomeController extends Controller
                 break;
         }
 
-        $request->session()->put('CURRECT_PRODUCT_PAGE', $product->id);
-
         return view('offers.item')->with('categoriesPath', $categoriesPath)->with('product', $product)->with('status', $status);
     }
 

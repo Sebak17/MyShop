@@ -33,16 +33,20 @@ class PanelSystemController extends Controller
 
     public function addProductToShoppingCart(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id'          => new ValidID,
+        ]);
+
         $results = array();
 
-        if (!$request->session()->exists('CURRECT_PRODUCT_PAGE')) {
+        if ($validator->fails()) {
             $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
             return response()->json($results);
         }
 
-        $product_id = $request->session()->get('CURRECT_PRODUCT_PAGE');
-
-        $product = Product::where('id', $product_id)->first();
+        $product = Product::where('id', $request->id)->first();
 
         if ($product == null) {
             $results['success'] = false;
@@ -56,7 +60,11 @@ class PanelSystemController extends Controller
         }
 
         if (isset($shoppingCartData[$product->id])) {
-            $shoppingCartData[$product->id] = $shoppingCartData[$product->id] + 1;
+
+            if ($shoppingCartData[$product->id] < 100) {
+                $shoppingCartData[$product->id] = $shoppingCartData[$product->id] + 1;
+            }
+
         } else {
             $shoppingCartData[$product->id] = 1;
         }
@@ -99,7 +107,7 @@ class PanelSystemController extends Controller
     public function updateShoppingCart(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'products'          => 'required|array',
+            'products'          => 'array',
             'products.*.id'     => new ValidID,
             'products.*.amount' => 'required|integer|between:1,100',
         ]);
@@ -119,17 +127,21 @@ class PanelSystemController extends Controller
             $shoppingCartData = array();
         }
 
-        foreach ($request->products as $value) {
-            $product = Product::where('id', $value['id'])->first();
+        $newShoppingCartData = array();
 
-            if ($product == null) {
-                continue;
+        if(is_array($request->products) && !empty($request->products)) {
+            foreach ($request->products as $value) {
+                $product = Product::where('id', $value['id'])->first();
+
+                if ($product == null) {
+                    continue;
+                }
+
+                $newShoppingCartData[$value['id']] = $value['amount'];
             }
-
-            $shoppingCartData[$value['id']] = $value['amount'];
         }
 
-        $request->session()->put('SHOPPINGCART_DATA', $shoppingCartData);
+        $request->session()->put('SHOPPINGCART_DATA', $newShoppingCartData);
         $request->session()->save();
 
         $results['success'] = true;
@@ -147,7 +159,7 @@ class PanelSystemController extends Controller
 
         $shoppingCartData = $request->session()->get('SHOPPINGCART_DATA');
 
-        if (empty($shoppingCartData)) {
+        if (!is_array($shoppingCartData) || empty($shoppingCartData)) {
             $results['success'] = false;
             return response()->json($results);
         }
@@ -158,11 +170,13 @@ class PanelSystemController extends Controller
 
             $product = Product::where('id', $key)->first();
 
-            if($product == null)
+            if ($product == null) {
                 continue;
+            }
 
-            if(!is_int($value) || $value <= 0 || $value > 100 )
+            if (!is_int($value) || $value <= 0 || $value > 100) {
                 continue;
+            }
 
             $newShoppingCartData[$key] = $value;
         }
@@ -170,7 +184,6 @@ class PanelSystemController extends Controller
         $request->session()->put('SHOPPINGCART_STATUS', "INFORMATION");
         $request->session()->put('SHOPPINGCART_DATA', $newShoppingCartData);
         $request->session()->save();
-
 
         $results['url']     = route('shoppingCartInformation');
         $results['success'] = true;
