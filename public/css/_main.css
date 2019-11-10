@@ -93,3 +93,7 @@ input[type="number"] {
 a.none {
     text-decoration: none;
 }
+
+.card-pick {
+    box-shadow: 0 2px 8px #1356f2 !important;
+}
