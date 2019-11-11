@@ -18,6 +18,8 @@ class CreateOrders extends Migration
             $table->unsignedBigInteger('user_id');
             $table->enum('status', ['CREATED', 'UNPAID', 'PAID', 'REALIZE', 'SENT']);
             $table->float('cost', 8, 2);
+            $table->unsignedBigInteger('deliver_id');
+            $table->enum('payment', ['PAYU', 'PAYPAL', 'PAYMENTCARD']);
             $table->text('time_create', 24);
             $table->foreign('user_id')->references('id')->on('users');
         });
