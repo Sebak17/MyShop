@@ -97,3 +97,7 @@ a.none {
 .card-pick {
     box-shadow: 0 2px 8px #1356f2 !important;
 }
+
+#map-list-flex {
+    min-height: 400px !important;
+}

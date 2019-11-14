@@ -137,6 +137,11 @@ Route::prefix('systemUser')->group(function () {
         return redirect('/');
     });
 
+    Route::post('createOrder', 'PanelSystemController@createOrder')->name('systemUser_createOrder');
+    Route::get('createOrder', function () {
+        return redirect('/');
+    });
+
     Route::post('changeDataPersonal', 'PanelSystemController@changeDataPersonal')->name('systemUser_changeDataPersonal');
     Route::get('changeDataPersonal', function () {
         return redirect('/');

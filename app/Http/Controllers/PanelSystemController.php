@@ -9,10 +9,12 @@ use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
 use App\Rules\ValidFirstName;
 use App\Rules\ValidID;
+use App\Rules\ValidOrderNote;
 use App\Rules\ValidPassword;
 use App\Rules\ValidPhoneNumber;
 use App\Rules\ValidSurName;
 use App\Rules\ValidZipCode;
+use App\Rules\ValidLockerName;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +36,7 @@ class PanelSystemController extends Controller
     public function addProductToShoppingCart(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id'          => new ValidID,
+            'id' => new ValidID,
         ]);
 
         $results = array();
@@ -129,7 +131,8 @@ class PanelSystemController extends Controller
 
         $newShoppingCartData = array();
 
-        if(is_array($request->products) && !empty($request->products)) {
+        if (is_array($request->products) && !empty($request->products)) {
+
             foreach ($request->products as $value) {
                 $product = Product::where('id', $value['id'])->first();
 
@@ -139,6 +142,7 @@ class PanelSystemController extends Controller
 
                 $newShoppingCartData[$value['id']] = $value['amount'];
             }
+
         }
 
         $request->session()->put('SHOPPINGCART_DATA', $newShoppingCartData);
@@ -186,6 +190,67 @@ class PanelSystemController extends Controller
         $request->session()->save();
 
         $results['url']     = route('shoppingCartInformation');
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function createOrder(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'paymentType'  => "required|integer",
+            'clientFName'  => new ValidFirstName,
+            'clientSName'  => new ValidSurName,
+            'clientPhone'  => new ValidPhoneNumber,
+            'deliver.type' => "required|in:INPOST_LOCKER,COURIER",
+            'note'         => new ValidOrderNote,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        switch ($request->input('deliver.type')) {
+            case 'INPOST_LOCKER':
+                $validator = Validator::make($request->all(), [
+                    'deliver.lockerName' => new ValidLockerName,
+                ]);
+
+                if ($validator->fails()) {
+                    $results['success'] = false;
+
+                    $results['msg'] = $validator->errors()->first();
+                    return response()->json($results);
+                }
+
+                break;
+            case 'COURIER':
+                $validator = Validator::make($request->all(), [
+                    'deliver.district' => new ValidDistrict,
+                    'deliver.city'     => new ValidCity,
+                    'deliver.zipcode'  => new ValidZipCode,
+                    'deliver.address'  => new ValidAddress,
+                ]);
+
+                if ($validator->fails()) {
+                    $results['success'] = false;
+
+                    $results['msg'] = $validator->errors()->first();
+                    return response()->json($results);
+                }
+
+                break;
+        }
+
+
+        
+
+
+
         $results['success'] = true;
         return response()->json($results);
     }

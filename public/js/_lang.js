@@ -76,4 +76,13 @@ var Lang = {
 
     PRODUCT_ADDED_TO_SHOPPINGCART: "Produkt został dodany do koszyka!",
 
+
+    ORDER_CONFIRMING: "Trwa sprawdzanie zamówienia...",
+    ORDER_PAYMENT_CHOOSE: "Musisz wybrać formę płatności!",
+    ORDER_DELIVER_CHOOSE: "Musisz wybrać formę dostawy!",
+    ORDER_DELIVER_LOCKER: "Wybierz paczkomat do dostawy!",
+
+    ORDER_NOTE_NOT_IN_RANGE: "Uwaga do zamówienia ma niepoprawną długość! (4-1000)",
+
+
 };
