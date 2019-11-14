@@ -17,6 +17,7 @@ class CreatePayments extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id');
             $table->float('amount', 8, 2);
+            $table->string('status', 32);
             
             $table->foreign('order_id')->references('id')->on('orders');
         });

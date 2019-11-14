@@ -11,7 +11,13 @@ class Order extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'user_id', 'status', 'cost', 'time_create',
+        'user_id',
+        'status',
+        'cost',
+        'deliver_name',
+        'deliver_info',
+        'payment',
+        'time_create',
     ];
 
     public function products()
@@ -21,7 +27,7 @@ class Order extends Model
 
     public function payment()
     {
-        return $this->hasMany('App\Payment');
+        return $this->hasOne('App\Payment');
     }
 
 }
