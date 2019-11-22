@@ -50,7 +50,6 @@ Route::group([], function () {
     Route::get('/koszyk', 'PanelController@shoppingCartPage')->name('shoppingCartPage');
 
     Route::get('/zamowienie/tworzenie', 'PanelController@shoppingCartInformation')->name('shoppingCartInformation');
-    Route::get('/zamowienie/potwierdz', 'PanelController@shoppingCartConfirm')->name('shoppingCartConfirm');
 
     Route::get('/zamowienie/{id}', function ($id) {
         echo $id;
