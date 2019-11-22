@@ -71,8 +71,6 @@ function showAlertDismissible(type, text = '', id = '', useIcon = false) {
     if (type != -1)
         $(id).removeClass('d-none');
 
-    console.log(id + ">span");
-
     switch (type) {
         case -1:
             $(id + ">span").html("");

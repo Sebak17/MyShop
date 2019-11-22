@@ -54,7 +54,7 @@ Route::group([], function () {
 
     Route::get('/zamowienie/{id}', function ($id) {
         echo $id;
-    })->where('id', '[0-9]+');
+    })->where('id', '[0-9]+')->name('orderIDPage');
 });
 
 //

@@ -175,8 +175,16 @@ function confirmData() {
         url: "/systemUser/createOrder",
         method: "POST",
         data: toObject(orderData),
-        success: function (data) {},
-        error: function () {},
+        success: function (data) {
+            if (data.success == true) {
+                showAlert(AlertType.SUCCESS, Lang.ORDER_CONFIRMING_SUCCESS);
+                location.href = data.url;
+            } else
+                showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING_ERROR);
+        },
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING);
+        },
         complete: function () {}
     });
 }
@@ -222,7 +230,7 @@ function changeDeliver(deliver) {
 
                 $("#modalDeliver").modal("hide");
                 $("#deliverPrice").html(PRICE_LOCKER);
-                $("#summaryPrice").html(productsCost + PRICE_LOCKER);
+                $("#summaryPrice").html(rePrice(productsCost + PRICE_LOCKER));
             });
 
             $("#modalDeliver").modal("show");
@@ -232,7 +240,7 @@ function changeDeliver(deliver) {
             $("#deliverForm").removeClass('d-none');
 
             $("#deliverPrice").html(PRICE_COURIER);
-            $("#summaryPrice").html(productsCost + PRICE_COURIER);
+            $("#summaryPrice").html(rePrice(productsCost + PRICE_COURIER));
             break;
     }
 }
@@ -253,7 +261,7 @@ function bindPayments() {
 }
 
 function getPaymentName() {
-    switch(_currentPayment) {
+    switch (_currentPayment) {
         case 1:
             return "PAYU";
         case 2:
@@ -281,4 +289,8 @@ function changePayment(element, method) {
             $(element).addClass('card-pick');
             break;
     }
+}
+
+function rePrice(price) {
+    return Math.round(price * 100) / 100;
 }

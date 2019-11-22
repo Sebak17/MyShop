@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\OrderHelper;
 use App\Http\Controllers\Controller;
 use App\Order;
-use App\Payment;
 use App\OrderProduct;
+use App\Payment;
 use App\Product;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
@@ -200,6 +200,13 @@ class PanelSystemController extends Controller
 
     public function createOrder(Request $request)
     {
+        $results = array();
+
+        if (!$request->session()->exists('SHOPPINGCART_STATUS') || $request->session()->get('SHOPPINGCART_STATUS') != "INFORMATION") {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
         $validator = Validator::make($request->all(), [
             'paymentType'  => "required|in:PAYU,PAYPAL,PAYMENTCARD",
             'clientFName'  => new ValidFirstName,
@@ -208,8 +215,6 @@ class PanelSystemController extends Controller
             'deliver.type' => "required|in:INPOST_LOCKER,COURIER",
             'note'         => new ValidOrderNote,
         ]);
-
-        $results = array();
 
         $addNoteToOrder = true;
 
@@ -323,9 +328,9 @@ class PanelSystemController extends Controller
 
         Payment::create([
             'order_id' => $order->id,
-            'type' => $order->payment,
-            'amount' => $order->cost,
-            'status' => "CREATED",
+            'type'     => $order->payment,
+            'amount'   => $order->cost,
+            'status'   => "CREATED",
         ]);
 
         foreach ($productsData as $product) {
@@ -338,8 +343,11 @@ class PanelSystemController extends Controller
             ]);
         }
 
+        $request->session()->forget('SHOPPINGCART_STATUS');
+        $request->session()->forget('SHOPPINGCART_DATA');
+
         $results['success'] = true;
-        $results['orderID'] = $order->id;
+        $results['url']     = route('orderIDPage', $order->id);
         return response()->json($results);
     }
 

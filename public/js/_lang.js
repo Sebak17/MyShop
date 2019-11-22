@@ -78,6 +78,8 @@ var Lang = {
 
 
     ORDER_CONFIRMING: "Trwa sprawdzanie zamówienia...",
+    ORDER_CONFIRMING_ERROR: "Wystąpił bład podczas tworzenia zamówienia!",
+    ORDER_CONFIRMING_SUCCESS: "Zamówienie zostało stworzone!",
     ORDER_PAYMENT_CHOOSE: "Musisz wybrać formę płatności!",
     ORDER_DELIVER_CHOOSE: "Musisz wybrać formę dostawy!",
     ORDER_DELIVER_LOCKER: "Wybierz paczkomat do dostawy!",
