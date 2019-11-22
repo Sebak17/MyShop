@@ -18,9 +18,9 @@ class CreateOrders extends Migration
             $table->unsignedBigInteger('user_id');
             $table->enum('status', ['CREATED', 'UNPAID', 'PAID', 'REALIZE', 'SENT']);
             $table->float('cost', 8, 2);
-            $table->json('buyer_info');
+            $table->text('buyer_info');
             $table->string('deliver_name', 24);
-            $table->json('deliver_info');
+            $table->text('deliver_info');
             $table->enum('payment', ['PAYU', 'PAYPAL', 'PAYMENTCARD']);
             $table->string('note')->nullable();
 
