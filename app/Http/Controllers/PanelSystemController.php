@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\OrderHelper;
 use App\Http\Controllers\Controller;
+use App\Order;
+use App\Payment;
+use App\OrderProduct;
 use App\Product;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
 use App\Rules\ValidFirstName;
 use App\Rules\ValidID;
+use App\Rules\ValidLockerName;
 use App\Rules\ValidOrderNote;
 use App\Rules\ValidPassword;
 use App\Rules\ValidPhoneNumber;
 use App\Rules\ValidSurName;
 use App\Rules\ValidZipCode;
-use App\Rules\ValidLockerName;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -197,7 +201,7 @@ class PanelSystemController extends Controller
     public function createOrder(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'paymentType'  => "required|integer",
+            'paymentType'  => "required|in:PAYU,PAYPAL,PAYMENTCARD",
             'clientFName'  => new ValidFirstName,
             'clientSName'  => new ValidSurName,
             'clientPhone'  => new ValidPhoneNumber,
@@ -207,12 +211,16 @@ class PanelSystemController extends Controller
 
         $results = array();
 
+        $addNoteToOrder = true;
+
         if ($validator->fails()) {
             $results['success'] = false;
 
             $results['msg'] = $validator->errors()->first();
             return response()->json($results);
         }
+
+        $deliver_info = array();
 
         switch ($request->input('deliver.type')) {
             case 'INPOST_LOCKER':
@@ -226,6 +234,8 @@ class PanelSystemController extends Controller
                     $results['msg'] = $validator->errors()->first();
                     return response()->json($results);
                 }
+
+                $deliver_info['lockerName'] = $request->input('deliver.lockerName');
 
                 break;
             case 'COURIER':
@@ -243,15 +253,93 @@ class PanelSystemController extends Controller
                     return response()->json($results);
                 }
 
+                $deliver_info['district'] = $request->input('deliver.district');
+                $deliver_info['city']     = $request->input('deliver.city');
+                $deliver_info['zipcode']  = $request->input('deliver.zipcode');
+                $deliver_info['address']  = $request->input('deliver.address');
+
                 break;
         }
 
+        $shoppingCartData = $request->session()->get('SHOPPINGCART_DATA');
 
-        
+        if (empty($shoppingCartData)) {
+            $results['success'] = false;
+            $results['msg']     = "Koszyk jest pusty!";
+            return response()->json($results);
+        }
 
+        if (empty($deliver_info)) {
+            $results['success'] = false;
+            $results['msg']     = "Wystąpił błąd z danymi do wysyłki!";
+            return response()->json($results);
+        }
 
+        $productsData = array();
+        $summaryPrice = 0;
+
+        foreach ($shoppingCartData as $key => $value) {
+            $product = Product::where('id', $key)->first();
+
+            if ($product == null) {
+                continue;
+            }
+
+            $data           = array();
+            $data['id']     = $product->id;
+            $data['name']   = $product->title;
+            $data['price']  = $product->price;
+            $data['amount'] = $value;
+            $summaryPrice += $product->price * $value;
+            array_push($productsData, $data);
+        }
+
+        $summaryPrice = number_format((float) $summaryPrice, 2, '.', '');
+
+        $summaryPrice += OrderHelper::getDeliverCost($request->input('deliver.type'));
+
+        $user = Auth::user();
+
+        $buyer_info = [
+            'firstname' => $request->input('clientFName'),
+            'surname'   => $request->input('clientSName'),
+            'phone'     => $request->input('clientPhone'),
+        ];
+
+        $order = Order::create([
+            'user_id'      => $user->id,
+            'status'       => 'CREATED',
+            'cost'         => $summaryPrice,
+            'buyer_info'   => json_encode($buyer_info),
+            'deliver_name' => $request->input('deliver.type'),
+            'deliver_info' => json_encode($deliver_info),
+            'payment'      => $request->input('paymentType'),
+        ]);
+
+        if ($addNoteToOrder) {
+            $order->note = $request->input('note');
+            $order->save();
+        }
+
+        Payment::create([
+            'order_id' => $order->id,
+            'type' => $order->payment,
+            'amount' => $order->cost,
+            'status' => "CREATED",
+        ]);
+
+        foreach ($productsData as $product) {
+            OrderProduct::create([
+                'order_id'   => $order->id,
+                'product_id' => $product['id'],
+                'price'      => $product['price'],
+                'amount'     => $product['amount'],
+                'name'       => $product['name'],
+            ]);
+        }
 
         $results['success'] = true;
+        $results['orderID'] = $order->id;
         return response()->json($results);
     }
 

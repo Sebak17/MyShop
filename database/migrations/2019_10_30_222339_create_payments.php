@@ -16,6 +16,7 @@ class CreatePayments extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id');
+            $table->enum('type', ['PAYU', 'PAYPAL', 'PAYMENTCARD']);
             $table->float('amount', 8, 2);
             $table->string('status', 32);
             

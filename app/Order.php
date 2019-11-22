@@ -8,16 +8,17 @@ class Order extends Model
 {
     protected $table = 'orders';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'user_id',
         'status',
         'cost',
+        'buyer_info',
         'deliver_name',
         'deliver_info',
         'payment',
-        'time_create',
+        'note',
     ];
 
     public function products()

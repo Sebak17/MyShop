@@ -158,7 +158,7 @@ function confirmData() {
 
     let orderData = [];
 
-    orderData['paymentType'] = _currentPayment;
+    orderData['paymentType'] = getPaymentName();
 
     orderData['clientFName'] = d_fname;
     orderData['clientSName'] = d_sname;
@@ -250,6 +250,17 @@ function bindPayments() {
             changePayment(this, method);
         });
     });
+}
+
+function getPaymentName() {
+    switch(_currentPayment) {
+        case 1:
+            return "PAYU";
+        case 2:
+            return "PAYPAL";
+        case 3:
+            return "PAYMENTCARD";
+    }
 }
 
 function changePayment(element, method) {

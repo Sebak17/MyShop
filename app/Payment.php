@@ -12,7 +12,7 @@ class Payment extends Model
     public $timestamps = false;
    
 	protected $fillable = [
-        'order_id', 'amount',
+        'order_id', 'type', 'amount', 'status'
     ];
 
 }
