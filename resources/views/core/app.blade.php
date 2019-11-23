@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>{{ config('app.name') }}</title>
+		<title>{{ config('app.name') }} {{ isset($titleInfo) ? " - " . $titleInfo : "" }}</title>
 		
 		<meta name="author" content="Sebastian Krysa">
 		<meta name="description" content="Zakupy online">

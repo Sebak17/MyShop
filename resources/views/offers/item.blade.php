@@ -1,4 +1,4 @@
-@extends('core.app')
+@extends('core.app', ['titleInfo' => $product->title])
 
 @extends('core.menu')
 
