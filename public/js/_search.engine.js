@@ -21,5 +21,5 @@ function searchOffers() {
 		return;
 	}
 
-	window.location.href = "/oferty/?string=" + val;
+	window.location.href = "/produkty/?string=" + val;
 }

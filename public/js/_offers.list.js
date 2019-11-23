@@ -88,7 +88,7 @@ function generateURL() {
 
     url = url.replace("&", "?");
 
-    return "/oferty/" + url;
+    return "/produkty/" + url;
 }
 
 function bindCategoryList() {

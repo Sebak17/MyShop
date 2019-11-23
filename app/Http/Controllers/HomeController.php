@@ -54,7 +54,7 @@ class HomeController extends Controller
         return view('home/main')->with('categories', $categoriesData)->with('productsHistory', $productsHistoryData);
     }
 
-    public function offersPage(Request $request)
+    public function productsPage(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'category'  => 'integer',
@@ -266,7 +266,7 @@ class HomeController extends Controller
 
             $category = Category::where('id', $currCategoryID)->first();
 
-            $categoriesPath = '<li class="breadcrumb-item"><a href="oferty?category=' . $currCategoryID . '">' . $category->name . '</a></li>' . $categoriesPath;
+            $categoriesPath = '<li class="breadcrumb-item"><a href="' . route('productsPage') .'?category=' . $currCategoryID . '">' . $category->name . '</a></li>' . $categoriesPath;
 
             $currCategoryID = $category->overcategory;
 
@@ -291,7 +291,7 @@ class HomeController extends Controller
 
         $request->session()->put('PRODUCTS_SEEN_HISTORY', $productsHistory);
 
-        $categoriesPath = '<li class="breadcrumb-item"><a href="oferty?category=0"><i class="fas fa-home"></i></a></li>' . $categoriesPath;
+        $categoriesPath = '<li class="breadcrumb-item"><a href="' . route('productsPage') .'?category=0"><i class="fas fa-home"></i></a></li>' . $categoriesPath;
 
         $status = "<strong class='text-muted'>BRAK DANYCH</strong>";
 

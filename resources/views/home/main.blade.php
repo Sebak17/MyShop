@@ -37,7 +37,7 @@
                                 <table class="col-10 offset-1">
                                     <tbody id="categoriesList">
                                         @foreach($categories as $category)
-                                        <tr data-href="/oferty/?category={{ $category['id'] }}"><td class="text-center"><i class="fas {{ $category['icon'] }}"></i></td><td>{{ $category['name'] }}</td></tr>
+                                        <tr data-href="{{ route('productsPage') }}/?category={{ $category['id'] }}"><td class="text-center"><i class="fas {{ $category['icon'] }}"></i></td><td>{{ $category['name'] }}</td></tr>
                                         @endforeach
                                     </tbody>
                                 </table>

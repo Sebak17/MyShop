@@ -13,7 +13,7 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::any('/oferty', 'HomeController@offersPage')->name('offersPage');
+Route::any('/produkty', 'HomeController@productsPage')->name('productsPage');
 Route::get('/produkt', 'HomeController@productPage')->name('productPage');
 
 //
