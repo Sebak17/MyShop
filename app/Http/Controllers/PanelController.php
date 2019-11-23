@@ -1,7 +1,10 @@
-<?php namespace App\Http\Controllers;
+<?php 
+namespace App\Http\Controllers;
 
+use App\Order;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PanelController extends Controller
 {
@@ -54,6 +57,36 @@ class PanelController extends Controller
 
         $summaryPrice = number_format((float) $summaryPrice, 2, '.', '');
         return view('order.information')->with('productsData', $productsData)->with('summaryPrice', $summaryPrice);
+    }
+
+    public function orderPage(Request $request, $id)
+    {
+
+        $order = Order::where('id', $id)->first();
+
+        if($order == null) {
+            return redirect()->route('home');
+        }
+
+        $user = Auth::user();
+
+        if($order->user_id != $user->id) {
+            return redirect()->route('home');
+        }
+
+        $productsData = array();
+
+        foreach ($order->products as $product) {
+            $data              = array();
+            $data['id']        = $product->product_id;
+            $data['name']      = $product->name;
+            $data['amount']    = $product->amount;
+            $data['fullPrice'] = number_format((float) ($product->price * $product->amount), 2, '.', '');
+            array_push($productsData, $data);
+        }
+
+
+        return view('order.item')->with('productsData', $productsData)->with('summaryPrice', $order->cost);
     }
 
     public function favoritesPage()

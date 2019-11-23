@@ -51,9 +51,7 @@ Route::group([], function () {
 
     Route::get('/zamowienie/tworzenie', 'PanelController@shoppingCartInformation')->name('shoppingCartInformation');
 
-    Route::get('/zamowienie/{id}', function ($id) {
-        echo $id;
-    })->where('id', '[0-9]+')->name('orderIDPage');
+    Route::get('/zamowienie/{id}', 'PanelController@orderPage')->where('id', '[0-9]+')->name('orderIDPage');
 });
 
 //
