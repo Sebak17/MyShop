@@ -77,11 +77,6 @@ Route::prefix('system')->group(function () {
     //      GENERAL
     //
 
-    Route::post('categoriesList', 'HomeSystemController@loadCategories')->name('system_categoriesList');
-    Route::get('categoriesList', function () {
-        return redirect('/');
-    });
-
     //
     //      AUTH
     //
