@@ -26,7 +26,7 @@
 						<div class="input-group mb-3">
 							<input id="inp_price" type="number" class="form-control">
 							<div class="input-group-append">
-								<span class="input-group-text"> zł</span>
+								<span class="input-group-text">{{ config('site.currency') }}</span>
 							</div>
 						</div>
 					</div>

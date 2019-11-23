@@ -42,8 +42,8 @@
                             <label for="orderDeliver">Wybierz sposób dostawy:</label>
                             <select id="orderDeliver" class="form-control">
                                 <option class="d-none" selected></option>
-                                <option value="INPOST_LOCKER">InPost - Paczkomat (8.99 zł)</option>
-                                <option value="COURIER">Kurier (15.99 zł)</option>
+                                <option value="INPOST_LOCKER">InPost - Paczkomat (8.99 {{ config('site.currency') }})</option>
+                                <option value="COURIER">Kurier (15.99 {{ config('site.currency') }})</option>
                             </select>
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                                         <a href="/produkt?id={{ $product['id'] }}"><h5>{{ $product['name'] }}</h5></a>
                                     </td>
                                     <td>{{ $product['amount'] }} szt.</td>
-                                    <td>{{ $product['fullPrice'] }} zł</td>
+                                    <td>{{ $product['fullPrice'] . " " . config('site.currency') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -184,14 +184,14 @@
                 <hr />
                 
                 <div class="lead">
-                    Dostawa: <strong id="deliverPrice">?</strong><strong> zł</strong>
+                    Dostawa: <strong id="deliverPrice">?</strong><strong> {{ config('site.currency') }}</strong>
                 </div>
                 
                 <hr />
                 
                 <div class="row text-center">
                     <div class="col-6 lead">Suma:</div>
-                    <div class="col-6 lead"><strong id="summaryPrice">{{ $summaryPrice }}</strong><strong> zł</strong></div>
+                    <div class="col-6 lead"><strong id="summaryPrice">{{ $summaryPrice }}</strong><strong> {{ config('site.currency') }}</strong></div>
                 </div>
                 
                 <hr />

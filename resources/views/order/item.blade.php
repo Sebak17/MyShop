@@ -21,7 +21,7 @@
                                     <a href="/produkt?id={{ $product['id'] }}"><h5>{{ $product['name'] }}</h5></a>
                                 </td>
                                 <td>{{ $product['amount'] }} szt.</td>
-                                <td>{{ $product['fullPrice'] }} zł</td>
+                                <td>{{ $product['fullPrice'] }} {{ config('site.currency') }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -36,7 +36,7 @@
 
                 <div class="row text-center">
                     <div class="col-6 lead">Suma:</div>
-                    <div class="col-6 lead"><strong>{{ $summaryPrice }} zł</strong></div>
+                    <div class="col-6 lead"><strong>{{ $summaryPrice }} {{ config('site.currency') }}</strong></div>
                 </div>
                 
                 <hr />

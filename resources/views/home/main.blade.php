@@ -64,7 +64,7 @@
                                             alt="Produkt 1">
                                             
                                             <div class="card-body">
-                                                <h3 class="card-title">10.00 zł</h3>
+                                                <h3 class="card-title">10.00 {{ config('site.currency') }}</h3>
                                                 <h5 class="card-subtitle text-muted">Produkt 1</h5>
                                             </div>
                                         </div>
@@ -94,7 +94,7 @@
                                             alt="{{ $product['name'] }}">
 
                                             <div class="card-body">
-                                                <h3 class="card-title">{{ $product['price'] }} zł</h3>
+                                                <h3 class="card-title">{{ $product['price'] . " " . config('site.currency') }}</h3>
                                                 <h5 class="card-subtitle text-muted">{{ $product['name'] }}</h5>
                                             </div>
                                         </div>

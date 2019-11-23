@@ -78,7 +78,7 @@ function loadProducts() {
                                                 <h5>` + data.list[i].name + `</h5>
                                             </td>
                                             <td class="align-middle text-left">
-                                                <h5>` + data.list[i].price + ` zł</h5>
+                                                <h5>` + data.list[i].price + ` ` + cfg_currency +  `</h5>
                                             </td>
                                             <td class="align-middle text-right">
                                                 <button class="btn btn-info"><i class="fas fa-arrow-right"></i> Pokaż</button>

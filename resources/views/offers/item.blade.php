@@ -45,7 +45,7 @@
 						
 						<p>0 osób kupiło ten produkt</p>
 						
-						<h2>{{ number_format((float) $product->price, 2, '.', '') }} zł</h2>
+						<h2>{{ number_format((float) $product->price, 2, '.', '') . " " . config('site.currency') }}</h2>
 						
 						<hr />
 						

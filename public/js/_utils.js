@@ -2,6 +2,8 @@ var verifyToken = "",
     isVerifying = false,
     isRequest = false;
 
+var cfg_currency = "zł";
+
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -34,7 +34,7 @@
 					<td>10-10-2019 16:61</td>
 					<td>3</td>
 					<td>Wysłane</td>
-					<td>10.00 zł</td>
+					<td>10.00 {{ config('site.currency') }}</td>
 				</tr>
 				<tr>
 					<td class="text-center">
@@ -47,7 +47,7 @@
 					<td>10-10-2019 16:61</td>
 					<td>3</td>
 					<td>Wysłane</td>
-					<td>10.00 zł</td>
+					<td>10.00 {{ config('site.currency') }}</td>
 				</tr>
 			</tbody>
 		</table>

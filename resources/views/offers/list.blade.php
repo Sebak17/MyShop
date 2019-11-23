@@ -137,7 +137,7 @@
 									</div>
 									
 									<div class="col-4 col-md-3">
-										<h2 class="mt-2">{{ $product['price'] }} zł</h2>
+										<h2 class="mt-2">{{ $product['price'] . " " . config('site.currency') }}</h2>
 										
 									</div>
 									
