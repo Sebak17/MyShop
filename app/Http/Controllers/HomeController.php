@@ -13,9 +13,45 @@ class HomeController extends Controller
 {
     public function __construct() {}
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('home/main');
+
+        $categories = Category::where('active', 1)->where('visible', 1)->where('overcategory', 0)->orderBy('orderID', 'ASC')->get();
+        $categoriesData = array();
+
+        foreach ($categories as $category) {
+            $cat = array();
+
+            $cat['id']   = $category->id;
+            $cat['name'] = $category->name;
+            $cat['icon'] = $category->icon;
+
+            array_push($categoriesData, $cat);
+        }
+
+
+
+
+        $productsHistorySession = $request->session()->get('PRODUCTS_SEEN_HISTORY', []);
+        $productsHistoryData = array();
+
+        foreach ($productsHistorySession as $id) {
+            $product = Product::where('id', $id)->first();
+            if ($product == null || $product->status == 'INVISIBLE') {
+                continue;
+            }
+
+            $pr           = array();
+            $pr['url']     = route('productPage') . '?id=' . $product->id;
+            $pr['name']   = $product->title;
+            $pr['price']  = number_format((float) $product->price, 2, '.', '');
+            $pr['image']  = (count($product->images) > 0 ? $product->images[0]->name : null);
+            array_push($productsHistoryData, $pr);
+        }
+
+        $productsHistoryData = array_reverse($productsHistoryData);
+
+        return view('home/main')->with('categories', $categoriesData)->with('productsHistory', $productsHistoryData);
     }
 
     public function offersPage(Request $request)
@@ -218,7 +254,8 @@ class HomeController extends Controller
 
         $product = Product::where('id', $request->id)->first();
 
-        if ($product == null) {
+        if ($product == null || $product->status == 'INVISIBLE') {
+            // TODO
             return "Not found!";
         }
 
@@ -234,6 +271,25 @@ class HomeController extends Controller
             $currCategoryID = $category->overcategory;
 
         } while ($currCategoryID != 0);
+
+        $productsHistory = $request->session()->get('PRODUCTS_SEEN_HISTORY', []);
+
+        if (in_array($product->id, $productsHistory)) {
+
+            if (($key = array_search($product->id, $productsHistory)) !== false) {
+                unset($productsHistory[$key]);
+            }
+
+        }
+
+        array_push($productsHistory, $product->id);
+
+        if(count($productsHistory) > 10) {
+            array_shift($productsHistory);
+        }
+
+
+        $request->session()->put('PRODUCTS_SEEN_HISTORY', $productsHistory);
 
         $categoriesPath = '<li class="breadcrumb-item"><a href="oferty?category=0"><i class="fas fa-home"></i></a></li>' . $categoriesPath;
 
