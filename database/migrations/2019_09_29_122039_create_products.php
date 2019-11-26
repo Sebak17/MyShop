@@ -15,11 +15,12 @@ class CreateProducts extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->enum('status', ['INVISIBLE', 'IN_STOCK', 'INACCESSIBLE']);
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->float('price', 8, 2);
             $table->string('title', 120);
             $table->text('description');
-            $table->enum('status', ['INVISIBLE', 'IN_STOCK', 'INACCESSIBLE']);
-            $table->unsignedBigInteger('category_id')->nullable();
+            $table->text('params')->nullable();
 
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
         });

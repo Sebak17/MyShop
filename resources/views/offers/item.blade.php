@@ -90,35 +90,27 @@
 				</div>
 			</div>
 			
+			@if(!empty($params))
 			<div class="row mb-3">
 				<div class="col-12">
 					<div class="card card-body">
-						<legend><i class="fas fa-info"></i> Opis produktu</legend>
+						<legend><i class="fas fa-table"></i> Informacje o produkcie</legend>
 						<hr />
 						
 						<table class="table table-striped">
 							<tbody>
+								@foreach($params as $param)
 								<tr>
-									<td>Test</td>
-									<td>1</td>
+									<td>{{ $param->name }}</td>
+									<td>{{ $param->value }}</td>
 								</tr>
-								<tr>
-									<td>Test</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td>Test</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td>Test</td>
-									<td>1</td>
-								</tr>
+								@endforeach
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
+			@endif
 			
 			<div class="row">
 				<div class="col-12">

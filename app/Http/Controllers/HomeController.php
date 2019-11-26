@@ -304,7 +304,13 @@ class HomeController extends Controller
                 break;
         }
 
-        return view('offers.item')->with('categoriesPath', $categoriesPath)->with('product', $product)->with('status', $status);
+
+        $params = json_decode($product->params);
+
+        if(json_last_error() !== JSON_ERROR_NONE)
+            $params = array();
+
+        return view('offers.item')->with('categoriesPath', $categoriesPath)->with('product', $product)->with('status', $status)->with('params', $params);
     }
 
 }
