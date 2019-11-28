@@ -19,6 +19,9 @@ class CreatePayments extends Migration
             $table->enum('type', ['PAYU', 'PAYPAL', 'PAYMENTCARD']);
             $table->float('amount', 8, 2);
             $table->string('status', 32);
+            $table->boolean('cancelled');
+
+            $table->timestamps();
             
             $table->foreign('order_id')->references('id')->on('orders');
         });

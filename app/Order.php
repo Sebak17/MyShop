@@ -26,9 +26,18 @@ class Order extends Model
         return $this->hasMany('App\OrderProduct');
     }
 
-    public function payment()
+    public function payments()
     {
-        return $this->hasOne('App\Payment');
+        return $this->hasMany('App\Payment');
+    }
+
+    public function getCurrentPayment() {
+        foreach ($this->payments as $key => $paym) {
+            if(!$paym->cancelled)
+                return $this->payments[$key];
+        }
+
+        return null;
     }
 
 }

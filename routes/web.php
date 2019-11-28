@@ -138,6 +138,13 @@ Route::prefix('systemUser')->group(function () {
         return redirect('/');
     });
 
+
+
+    Route::post('paymentCancel', 'PanelSystemController@paymentCancel')->name('systemUser_paymentCancel');
+    Route::get('paymentCancel', function () {
+        return redirect('/');
+    });
+
     Route::post('changeDataPersonal', 'PanelSystemController@changeDataPersonal')->name('systemUser_changeDataPersonal');
     Route::get('changeDataPersonal', function () {
         return redirect('/');

@@ -85,8 +85,10 @@ class PanelController extends Controller
             array_push($productsData, $data);
         }
 
+        $deliverInfo = json_decode($order->deliver_info, true);
+        $deliverInfo['type'] = $order->deliver_name;
 
-        return view('order.item')->with('productsData', $productsData)->with('summaryPrice', $order->cost);
+        return view('order.item')->with('productsData', $productsData)->with('order', $order)->with('deliverInfo', $deliverInfo);
     }
 
     public function favoritesPage()

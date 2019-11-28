@@ -2,11 +2,36 @@
 
 return [
 
-	'currency' => "zł",
+    'currency'      => "zł",
 
-    'deliver_cost' => [
+    'deliver_cost'  => [
         'locker'  => 8.99,
         'courier' => 15.99,
+    ],
+
+    'district_name' => [
+        '1'  => "Dolnośląskie",
+        '2'  => "Kujawsko-Pomorskie",
+        '3'  => "Lubelskie",
+        '4'  => "Lubuskie",
+        '5'  => "Łódzkie",
+        '6'  => "Małopolskie",
+        '7'  => "Mazowieckie",
+        '8'  => "Opolskie",
+        '9'  => "Podkarpackie",
+        '10' => "Podlaskie",
+        '11' => "Pomorskie",
+        '12' => "Śląskie",
+        '13' => "Świętokrzyskie",
+        '14' => "Warmińsko-Mazurskie",
+        '15' => "Wielkopolskie",
+        '16' => "Zachodniopomorskie",
+    ],
+
+    'payment_name'  => [
+        'PAYU'        => "PayU",
+        'PAYPAL'      => "PayPal",
+        'PAYMENTCARD' => "Karta kredytowa/debetowa",
     ],
 
 ];

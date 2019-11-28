@@ -322,15 +322,19 @@ class PanelSystemController extends Controller
         ]);
 
         if ($addNoteToOrder) {
-            $order->note = $request->input('note');
+            $note = $request->input('note');
+            // TODO
+            // NOTE FILTR
+            $order->note = $note;
             $order->save();
         }
 
         Payment::create([
-            'order_id' => $order->id,
-            'type'     => $order->payment,
-            'amount'   => $order->cost,
-            'status'   => "CREATED",
+            'order_id'  => $order->id,
+            'type'      => $order->payment,
+            'amount'    => $order->cost,
+            'status'    => "CREATED",
+            'cancelled' => false,
         ]);
 
         foreach ($productsData as $product) {
@@ -350,6 +354,54 @@ class PanelSystemController extends Controller
         $results['url']     = route('orderIDPage', $order->id);
         return response()->json($results);
     }
+
+    //
+    //      USER PAYMENT
+    //
+    
+    public function paymentCancel(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'id'  => new ValidID,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $order = Order::where('id', $request->id)->first();
+
+        if($order == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        do {
+
+            $payment = $order->getCurrentPayment();
+
+            if($payment == null) 
+                break;
+
+            $payment->cancelled = true;
+            $payment->save();
+
+        } while($payment != null);
+
+        $order->status = 'UNPAID';
+        $order->save();
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+
+
 
     //
     //      USER DATA SETTINGS
