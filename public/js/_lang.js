@@ -86,5 +86,8 @@ var Lang = {
 
     ORDER_NOTE_NOT_IN_RANGE: "Uwaga do zamówienia ma niepoprawną długość! (4-1000)",
 
+    PRODUCT_PARAM_EXIST_ERROR: "Taki parametr już istnieje!",
+    PRODUCT_PARAM_NAME_ERROR: "Niepoprawna nazwa dla parametru!",
+    PRODUCT_PARAM_VALUE_ERROR: "Niepoprawna wartość parametru!",
 
 };

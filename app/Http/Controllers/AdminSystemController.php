@@ -12,6 +12,7 @@ use App\Rules\ValidProductCategory;
 use App\Rules\ValidProductDescription;
 use App\Rules\ValidProductImage;
 use App\Rules\ValidProductName;
+use App\Rules\ValidProductParams;
 use App\Rules\ValidProductPrice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -247,6 +248,7 @@ class AdminSystemController extends Controller
             'price'       => new ValidProductPrice,
             'description' => new ValidProductDescription,
             'category'    => new ValidProductCategory,
+            'params'      => new ValidProductParams,
         ]);
 
         $results = array();
@@ -281,6 +283,7 @@ class AdminSystemController extends Controller
             'description' => $request->description,
             'status'      => "INVISIBLE",
             'category_id' => $request->category,
+            'params'      => $request->params,
         ]);
 
         foreach ($images as $value) {
@@ -322,6 +325,7 @@ class AdminSystemController extends Controller
         $results['product']['description'] = $product['description'];
         $results['product']['price']       = $product['price'];
         $results['product']['category_id'] = $product['category_id'];
+        $results['product']['params']      = $product['params'];
 
         $results['product']['images'] = array();
 
@@ -342,6 +346,7 @@ class AdminSystemController extends Controller
             'price'       => new ValidProductPrice,
             'description' => new ValidProductDescription,
             'category'    => new ValidProductCategory,
+            'params'      => new ValidProductParams,
         ]);
 
         $results = array();
@@ -367,6 +372,7 @@ class AdminSystemController extends Controller
         $product->price       = $request->price;
         $product->description = $request->description;
         $product->category_id = $request->category;
+        $product->params      = $request->params;
 
         $product->save();
 

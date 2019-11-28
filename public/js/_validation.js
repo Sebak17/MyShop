@@ -1,3 +1,13 @@
+function validateStringSimple(val, min = 1, max = 32) {
+    if (!/^[a-zA-Z0-9żźćńółęąśŻŹĆĄŚĘŁÓŃ -]+$/.test(val))
+        return false;
+
+    if (val.length < min || val.length > max)
+        return false;
+
+    return true;
+}
+
 function validatePersonalNameLength(name) {
     if (name.length < 3 || name.length > 16)
         return false;

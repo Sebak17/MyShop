@@ -81,8 +81,8 @@ function loadProducts() {
                                                 <h5>` + data.list[i].price + ` ` + cfg_currency +  `</h5>
                                             </td>
                                             <td class="align-middle text-right">
-                                                <button class="btn btn-info"><i class="fas fa-arrow-right"></i> Pokaż</button>
-                                                <a href="/admin/produkty/edytuj/` + data.list[i].id  + `"><button class="btn btn-primary"><i class="fas fa-edit"></i> Edytuj</button></a>
+                                                <a href="/produkt?id=` + data.list[i].id  + `"><button class="btn btn-sm btn-info mb-1"><i class="fas fa-arrow-right"></i> Pokaż</button></a>
+                                                <a href="/admin/produkty/edytuj/` + data.list[i].id  + `"><button class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Edytuj</button></a>
                                             </td>
                                         </tr>`;
 
