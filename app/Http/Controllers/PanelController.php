@@ -98,12 +98,27 @@ class PanelController extends Controller
 
     public function dashboardPage()
     {
-        return view('panel.dashboard');
+        $summary = array();
+
+        $user = Auth::user();
+
+        $summary['orders'] = count($user->orders);
+
+        return view('panel.dashboard')->with('summary', $summary);
     }
 
     public function ordersPage()
     {
-        return view('panel.orders');
+        $user = Auth::user();
+
+        $orders = $user->orders;
+
+        return view('panel.orders')->with('orders', $orders);
+    }
+
+    public function reportsPage()
+    {
+        return view('panel.reports');
     }
 
     public function settingsPage()

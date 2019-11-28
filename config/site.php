@@ -34,4 +34,14 @@ return [
         'PAYMENTCARD' => "Karta kredytowa/debetowa",
     ],
 
+    'order_status' => [
+        'CREATED' => "Stworzone",
+        'UNPAID' => "Niezapłacone",
+        'PROCESSING' => "Przetwarzanie płatności",
+        'PAID' => "Zapłacone",
+        'REALIZE' => "Realizowane",
+        'SENT' => "Wysłane",
+        'RECEIVE' => "Odebrane",
+    ],
+
 ];

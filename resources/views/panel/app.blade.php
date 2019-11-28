@@ -35,7 +35,7 @@
 				
 				@include('panel/menu')
 				
-				<div class="col-sm-12 col-md-9 col-lg-8 mt-3">
+				<div class="col-12 col-md-9 col-lg-8 mt-3">
 					@yield('content')
 				</div>
 				
