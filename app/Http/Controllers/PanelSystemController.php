@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\OrderHelper;
+use App\Helpers\Payments\PayPalHelper;
 use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderProduct;
@@ -358,25 +359,30 @@ class PanelSystemController extends Controller
     //
     //      USER PAYMENT
     //
-    
+
     public function paymentCancel(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
-            'id'  => new ValidID,
+            'id' => new ValidID,
         ]);
 
         $results = array();
 
         if ($validator->fails()) {
             $results['success'] = false;
-            $results['msg'] = $validator->errors()->first();
+            $results['msg']     = $validator->errors()->first();
             return response()->json($results);
         }
 
         $order = Order::where('id', $request->id)->first();
 
-        if($order == null) {
+        if ($order == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        if(!in_array($order->status, ['CREATED','UNPAID','PROCESSING','PAID','REALIZE','SENT','RECEIVE'])) {
             $results['success'] = false;
             return response()->json($results);
         }
@@ -385,23 +391,77 @@ class PanelSystemController extends Controller
 
             $payment = $order->getCurrentPayment();
 
-            if($payment == null) 
+            if ($payment == null) {
                 break;
+            }
 
             $payment->cancelled = true;
             $payment->save();
 
-        } while($payment != null);
+        } while ($payment != null);
 
-        $order->status = 'UNPAID';
+        $order->status = 'PAID';
         $order->save();
 
         $results['success'] = true;
         return response()->json($results);
     }
 
+    public function paymentPay(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg']     = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $order = Order::where('id', $request->id)->first();
+
+        if ($order == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        if(!in_array($order->status, ['CREATED','UNPAID'])) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $payment = $order->getCurrentPayment();
+
+        if ($payment == null) {
+            $payment = Payment::create([
+                'order_id'  => $order->id,
+                'type'      => $order->payment,
+                'amount'    => $order->cost,
+                'status'    => "CREATED",
+                'cancelled' => false,
+            ]);
+        }
+
+        $order->status = 'UNPAID';
+        $order->save();
 
 
+        $paypal = new PayPalHelper();
+        $res = $paypal->createPayment($order, $payment);
+
+        if($res['success'] == true) {
+            $results['success'] = true;
+            $results['url'] = $res['url'];
+        } else {
+            $results['success'] = false;
+            $results['msg'] = $res['msg'];
+        }
+
+        return response()->json($results);
+    }
 
     //
     //      USER DATA SETTINGS

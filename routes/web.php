@@ -52,6 +52,8 @@ Route::group([], function () {
     Route::get('/zamowienie/tworzenie', 'PanelController@shoppingCartInformation')->name('shoppingCartInformation');
 
     Route::get('/zamowienie/{id}', 'PanelController@orderPage')->where('id', '[0-9]+')->name('orderIDPage');
+
+    Route::get('/platnosc/status', 'PanelController@paymentStatus')->name('paymentStatusPage');
 });
 
 //
@@ -146,6 +148,15 @@ Route::prefix('systemUser')->group(function () {
     Route::get('paymentCancel', function () {
         return redirect('/');
     });
+
+    Route::post('paymentPay', 'PanelSystemController@paymentPay')->name('systemUser_paymentPay');
+    Route::get('paymentPay', function () {
+        return redirect('/');
+    });
+
+
+
+
 
     Route::post('changeDataPersonal', 'PanelSystemController@changeDataPersonal')->name('systemUser_changeDataPersonal');
     Route::get('changeDataPersonal', function () {

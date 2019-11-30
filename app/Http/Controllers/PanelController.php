@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\Product;
+use App\Helpers\Payments\PayPalHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -89,6 +90,18 @@ class PanelController extends Controller
         $deliverInfo['type'] = $order->deliver_name;
 
         return view('order.item')->with('productsData', $productsData)->with('order', $order)->with('deliverInfo', $deliverInfo);
+    }
+
+    public function paymentStatus(Request $request)
+    {
+        $res = [];
+
+        if(isset($request->PayerID) && isset($request->token)) {
+            $paypal = new PayPalHelper();
+            $res = $paypal->getPaymentStatus($request->input('PayerID'), $request->input('token'));
+        }
+
+        return view('order.payments.paypal_status')->with('results', $res);
     }
 
     public function favoritesPage()
