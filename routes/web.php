@@ -198,6 +198,9 @@ Route::prefix('admin')->group(function () {
     Route::get('produkty/lista', 'AdminController@productsListPage')->name('admin_productsListPage');
     Route::get('produkty/dodaj', 'AdminController@productsAddPage')->name('admin_productsAddPage');
     Route::get('produkty/edytuj/{id}', 'AdminController@productsEditPage')->name('admin_productsEditPage');
+
+    Route::get('zamowienia/lista', 'AdminController@ordersListPage')->name('admin_ordersListPage');
+    Route::get('zamowienia/informacje/{id}', 'AdminController@orderPage')->where('id', '[0-9]+')->name('admin_orderPageID');
 });
 
 //

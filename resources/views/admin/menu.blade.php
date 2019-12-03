@@ -40,7 +40,7 @@
 		<hr class="sidebar-divider d-none d-md-block">
 
 		<li class="nav-item">
-			<a class="nav-link" href="">
+			<a class="nav-link" href="{{ route('admin_ordersListPage') }}">
 				<i class="fas fa-fw fa-receipt"></i>
 				<span>Zamówienia</span>
 			</a>
