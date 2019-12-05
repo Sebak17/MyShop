@@ -9,6 +9,11 @@ return [
         'courier' => 15.99,
     ],
 
+    'deliver_name' => [
+        'INPOST_LOCKER' => "InPost - Paczkomat",
+        'COURIER' => "Kurier",
+    ],
+
     'district_name' => [
         '1'  => "Dolnośląskie",
         '2'  => "Kujawsko-Pomorskie",
