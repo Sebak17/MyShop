@@ -92,7 +92,7 @@
                         <div id="lockerInfo" class="d-none">
                             <div class="row">
                                 <div class="col-4 col-sm-3 col-md-2">
-                                    <button class="btn btn-success" id="btnChangeLocker"><i class="fas fa-"></i> ZMIEŃ</button>
+                                    <button class="btn btn-success" id="btnChangeLocker"><i class="fas fa-edit"></i> ZMIEŃ</button>
                                 </div>
                                 <div class="col">
                                     <p>

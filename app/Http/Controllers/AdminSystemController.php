@@ -3,17 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Helpers\OrderHelper;
+use App\Order;
 use App\Product;
 use App\ProductImage;
+use App\Rules\ValidAddress;
 use App\Rules\ValidCategoryName;
+use App\Rules\ValidCity;
+use App\Rules\ValidDistrict;
 use App\Rules\ValidIconFA;
 use App\Rules\ValidID;
+use App\Rules\ValidLockerName;
+use App\Rules\ValidOrderStatus;
 use App\Rules\ValidProductCategory;
 use App\Rules\ValidProductDescription;
 use App\Rules\ValidProductImage;
 use App\Rules\ValidProductName;
 use App\Rules\ValidProductParams;
 use App\Rules\ValidProductPrice;
+use App\Rules\ValidZipCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -624,6 +632,112 @@ class AdminSystemController extends Controller
             $category->orderID = $index;
             $category->save();
         }
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    //
+    //      ORDER MANAGER SITES
+    //
+
+    public function orderChangeStatus(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'     => new ValidID,
+            'status' => new ValidOrderStatus,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $order = Order::where('id', $request->id)->first();
+
+        if ($order == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie znaleziono zamówienia!";
+            return response()->json($results);
+        }
+
+        OrderHelper::changeOrderStatus($order, $request->status);
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function orderChangeDeliverLoc(Request $request)
+    {
+        $results = array();
+
+        $validator = Validator::make($request->all(), [
+            'deliver.type' => "required|in:INPOST_LOCKER,COURIER",
+        ]);
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $deliver_info = array();
+
+        switch ($request->input('deliver.type')) {
+            case 'INPOST_LOCKER':
+                $validator = Validator::make($request->all(), [
+                    'deliver.lockerName' => new ValidLockerName,
+                ]);
+
+                if ($validator->fails()) {
+                    $results['success'] = false;
+
+                    $results['msg'] = $validator->errors()->first();
+                    return response()->json($results);
+                }
+
+                $deliver_info['lockerName'] = $request->input('deliver.lockerName');
+
+                break;
+            case 'COURIER':
+                $validator = Validator::make($request->all(), [
+                    'deliver.district' => new ValidDistrict,
+                    'deliver.city'     => new ValidCity,
+                    'deliver.zipcode'  => new ValidZipCode,
+                    'deliver.address'  => new ValidAddress,
+                ]);
+
+                if ($validator->fails()) {
+                    $results['success'] = false;
+
+                    $results['msg'] = $validator->errors()->first();
+                    return response()->json($results);
+                }
+
+                $deliver_info['district'] = $request->input('deliver.district');
+                $deliver_info['city']     = $request->input('deliver.city');
+                $deliver_info['zipcode']  = $request->input('deliver.zipcode');
+                $deliver_info['address']  = $request->input('deliver.address');
+
+                break;
+        }
+
+        if (empty($deliver_info)) {
+            $results['success'] = false;
+            $results['msg']     = "Wystąpił błąd z danymi do wysyłki!";
+            return response()->json($results);
+        }
+
+
+
+
+
 
         $results['success'] = true;
         return response()->json($results);

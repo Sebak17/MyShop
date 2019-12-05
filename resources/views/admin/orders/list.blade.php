@@ -35,7 +35,7 @@
 								</h5>
 							</td>
 							<td>{{ count($order->products) }}</td>
-							<td>{{ $order->cost }}</td>
+							<td>{{ $order->cost }} {{ config('site.currency') }}</td>
 							<td>{{ config('site.order_status.'.$order->status) }}</td>
 							<td>
 								<a href="{{ route('admin_orderPageID', $order->id) }}" target="_blank">
@@ -50,10 +50,48 @@
 			</div>
 		</div>
 		
+		<div class="col-12 col-sm-4">
+			<div class="card card-body mb-3">
+				<legend><i class="fas fa-search"></i> Szukaj zamówienia</legend>
+				<hr />
+
+				<div class="form-group">
+					<label for="inp_orderID">Podaj ID zamówienia:</label>
+					<input type="number" id="inp_orderID" class="form-control">
+				</div>
+
+				<div class="form-group text-right">
+					<button class="btn btn-info" id="btnOrderSearch"><i class="fas fa-search"></i> Szukaj</button>
+				</div>
+			</div>
+
+			<div class="card card-body">
+				<legend></legend>
+				<hr />
+
+				<div class="row">
+					<div class="col-10">
+						Zamówienia do realizacji 
+					</div>
+					<div class="col-2">
+						<strong>{{ $realizeOrders }}</strong>
+					</div>
+
+					<div class="col-12 mt-2 text-right">
+						<a href="{{ route('admin_ordersRealizeListPage') }}">
+							<button class="btn btn-sm btn-info">
+								<i class="fas fa-list"></i> Pokaż zamówienia
+							</button>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 	
 </div>
 
 <script src="{{ asset('js/_validation.js') }}" charset="utf-8"></script>
-
+<script src="{{ asset('js/_admin.orders.list.js') }}" charset="utf-8"></script>
 @endsection

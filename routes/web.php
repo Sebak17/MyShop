@@ -200,7 +200,10 @@ Route::prefix('admin')->group(function () {
     Route::get('produkty/edytuj/{id}', 'AdminController@productsEditPage')->name('admin_productsEditPage');
 
     Route::get('zamowienia/lista', 'AdminController@ordersListPage')->name('admin_ordersListPage');
+    Route::get('zamowienia/realizacja', 'AdminController@ordersRealisingListPage')->name('admin_ordersRealizeListPage');
     Route::get('zamowienia/informacje/{id}', 'AdminController@orderPage')->where('id', '[0-9]+')->name('admin_orderPageID');
+
+
 });
 
 //
@@ -313,4 +316,19 @@ Route::prefix('systemAdmin')->group(function () {
     Route::get('productEditImageRemove', function () {
         return redirect('/');
     });
+
+    //
+    //      ORDER MANAGE SITES
+    //
+    
+    Route::post('orderChangeStatus', 'AdminSystemController@orderChangeStatus')->name('systemAdmin_orderChangeStatus');
+    Route::get('orderChangeStatus', function () {
+        return redirect('/');
+    });
+
+    Route::post('orderChangeDeliverLoc', 'AdminSystemController@orderChangeDeliverLoc')->name('systemAdmin_orderChangeDeliverLoc');
+    Route::get('orderChangeDeliverLoc', function () {
+        return redirect('/');
+    });
+
 });

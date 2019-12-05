@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
 use App\Order;
+use App\OrderHistory;
+use App\Product;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -61,14 +62,16 @@ class AdminController extends Controller
     {
         $orders = Order::all();
 
-        return view('admin.orders.list')->with('orders', $orders);
+        $realizeOrders = Order::where('status', 'REALIZE')->count();
+
+        return view('admin.orders.list')->with('orders', $orders)->with('realizeOrders', $realizeOrders);
     }
 
     public function orderPage(Request $request, $id)
     {
         $order = Order::where('id', $id)->first();
 
-        if($order == null) {
+        if ($order == null) {
             return view('admin.orders.not_exist')->with('id', $id);
         }
 
@@ -83,10 +86,20 @@ class AdminController extends Controller
             array_push($productsData, $data);
         }
 
-        $deliverInfo = json_decode($order->deliver_info, true);
+        $deliverInfo         = json_decode($order->deliver_info, true);
         $deliverInfo['type'] = $order->deliver_name;
 
-        return view('admin.orders.item')->with('productsData', $productsData)->with('order', $order)->with('deliverInfo', $deliverInfo);
+        $orderHistory = OrderHistory::where('order_id', $order->id)->get();
+
+        return view('admin.orders.item')->with('productsData', $productsData)->with('order', $order)->with('deliverInfo', $deliverInfo)->with('orderHistory', $orderHistory);
+    }
+
+    public function ordersRealisingListPage()
+    {
+
+        $orders = Order::where('status', 'REALIZE')->get();
+
+        return view('admin.orders.realising_list')->with('orders', $orders);
     }
 
 }

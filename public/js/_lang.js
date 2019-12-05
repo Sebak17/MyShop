@@ -1,4 +1,8 @@
 var Lang = {
+
+    FORM_SENDING: "Trwa wysyłanie...",
+    FORM_SENDING_ERROR: "Wystąpił błąd podczas wysyłania!",
+
     RECATPCHA_VERIFYING: "Trwa weryfikowanie klienta!",
 
     PASSWORDS_NOT_MATCH: "Hasła się nie zgadzają!",
@@ -27,9 +31,6 @@ var Lang = {
 	ADDRESS_NOT_IN_RANGE: "Adres ma błędną długość! Poprawna długość: 2-40",
 
     ICON_FA_ERROR: "Błędna ikona",
-
-    FORM_SENDING: "Trwa wysyłanie...",
-    FORM_SENDING_ERROR: "Wystąpił błąd podczas wysyłania!",
 
     REQUEST_IN_PROGRESS: "Żądanie jest przetwarzane!",
 
@@ -89,5 +90,8 @@ var Lang = {
     PRODUCT_PARAM_EXIST_ERROR: "Taki parametr już istnieje!",
     PRODUCT_PARAM_NAME_ERROR: "Niepoprawna nazwa dla parametru!",
     PRODUCT_PARAM_VALUE_ERROR: "Niepoprawna wartość parametru!",
+
+
+    ORDER_STATUS_SUCCESS: "Status zamówienia został zmieniony!",
 
 };
