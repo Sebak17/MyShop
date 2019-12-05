@@ -17,6 +17,7 @@ class Order extends Model
         'buyer_info',
         'deliver_name',
         'deliver_info',
+        'deliver_parcelID',
         'payment',
         'note',
     ];
