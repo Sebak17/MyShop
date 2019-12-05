@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Order;
+use App\OrderHistory;
+
 class OrderHelper
 {
 
@@ -16,6 +19,27 @@ class OrderHelper
         }
 
         return null;
+    }
+
+    public static function changeOrderStatus($order, $status)
+    {
+        
+        if($order == null || $status == null)
+            return;
+
+        if($order->status == $status)
+            return;
+
+        $msg = "Zamiana statusu z " . $order->status . " na " . $status;
+
+        OrderHistory::create([
+            'order_id' => $order->id,
+            'data' => $msg,
+        ]);
+
+        $order->status = $status;
+        $order->save();
+
     }
 
 }

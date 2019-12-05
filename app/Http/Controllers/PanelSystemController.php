@@ -400,8 +400,8 @@ class PanelSystemController extends Controller
 
         } while ($payment != null);
 
-        $order->status = 'PAID';
-        $order->save();
+        OrderHelper::changeOrderStatus($order, 'UNPAID');
+
 
         $results['success'] = true;
         return response()->json($results);
@@ -445,8 +445,7 @@ class PanelSystemController extends Controller
             ]);
         }
 
-        $order->status = 'UNPAID';
-        $order->save();
+        OrderHelper::changeOrderStatus($order, 'UNPAID');
 
 
         $paypal = new PayPalHelper();

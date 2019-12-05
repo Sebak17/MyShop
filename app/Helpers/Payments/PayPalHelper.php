@@ -106,8 +106,7 @@ class PayPalHelper
         Session::put('paypal_payment_id', $payment->getId());
 
         if (isset($redirect_url)) {
-        	$order->status = 'PROCESSING';
-        	$order->save();
+            OrderHelper::changeOrderStatus($order, 'PROCESSING');
 
             $order_payment->externalID = $payment->getId();
             $order_payment->status     = "GENERATED";
@@ -202,10 +201,8 @@ class PayPalHelper
             $order_payment->status = $result->getState();
             $order_payment->save();
 
-            $order->status = 'PAID';
-        	$order->save();
-
-
+            OrderHelper::changeOrderStatus($order, 'PAID');
+            
             $results['success'] = true;
             $results['msg']     = "Zamówienie zostało opłacone pomyślnie!";
 
