@@ -26,7 +26,7 @@ class ValidLockerName implements Rule
     public function passes($attribute, $value)
     {
 
-        if (mb_strlen($value) > 10) {
+        if (mb_strlen($value) > 14) {
             return false;
         }
 
@@ -34,7 +34,7 @@ class ValidLockerName implements Rule
             return false;
         }
 
-        if (!preg_match("/^[a-zA-Z0-9]+$/", $value)) {
+        if (!preg_match("/^[a-zA-Z0-9-]+$/", $value)) {
             return false;
         }
 
