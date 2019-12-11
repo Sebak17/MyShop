@@ -47,6 +47,7 @@ return [
         'REALIZE' => "Realizowane",
         'SENT' => "Wysłane",
         'RECEIVE' => "Odebrane",
+        'CANCELED' => "Anulowana",
     ],
 
 ];

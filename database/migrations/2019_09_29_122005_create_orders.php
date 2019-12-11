@@ -16,7 +16,7 @@ class CreateOrders extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->enum('status', ['CREATED', 'UNPAID', 'PROCESSING', 'PAID', 'REALIZE', 'SENT', 'RECEIVE']);
+            $table->enum('status', ['CREATED', 'UNPAID', 'PROCESSING', 'PAID', 'REALIZE', 'SENT', 'RECEIVE', 'CANCELED']);
             $table->float('cost', 8, 2);
             $table->text('buyer_info');
             $table->string('deliver_name', 24);
