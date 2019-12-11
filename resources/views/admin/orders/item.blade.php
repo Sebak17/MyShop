@@ -29,34 +29,34 @@
 				
 				<div>
 					<div class="row text-left ml-2">
-						<div class="col-6 lead">Sposób dostawy: </div>
-						<div class="col-6 lead"><strong>{{ config('site.deliver_name.'.$deliverInfo['type']) }}</strong></div>
+						<div class="col-6">Sposób dostawy: </div>
+						<div class="col-6"><strong>{{ config('site.deliver_name.'.$deliverInfo['type']) }}</strong></div>
 					</div>
 					
 					@if($deliverInfo['type'] == 'COURIER')
 					<div class="row text-left ml-2">
-						<div class="col-6 lead">Ulica: </div>
-						<div class="col-6 lead"><strong>{{ $deliverInfo['address'] }}</strong></div>
+						<div class="col-6">Ulica: </div>
+						<div class="col-6"><strong>{{ $deliverInfo['address'] }}</strong></div>
 					</div>
 					
 					<div class="row text-left ml-2">
-						<div class="col-6 lead">Miejscowość: </div>
-						<div class="col-6 lead"><strong>{{ $deliverInfo['city'] }}</strong></div>
+						<div class="col-6">Miejscowość: </div>
+						<div class="col-6"><strong>{{ $deliverInfo['city'] }}</strong></div>
 					</div>
 					
 					<div class="row text-left ml-2">
-						<div class="col-6 lead">Kod pocztowy: </div>
-						<div class="col-6 lead"><strong>{{ $deliverInfo['zipcode'] }}</strong></div>
+						<div class="col-6">Kod pocztowy: </div>
+						<div class="col-6"><strong>{{ $deliverInfo['zipcode'] }}</strong></div>
 					</div>
 					
 					<div class="row text-left ml-2">
-						<div class="col-6 lead">Województwo: </div>
-						<div class="col-6 lead"><strong>{{ config('site.district_name.'.$deliverInfo['district']) }}</strong></div>
+						<div class="col-6">Województwo: </div>
+						<div class="col-6"><strong>{{ config('site.district_name.'.$deliverInfo['district']) }}</strong></div>
 					</div>
 					@elseif($deliverInfo['type'] == 'INPOST_LOCKER')
 					<div class="row text-left ml-2">
-						<div class="col-6 lead">Nazwa paczkomatu: </div>
-						<div class="col-6 lead"><strong id="lockerCode">{{ $deliverInfo['lockerName'] }}</strong></div>
+						<div class="col-6">Nazwa paczkomatu: </div>
+						<div class="col-6"><strong id="lockerCode">{{ $deliverInfo['lockerName'] }}</strong></div>
 					</div>
 					<div id="lockerInfo">
 					</div>
@@ -103,18 +103,33 @@
 				<div class="row mb-2">
 					<div class="col-12 col-sm-6">
 						<button class="btn btn-info" id="btnShowHistory"><i class="fas fa-history"></i> Pokaż historię</button>
+						
+						<button class="btn btn-info mt-2" id="btnChangeDeliverLocModal"><i class="fas fa-search-location"></i> Zmień adres dostawy</button>
+						
+						<button class="btn btn-info mt-2" id="btnChangePaymentModal"><i class="fas fa-money-bill-alt"></i> Zmień płatność</button>
 					</div>
+					
 					<div class="col-12 col-sm-6 text-right">
 						<button class="btn btn-info" id="btnChangeStatusModal"><i class="fas fa-edit"></i> Nadaj status</button>
+						
+						<button class="btn btn-info mt-2" id="btnChangeCostModal"><i class="fas fa-money-bill-wave-alt"></i> Zmień koszt</button>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-12 col-sm-6">
-						<button class="btn btn-info" id="btnChangeDeliverLocModal"><i class="fas fa-search-location"></i> Zmień adres dostawy</button>
-					</div>
-					<div class="col-12 col-sm-6 text-right">
-						<button class="btn btn-info" id="btnChangeCostModal"><i class="fas fa-money-bill-wave-alt"></i> Zmień cenę</button>
-					</div>
+			</div>
+			
+			<div class="card card-body mb-3">
+				<legend><i class="fas fa-money-bill-wave-alt"></i> Informacje płatnicze</legend>
+				
+				<hr />
+				
+				<div class="row text-left ml-2">
+					<div class="col-6">Sposób płatności: </div>
+					<div class="col-6"><strong>{{ config('site.payment_name.'.$order->payment) }}</strong></div>
+				</div>
+				
+				<div class="row text-left ml-2">
+					<div class="col-6">Cena końcowa: </div>
+					<div class="col-6"><strong>{{ $order->cost }} {{ config('site.currency') }}</strong></div>
 				</div>
 			</div>
 			
@@ -278,10 +293,10 @@
 						</div>
 						
 						<div id="modalDeliverLoc_Locker" class="d-none">
-
+							
 							<hr />
 							<h4 class="mb-3"><i class="fas fa-map-marked-alt"></i> Wybierz paczkomat: </h4>
-
+							
 							<div class="row">
 								<div class="col-4 col-sm-3 col-md-2">
 									<button class="btn btn-success" id="btnChangeLocker"><i class="fas fa-edit"></i> ZMIEŃ</button>
@@ -295,23 +310,93 @@
 									</p>
 								</div>
 							</div>
-
+							
 							<div class="row">
 								<div class="col-12">
 									<div id="easypack-map"></div>
 								</div>
 							</div>
-	
+							
 							<hr />
 						</div>
 					</div>
-
+					
 				</div>
 			</div>
 			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
 				<button type="button" class="btn btn-success" id="btnChangeDeliverLoc">Zmień <i class="fas fa-exchange-alt"></i></button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+
+
+<!-- Order change cost -->
+<div class="modal fade" id="modalChangeCost">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-wrench"></i> Zmień koszt za zamówienie</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="alert d-none" id="alert03"></div>
+				
+				<div class="form-group">
+					<label for="inp_orderCost">Podaj koszt zamówienia:</label>
+					<div class="input-group mb-3">
+						<input type="number" class="form-control" id="inp_orderCost" value="{{ $order->cost }}">
+						<div class="input-group-append">
+							<span class="input-group-text">{{ config('site.currency') }}</span>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
+				<button type="button" class="btn btn-success" id="btnChangeCost">Zmień <i class="fas fa-exchange-alt"></i></button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<!-- Order change payment -->
+<div class="modal fade" id="modalChangePayment">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-wrench"></i> Zmień sposób płatności</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="alert d-none" id="alert03"></div>
+				
+				<div class="form-group">
+					<label for="inp_orderPaymentMethod">Wybierz sposób dostawy:</label>
+					<select id="inp_orderPaymentMethod" class="form-control">
+						<option class="d-none" selected></option>
+						@foreach(config('site.payment_name') as $key => $value)
+						<option value="{{ $key }}">{{ $value }}</option>
+						@endforeach
+					</select>
+				</div>
+				
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
+				<button type="button" class="btn btn-success" id="btnChangePayment">Zmień <i class="fas fa-exchange-alt"></i></button>
 			</div>
 			
 		</div>

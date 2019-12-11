@@ -1,61 +1,76 @@
-var _currentDeliver = '',
+var _orderID = -1,
+    _currentDeliver = '',
     _currentLocker = '';
 var lockerMap;
 
-$(document).ready(function() {
-	
-	bindButtons();
+$(document).ready(function () {
+
+    _orderID = $("[data-id]").attr('data-id');
+
+    bindButtons();
 
 });
 
 function bindButtons() {
-	
-	$('#btnShowHistory').click(function() {
-		$('#modalHistory').modal('show');
-	});
 
-	$('#btnChangeStatusModal').click(function() {
-		$('#modalChangeStatus').modal('show');
-	});
+    $('#btnShowHistory').click(function () {
+        $('#modalHistory').modal('show');
+    });
 
-	$('#btnChangeDeliverLocModal').click(function() {
-		$('#modalChangeDeliverLoc').modal('show');
-	});
+    $('#btnChangeStatusModal').click(function () {
+        $('#modalChangeStatus').modal('show');
+    });
 
-	$("#inp_orderDeliverType").each(function (index) {
+    $('#btnChangeDeliverLocModal').click(function () {
+        $('#modalChangeDeliverLoc').modal('show');
+    });
+
+    $('#btnChangePaymentModal').click(function () {
+        $('#modalChangePayment').modal('show');
+    });
+
+    $('#btnChangeCostModal').click(function () {
+        $('#modalChangeCost').modal('show');
+    });
+
+
+
+    $("#inp_orderDeliverType").each(function (index) {
         $(this).change(function () {
             let val = $(this).val();
             changeDeliver(val);
         });
     });
 
-    $("#btnChangeDeliverLoc").click(function() {
-		changeDeliverLoc();    	
+    $("#btnChangeDeliverLoc").click(function () {
+        changeDeliverLoc();
     });
 
+    $('#btnChangeStatus').click(function () {
+        changeOrderStatus();
+    });
 
-	$('#btnChangeStatus').click(function() {
-		changeOrderStatus();
-	});
+    $('#btnChangePayment').click(function () {
+        changeOrderPayment();
+    });
+
+    $('#btnChangeCost').click(function () {
+        changeOrderCost();
+    });
 
 }
 
 function changeOrderStatus() {
+    let status = $("#inp_orderNewStatus").val();
 
-	let id = $("[data-id]").attr('data-id');
-	if(isNaN(id))
-		return;
+    if (status == null)
+        return;
 
-	let status = $("#inp_orderNewStatus").val();
-
-	if(status == null)
-		return;
-
-	$.ajax({
+    $.ajax({
         url: "/systemAdmin/orderChangeStatus",
         method: "POST",
         data: {
-            id: id,
+            id: _orderID,
             status: status,
         },
         success: function (data) {
@@ -64,8 +79,8 @@ function changeOrderStatus() {
                     showAlert(AlertType.SUCCESS, Lang.ORDER_STATUS_SUCCESS, '#alert01');
 
                     setTimeout(function (argument) {
-                    	location.reload();
-                    }, 1000);
+                        location.reload();
+                    }, 800);
                 } else {
                     showAlert(AlertType.ERROR, data.msg, '#alert01');
                 }
@@ -112,11 +127,7 @@ function changeDeliver(deliver) {
 
 function changeDeliverLoc() {
 
-	let id = $("[data-id]").attr('data-id');
-	if(isNaN(id))
-		return;
-
-	if (_currentDeliver == '') {
+    if (_currentDeliver == '') {
         showAlert(AlertType.ERROR, Lang.ORDER_DELIVER_CHOOSE, '#alert02');
         return;
     }
@@ -183,7 +194,7 @@ function changeDeliverLoc() {
 
     let orderData = [];
 
-    orderData['id'] = id;
+    orderData['id'] = _orderID;
     orderData['deliver'] = toObject(m_deliver);
 
     showAlert(AlertType.LOADING, Lang.ORDER_CONFIRMING);
@@ -194,12 +205,84 @@ function changeDeliverLoc() {
         data: toObject(orderData),
         success: function (data) {
             if (data.success == true) {
-                showAlert(AlertType.SUCCESS, Lang.ORDER_CONFIRMING_SUCCESS);
+                showAlert(AlertType.SUCCESS, Lang.ORDER_CHANGE_DELIVERLOC_SUCCESS, '#alert02');
+
+                setTimeout(function (argument) {
+                    location.reload();
+                }, 800);
             } else
-                showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING_ERROR);
+                showAlert(AlertType.ERROR, Lang.ORDER_CHANGE_DELIVERLOC_ERROR, '#alert02');
         },
         error: function () {
-            showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING);
+            showAlert(AlertType.ERROR, Lang.ORDER_CHANGE_DELIVERLOC_ERROR, '#alert02');
+        }
+    });
+}
+
+function changeOrderPayment() {
+    let paymentMethod = $("#inp_orderPaymentMethod").val();
+
+    if (paymentMethod == null)
+        return;
+
+    $.ajax({
+        url: "/systemAdmin/orderChangePayment",
+        method: "POST",
+        data: {
+            id: _orderID,
+            paymentMethod: paymentMethod,
+        },
+        success: function (data) {
+            try {
+                if (data.success == true) {
+                    showAlert(AlertType.SUCCESS, Lang.ORDER_STATUS_SUCCESS, '#alert03');
+
+                    setTimeout(function (argument) {
+                        location.reload();
+                    }, 800);
+                } else {
+                    showAlert(AlertType.ERROR, data.msg, '#alert03');
+                }
+            } catch (e) {
+                showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert03');
+            }
+        },
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert03');
+        }
+    });
+}
+
+function changeOrderCost() {
+    let cost = parseInt($("#inp_orderCost").val());
+
+    if (cost == null || isNaN(cost))
+        return;
+
+    $.ajax({
+        url: "/systemAdmin/orderChangeCost",
+        method: "POST",
+        data: {
+            id: _orderID,
+            cost: cost,
+        },
+        success: function (data) {
+            try {
+                if (data.success == true) {
+                    showAlert(AlertType.SUCCESS, Lang.ORDER_STATUS_SUCCESS, '#alert03');
+
+                    setTimeout(function (argument) {
+                        location.reload();
+                    }, 800);
+                } else {
+                    showAlert(AlertType.ERROR, data.msg, '#alert03');
+                }
+            } catch (e) {
+                showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert03');
+            }
+        },
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert03');
         }
     });
 }

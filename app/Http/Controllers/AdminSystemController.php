@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Helpers\OrderHelper;
 use App\Order;
+use App\OrderHistory;
 use App\Product;
 use App\ProductImage;
 use App\Rules\ValidAddress;
@@ -677,6 +678,7 @@ class AdminSystemController extends Controller
         $results = array();
 
         $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
             'deliver.type' => "required|in:INPOST_LOCKER,COURIER",
         ]);
 
@@ -734,10 +736,61 @@ class AdminSystemController extends Controller
             return response()->json($results);
         }
 
+        $order = Order::where('id', $request->id)->first();
+
+        if($order == null) {
+           $results['success'] = false;
+            $results['msg']     = "Wystapił bład z zamówieniem!";
+            return response()->json($results); 
+        }
 
 
+        $order->deliver_name = $request->input('deliver.type');
+        $order->deliver_info = json_encode($deliver_info);
+        $order->save();
+
+        OrderHistory::create([
+            'order_id' => $order->id,
+            'data' => 'Zmiana dostawy zamówienia',
+        ]);
 
 
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function orderChangePayment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'     => new ValidID,
+            'paymentMethod' => "required|in:PAYU,PAYPAL,PAYMENTCARD",
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $order = Order::where('id', $request->id)->first();
+
+        if ($order == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie znaleziono zamówienia!";
+            return response()->json($results);
+        }
+
+        OrderHistory::create([
+            'order_id' => $order->id,
+            'data' => 'Zmiana płatności z ' . $order->payment . ' na ' . $request->paymentMethod,
+        ]);
+
+        $order->payment = $request->paymentMethod;
+        $order->save();
 
         $results['success'] = true;
         return response()->json($results);
