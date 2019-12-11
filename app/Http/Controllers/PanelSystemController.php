@@ -7,6 +7,7 @@ use App\Helpers\Payments\PayPalHelper;
 use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderProduct;
+use App\OrderHistory;
 use App\Payment;
 use App\Product;
 use App\Rules\ValidAddress;
@@ -348,6 +349,11 @@ class PanelSystemController extends Controller
             ]);
         }
 
+        OrderHistory::create([
+            'order_id' => $order->id,
+            'data'     => 'Stworzono zamówienie',
+        ]);
+
         $request->session()->forget('SHOPPINGCART_STATUS');
         $request->session()->forget('SHOPPINGCART_DATA');
 
@@ -382,7 +388,7 @@ class PanelSystemController extends Controller
             return response()->json($results);
         }
 
-        if(!in_array($order->status, ['CREATED','UNPAID','PROCESSING','PAID','REALIZE','SENT','RECEIVE'])) {
+        if (!in_array($order->status, ['CREATED', 'UNPAID', 'PROCESSING', 'PAID', 'REALIZE', 'SENT', 'RECEIVE'])) {
             $results['success'] = false;
             return response()->json($results);
         }
@@ -400,8 +406,12 @@ class PanelSystemController extends Controller
 
         } while ($payment != null);
 
-        OrderHelper::changeOrderStatus($order, 'UNPAID');
+        OrderHistory::create([
+            'order_id' => $order->id,
+            'data'     => 'Anulowanie płatności przez użytkownika.',
+        ]);
 
+        OrderHelper::changeOrderStatus($order, 'UNPAID');
 
         $results['success'] = true;
         return response()->json($results);
@@ -428,7 +438,7 @@ class PanelSystemController extends Controller
             return response()->json($results);
         }
 
-        if(!in_array($order->status, ['CREATED','UNPAID'])) {
+        if (!in_array($order->status, ['CREATED', 'UNPAID'])) {
             $results['success'] = false;
             return response()->json($results);
         }
@@ -447,16 +457,31 @@ class PanelSystemController extends Controller
 
         OrderHelper::changeOrderStatus($order, 'UNPAID');
 
+        $res = array();
 
-        $paypal = new PayPalHelper();
-        $res = $paypal->createPayment($order, $payment);
+        switch ($order->payment) {
+            case 'PAYPAL':
+                $paypal = new PayPalHelper();
+                $res    = $paypal->createPayment($order, $payment);
+                break;
+            default:
+                $res['success'] = false;
+                $res['msg']     = "Ten sposób płatności nie jest obsługiwany!";
+                break;
+        }
 
-        if($res['success'] == true) {
+        if ($res['success'] == true) {
             $results['success'] = true;
-            $results['url'] = $res['url'];
+            $results['url']     = $res['url'];
+
+            OrderHistory::create([
+                'order_id' => $order->id,
+                'data'     => 'Polecenie transakcji za pomocą: ' . $order->payment,
+            ]);
+
         } else {
             $results['success'] = false;
-            $results['msg'] = $res['msg'];
+            $results['msg']     = $res['msg'];
         }
 
         return response()->json($results);
