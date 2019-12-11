@@ -183,7 +183,7 @@ function confirmData() {
                 showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING_ERROR);
         },
         error: function () {
-            showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING);
+            showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING_ERROR);
         },
         complete: function () {}
     });
