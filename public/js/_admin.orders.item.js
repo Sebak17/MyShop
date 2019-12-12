@@ -254,7 +254,7 @@ function changeOrderPayment() {
 }
 
 function changeOrderCost() {
-    let cost = parseInt($("#inp_orderCost").val());
+    let cost = parseFloat($("#inp_orderCost").val());
 
     if (cost == null || isNaN(cost))
         return;
@@ -269,7 +269,7 @@ function changeOrderCost() {
         success: function (data) {
             try {
                 if (data.success == true) {
-                    showAlert(AlertType.SUCCESS, Lang.ORDER_STATUS_SUCCESS, '#alert03');
+                    showAlert(AlertType.SUCCESS, Lang.ORDER_COST_SUCCESS, '#alert03');
 
                     setTimeout(function (argument) {
                         location.reload();

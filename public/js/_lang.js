@@ -93,6 +93,7 @@ var Lang = {
 
 
     ORDER_STATUS_SUCCESS: "Status zamówienia został zmieniony!",
+    ORDER_COST_SUCCESS: "Koszt zamówienia został zmieniony!",
 
 
     ORDER_CHANGE_DELIVERLOC_SUCCESS: "Adres dostawy został zmieniony!",

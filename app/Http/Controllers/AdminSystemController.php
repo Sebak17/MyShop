@@ -796,4 +796,41 @@ class AdminSystemController extends Controller
         return response()->json($results);
     }
 
+    public function orderChangeCost(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'     => new ValidID,
+            'cost' => "required|numeric|min:0|not_in:0",
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $order = Order::where('id', $request->id)->first();
+
+        if ($order == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie znaleziono zamówienia!";
+            return response()->json($results);
+        }
+
+        OrderHistory::create([
+            'order_id' => $order->id,
+            'data' => 'Zmiana kosztu zamówienia z ' . $order->cost . ' na ' . $request->cost,
+        ]);
+
+        $order->cost = $request->cost;
+        $order->save();
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
 }
