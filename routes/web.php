@@ -123,7 +123,7 @@ Route::prefix('systemUser')->group(function () {
 });
 
 //
-//      SYSTEM - ADMIN SITES
+//      ADMIN SITES
 //
 
 Route::prefix('admin')->group(function () {
@@ -142,9 +142,15 @@ Route::prefix('admin')->group(function () {
     Route::get('produkty/dodaj', 'AdminController@productsAddPage')->name('admin_productsAddPage');
     Route::get('produkty/edytuj/{id}', 'AdminController@productsEditPage')->name('admin_productsEditPage');
 
-    Route::get('zamowienia/lista', 'AdminController@ordersListPage')->name('admin_ordersListPage');
+    Route::get('zamowienia', 'AdminController@ordersListPage')->name('admin_ordersListPage');
     Route::get('zamowienia/realizacja', 'AdminController@ordersRealisingListPage')->name('admin_ordersRealizeListPage');
-    Route::get('zamowienia/informacje/{id}', 'AdminController@orderPage')->where('id', '[0-9]+')->name('admin_orderPageID');
+    Route::get('zamowienia/{id}', 'AdminController@orderPage')->where('id', '[0-9]+')->name('admin_orderPageID');
+    
+
+    Route::get('uzytkownicy', 'AdminController@usersListPage')->name('admin_usersListPage');
+    Route::get('uzytkownik', 'AdminController@userPage')->name('admin_userPage');
+
+
 
 
 });

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Order;
 use App\OrderHistory;
 use App\Product;
+use App\Rules\ValidID;
+use App\Rules\ValidEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -89,9 +93,11 @@ class AdminController extends Controller
         $deliverInfo         = json_decode($order->deliver_info, true);
         $deliverInfo['type'] = $order->deliver_name;
 
+        $buyerInfo         = json_decode($order->buyer_info, true);
+
         $orderHistory = OrderHistory::where('order_id', $order->id)->get();
 
-        return view('admin.orders.item')->with('productsData', $productsData)->with('order', $order)->with('deliverInfo', $deliverInfo)->with('orderHistory', $orderHistory);
+        return view('admin.orders.item')->with('productsData', $productsData)->with('order', $order)->with('deliverInfo', $deliverInfo)->with('buyerInfo', $buyerInfo)->with('orderHistory', $orderHistory);
     }
 
     public function ordersRealisingListPage()
@@ -100,6 +106,38 @@ class AdminController extends Controller
         $orders = Order::where('status', 'REALIZE')->get();
 
         return view('admin.orders.realising_list')->with('orders', $orders);
+    }
+
+    public function usersListPage()
+    {
+        return view('admin.users.list');
+    }
+
+    public function userPage(Request $request) {
+
+        $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
+            'email' => new ValidEmail,
+        ]);
+
+        $results = array();
+
+        $user = null;
+
+        if ($validator->errors()->first('id') == '') {
+            $user = User::where('id', $request->id)->first();
+        }
+
+        if ($user == null && $validator->errors()->first('email') == '') {
+            $user = User::where('email', $request->email)->first();
+        }
+
+        if($user == null) {
+            return view('admin.users.not_exist');
+        }
+
+
+        return view('admin.users.item')->with('user', $user);
     }
 
 }

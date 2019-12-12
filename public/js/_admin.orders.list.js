@@ -11,7 +11,7 @@ function bindButtons() {
 		if(isNaN(val))
 			return;
 
-		location.href = "/admin/zamowienia/informacje/" + val;
+		location.href = "/admin/zamowienia/" + val;
 
 	});
 

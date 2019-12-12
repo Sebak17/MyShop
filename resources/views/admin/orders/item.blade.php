@@ -22,7 +22,40 @@
 					</div>
 				</div>
 			</div>
-			
+				
+			<div class="card card-body mb-3">
+				<legend><i class="fas fa-user-clock"></i> Kupujący</legend>
+				<hr />
+				
+				<div>
+					<div class="row text-left ml-2">
+						<div class="col-6">Email: </div>
+						<div class="col-6"><strong>
+							<a href="{{ route('admin_userPage'). '?id='. $order->user->id }}">
+								{{ $order->user->email }}
+							</a>
+						</strong></div>
+					</div>
+
+					<div class="row text-left ml-2">
+						<div class="col-6">Imię: </div>
+						<div class="col-6"><strong>{{ $buyerInfo['firstname'] }}</strong></div>
+					</div>
+
+					<div class="row text-left ml-2">
+						<div class="col-6">Nazwisko: </div>
+						<div class="col-6"><strong>{{ $buyerInfo['surname'] }}</strong></div>
+					</div>
+
+					<div class="row text-left ml-2">
+						<div class="col-6">Telefon: </div>
+						<div class="col-6"><strong>{{ $buyerInfo['phone'] }}</strong></div>
+					</div>
+				</div>
+				
+			</div>
+
+
 			<div class="card card-body mb-3">
 				<legend><i class="fas fa-search-location"></i> Dostawa</legend>
 				<hr />
