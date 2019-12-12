@@ -89,6 +89,10 @@
                 <legend><i class="fas fa-stream"></i> Status zamówienia</legend>
                 
                 <hr />
+
+                @if($order->status == 'CANCELED')
+                <div class="alert alert-danger"><i class="fas fa-times"></i> Zamówienie zostało anulowane!</div>
+                @endif
                 
                 <ul class="timeline">
                     <li class="{{ ( in_array($order->status, ['UNPAID','PROCESSING','PAID','REALIZE','SENT','RECEIVE']) ? 'ready' : '') }} {{ ( $order->status == 'CREATED' ? 'active' : '') }}">

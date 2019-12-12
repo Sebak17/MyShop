@@ -25,7 +25,7 @@ class ValidOrderStatus implements Rule
      */
     public function passes($attribute, $value)
     {
-        if(!in_array($value, ['CREATED','UNPAID','PROCESSING','PAID','REALIZE','SENT','RECEIVE']))
+        if(!in_array($value, ['CREATED','UNPAID','PROCESSING','PAID','REALIZE','SENT','RECEIVE','CANCELED']))
             return false;
         return true;
     }
