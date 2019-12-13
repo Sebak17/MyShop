@@ -99,4 +99,7 @@ var Lang = {
     ORDER_CHANGE_DELIVERLOC_SUCCESS: "Adres dostawy został zmieniony!",
     ORDER_CHANGE_DELIVERLOC_ERROR: "Wystąpił bład podczas zmiany!",
 
+    BAN_REASON_ERROR: "Powód bana jest błędny! (4-200)",
+    USER_BAN_SUCCESS: "Użytkownik został zablokowany!",
+
 };

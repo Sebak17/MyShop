@@ -137,3 +137,15 @@ function validateProductDescription(description) {
 
     return true;
 }
+function validateBanDescription(description) {
+    if (description.length < 4)
+        return false;
+
+    if (description.length > 200)
+        return false;
+
+    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9-\(\)'"\/ ]+$/.test(description))
+        return false;
+
+    return true;
+}

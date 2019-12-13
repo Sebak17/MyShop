@@ -8,7 +8,7 @@ class Ban extends Model
 {
     protected $table = 'bans';
 
-	public $timestamps = false;
+	public $timestamps = true;
 
 	protected $fillable = [
         'user_id', 'reason',

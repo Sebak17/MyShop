@@ -154,7 +154,7 @@ class AuthorizationController extends Controller
                 $results['msg']     = "Konto nie jest aktywowane!";
             } else
 
-            if (auth()->user()->banned_id != 0) {
+            if (auth()->user()->ban != null) {
                 UserHelper::addToHistory(
                     auth()->user(),
                     "AUTH",

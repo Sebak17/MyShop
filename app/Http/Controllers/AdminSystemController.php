@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Helpers\OrderHelper;
+use App\Helpers\UserHelper;
 use App\Order;
+use App\Ban;
 use App\OrderHistory;
 use App\Product;
 use App\ProductImage;
+use App\User;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCategoryName;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
+use App\Rules\ValidBanDescription;
 use App\Rules\ValidIconFA;
 use App\Rules\ValidID;
 use App\Rules\ValidLockerName;
@@ -830,6 +834,95 @@ class AdminSystemController extends Controller
         $order->save();
 
         $results['success'] = true;
+        return response()->json($results);
+    }
+
+    //
+    //      USER MANAGER SITES
+    //
+
+    public function userBan(Request $request)
+    {
+        $results = array();
+
+        $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
+            'reason' => new ValidBanDescription,
+        ]);
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $user = User::where('id', $request->id)->first();
+
+        if($user == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie znaleziono takiego użytkownika!";
+            return response()->json($results);
+        }
+
+        if($user->ban != null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Użytkownik jest już zablokowany!";
+            return response()->json($results);
+        }
+
+        Ban::create([
+            'user_id' => $user->id,
+            'reason' => $request->reason,
+        ]);
+
+        UserHelper::addToHistory($user, 'BAN', "Konto zablokowane z powodu: " . $request->reason);
+
+        $results['success'] = true;
+
+        return response()->json($results);
+    }
+
+    public function userUnban(Request $request)
+    {
+        $results = array();
+
+        $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
+        ]);
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $user = User::where('id', $request->id)->first();
+
+        if($user == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie znaleziono takiego użytkownika!";
+            return response()->json($results);
+        }
+
+        if($user->ban == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Użytkownik nie jest zablokowany!";
+            return response()->json($results);
+        }
+
+        
+        $user->ban->delete();
+
+        UserHelper::addToHistory($user, 'BAN', "Konto odblokowane");
+
+        $results['success'] = true;
+
         return response()->json($results);
     }
 

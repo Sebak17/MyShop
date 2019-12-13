@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('hash', 64);
             $table->smallInteger('active')->default(0);
-            $table->integer('banned_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

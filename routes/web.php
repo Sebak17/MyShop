@@ -224,4 +224,12 @@ Route::prefix('systemAdmin')->group(function () {
     Route::post('orderChangePayment', 'AdminSystemController@orderChangePayment')->name('systemAdmin_orderChangePayment');
     Route::post('orderChangeCost', 'AdminSystemController@orderChangeCost')->name('systemAdmin_orderChangeCost');
 
+
+    //
+    //      USER MANAGE SITES
+    //
+    
+    Route::post('userBan', 'AdminSystemController@userBan')->name('systemAdmin_userBan');
+    Route::post('userUnban', 'AdminSystemController@userUnban')->name('systemAdmin_userUnban');
+
 });

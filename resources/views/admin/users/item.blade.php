@@ -67,7 +67,14 @@
 					
 					<div class="row text-left ml-2">
 						<div class="col-6">Blokada konta: </div>
-						<div class="col-6"><strong>{{ $user->banned_id }}</strong></div>
+						<div class="col-6">
+							@if($user->ban == null)
+							<strong>Brak</strong>
+							@else
+							<strong>{{ $user->ban->created_at }}</strong>
+							<strong>{{ $user->ban->reason }}</strong>
+							@endif
+						</div>
 					</div>
 					
 				</div>
@@ -119,10 +126,10 @@
 					</div>
 					
 					<div class="col-12 col-sm-6 text-right">
-						@if($user->banned_id == null)
+						@if($user->ban == null)
 						<button class="btn btn-info" id="btnBanModal"><i class="fas fa-gavel"></i> Zablokuj konto</button>
 						@else
-						<button class="btn btn-info" id="btnUnbanModal"><i class="fas fa-gavel"></i> Odblokuj konto</button>
+						<button class="btn btn-info" id="btnUnban"><i class="fas fa-gavel"></i> Odblokuj konto</button>
 						@endif
 						
 						<button class="btn btn-info mt-2" id="btnChangePersonalModal"><i class="fas fa-edit"></i> Zmień dane osobowe</button>
@@ -137,7 +144,7 @@
 	
 </div>
 
-<!-- User history -->
+<!-- User history modal -->
 <div class="modal fade" id="modalHistory">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
@@ -182,8 +189,38 @@
 	</div>
 </div>
 
+<!-- User ban modal -->
+<div class="modal fade" id="modalBan">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-gavel"></i> Blokowanie użytkownika</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="alert d-none" id="alert01"></div>
+				
+				<div class="form-group">
+					<label for="inp_BanInfo"><i class="fas fa-clipboard"></i> Podaj powód blokady:</label>
+					<textarea id="inp_BanInfo" rows="4" class="form-control"></textarea>
+				</div>
+				
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
+				<button type="button" class="btn btn-success" id="btnBanUser">Zablokuj <i class="fas fa-ban"></i></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 
 <script>
+	var isBanned = {{ ( $user->ban != null ? "true" : "false" ) }};
 	var historyData = JSON.parse(String.raw`{!! $historyData !!}`);
 </script>
 

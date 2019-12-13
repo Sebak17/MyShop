@@ -18,6 +18,8 @@ class CreateBans extends Migration
             $table->unsignedBigInteger('user_id');
             $table->text('reason');
 
+            $table->timestamps();
+
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
