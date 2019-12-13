@@ -55,6 +55,9 @@ function formResetPassword() {
             try {
                 if (data.success == true) {
                     showAlert(AlertType.SUCCESS, 'Hasło zostało zmienione!');
+                    setTimeout(function (argument) {
+                        window.location.href = "/logowanie";
+                    }, 800);
                 } else {
                     generateRecaptchaToken('login');
                     showAlert(AlertType.ERROR, data.msg);

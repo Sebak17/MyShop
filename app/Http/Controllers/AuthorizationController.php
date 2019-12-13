@@ -366,6 +366,8 @@ class AuthorizationController extends Controller
 
         $user = $user_info->user;
 
+        $user->password = bcrypt($request->password);
+        $user->info->passwordResetHash = null;
         $user->info->passwordResetMailTime = null;
         $user->push();
 
