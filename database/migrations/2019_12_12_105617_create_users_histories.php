@@ -18,6 +18,7 @@ class CreateUsersHistories extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('type', 32);
             $table->text('data');
+            $table->ipAddress('ip');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

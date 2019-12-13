@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Security;
+use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
@@ -77,6 +78,12 @@ class AuthorizationController extends Controller
         $user->info->activationMailTime = null;
         $user->push();
 
+        UserHelper::addToHistory(
+            $user,
+            "AUTH",
+            "Konto aktywowane przez użytkownika",
+        );
+
         return view('auth.active_account_check')->with('success', true);
     }
 
@@ -135,6 +142,12 @@ class AuthorizationController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
             if (auth()->user()->active == 0) {
+                UserHelper::addToHistory(
+                    auth()->user(),
+                    "AUTH",
+                    "Logowanie do konta... KONTO NIEAKTYWNE",
+                );
+
                 auth()->logout();
 
                 $results['success'] = false;
@@ -142,12 +155,24 @@ class AuthorizationController extends Controller
             } else
 
             if (auth()->user()->banned_id != 0) {
+                UserHelper::addToHistory(
+                    auth()->user(),
+                    "AUTH",
+                    "Logowanie do konta... KONTO ZABLOKOWANE",
+                );
+
                 auth()->logout();
 
                 $results['success'] = false;
                 $results['msg']     = "Konto jest zablokowane!";
             } else {
                 $results['success'] = true;
+
+                UserHelper::addToHistory(
+                    auth()->user(),
+                    "AUTH",
+                    "Logowanie do konta... SUKCES",
+                );
             }
 
         } else {
@@ -225,6 +250,12 @@ class AuthorizationController extends Controller
             'activationHash' => $hash_2,
         ]);
 
+        UserHelper::addToHistory(
+            $user,
+            "AUTH",
+            "Stworzono konto",
+        );
+
         // TODO - wysyłanie maila
 
         $results['success'] = true;
@@ -275,6 +306,13 @@ class AuthorizationController extends Controller
         $user->info->activationMailTime = strtotime("+5 minutes");
         $user->push();
 
+
+        UserHelper::addToHistory(
+            $user,
+            "AUTH",
+            "Wysłano maila aktywującego",
+        );
+
         // TODO - wysyłanie maila
 
         $results['success'] = true;
@@ -303,19 +341,19 @@ class AuthorizationController extends Controller
 
         if ($user == null || !$user->exists()) {
             $results['success'] = true;
-            $results['debug']   = "EMAIL NOT FOUND";
+            // $results['debug']   = "EMAIL NOT FOUND";
             return response()->json($results);
         }
 
         if ($user->personal->phoneNumber != $request->phone) {
             $results['success'] = true;
-            $results['debug']   = "PHONE INCORRECT";
+            // $results['debug']   = "PHONE INCORRECT";
             return response()->json($results);
         }
 
         if ($user->info->passwordResetMailTime > strtotime("now")) {
             $results['success'] = true;
-            $results['debug']   = "TIME NOT REMAIN";
+            // $results['debug']   = "TIME NOT REMAIN";
             return response()->json($results);
         }
 
@@ -324,6 +362,12 @@ class AuthorizationController extends Controller
         $user->info->passwordResetHash     = $hash;
         $user->info->passwordResetMailTime = strtotime("+5 minutes");
         $user->push();
+
+        UserHelper::addToHistory(
+            $user,
+            "AUTH",
+            "Wysłano maila resetującego hasło",
+        );
 
         // TODO - wysyłanie maila
 
@@ -370,6 +414,12 @@ class AuthorizationController extends Controller
         $user->info->passwordResetHash = null;
         $user->info->passwordResetMailTime = null;
         $user->push();
+
+        UserHelper::addToHistory(
+            $user,
+            "AUTH",
+            "Zmiana hasła przez odzysk konta",
+        );
 
         $results['success'] = true;
         return response()->json($results);

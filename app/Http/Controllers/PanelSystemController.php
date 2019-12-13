@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\OrderHelper;
+use App\Helpers\UserHelper;
 use App\Helpers\Payments\PayPalHelper;
 use App\Http\Controllers\Controller;
 use App\Order;
@@ -517,6 +518,13 @@ class PanelSystemController extends Controller
 
         $user->push();
 
+
+        UserHelper::addToHistory(
+            $user,
+            "AC_CHANGE",
+            "Zmiana danych osobowych przez użytkownika",
+        );
+
         $results['success'] = true;
         return response()->json($results);
     }
@@ -548,6 +556,13 @@ class PanelSystemController extends Controller
         $user->location->address  = $request->address;
 
         $user->push();
+
+
+        UserHelper::addToHistory(
+            $user,
+            "AC_CHANGE",
+            "Zmiana lokalizacji przez użytkownika",
+        );
 
         $results['success'] = true;
         return response()->json($results);
@@ -590,6 +605,12 @@ class PanelSystemController extends Controller
 
         $user->password = bcrypt($request->password_new);
         $user->push();
+
+        UserHelper::addToHistory(
+            $user,
+            "AC_CHANGE",
+            "Zmiana hasła przez użytkownika",
+        );
 
         Auth::logout();
 

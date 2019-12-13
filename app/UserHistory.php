@@ -14,5 +14,6 @@ class UserHistory extends Model
         'user_id',
         'type',
         'data',
+        'ip',
     ];
 }
