@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Order;
 use App\OrderHistory;
+use App\UserHistory;
 use App\Product;
 use App\Rules\ValidID;
 use App\Rules\ValidEmail;
@@ -136,8 +137,24 @@ class AdminController extends Controller
             return view('admin.users.not_exist');
         }
 
+        $historyData = [];
 
-        return view('admin.users.item')->with('user', $user);
+        foreach ($user->history as $his) {
+
+            $obj           = array();
+
+            $obj['type'] = $his->type;
+            $obj['typeName'] = config('site.user_history.' . $his->type);
+            $obj['data'] = $his->data;
+            $obj['ip'] = $his->ip;
+            $obj['time'] = $his->created_at->format('Y-m-d H:i:s');
+
+            array_push($historyData, $obj);
+        }
+
+        $historyData = json_encode($historyData);
+
+        return view('admin.users.item')->with('user', $user)->with('historyData', $historyData);
     }
 
 }

@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Ban');
     }
+
+    public function history() 
+    {
+        return $this->hasMany('App\UserHistory');
+    }
 }

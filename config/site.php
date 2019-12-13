@@ -50,4 +50,10 @@ return [
         'CANCELED' => "Anulowana",
     ],
 
+    'user_history' => [
+        'ALL' => "Wszystko",
+        'AC_CHANGE' => "Zmiany na koncie",
+        'AUTH' => "Autoryzacja",
+    ],
+
 ];

@@ -115,7 +115,7 @@
 				
 				<div class="row mb-2">
 					<div class="col-12 col-sm-6">
-						<button class="btn btn-info" id="btnShowHistoryAuth"><i class="fas fa-history"></i> Pokaż historię logowań</button>
+						<button class="btn btn-info" id="btnShowHistory"><i class="fas fa-history"></i> Pokaż historię</button>
 					</div>
 					
 					<div class="col-12 col-sm-6 text-right">
@@ -124,7 +124,7 @@
 						@else
 						<button class="btn btn-info" id="btnUnbanModal"><i class="fas fa-gavel"></i> Odblokuj konto</button>
 						@endif
-
+						
 						<button class="btn btn-info mt-2" id="btnChangePersonalModal"><i class="fas fa-edit"></i> Zmień dane osobowe</button>
 						
 						<button class="btn btn-info mt-2" id="btnChangeLocationModal"><i class="fas fa-edit"></i> Zmień adres</button>
@@ -137,7 +137,57 @@
 	
 </div>
 
+<!-- User history -->
+<div class="modal fade" id="modalHistory">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-history"></i> Historia użytkownika</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="row">
+					<div class="offset-8 col-4">
+						<div class="form-group">
+							<select id="modalHistoryType" class="form-control">
+								@foreach(config('site.user_history') as $key => $value)
+								<option value="{{ $key }}">{{ $value }}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Akcja</th>
+							<th>Rodzaj</th>
+							<th>Adres</th>
+							<th>Data</th>
+						</tr>
+					</thead>
+					<tbody id="modalHistoryBox">
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+
+<script>
+	var historyData = JSON.parse(String.raw`{!! $historyData !!}`);
+</script>
+
 <script src="{{ asset('js/_validation.js') }}" charset="utf-8"></script>
-<script src="{{ asset('js/_admin.orders.item.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_admin.users.item.js') }}" charset="utf-8"></script>
 
 @endsection
