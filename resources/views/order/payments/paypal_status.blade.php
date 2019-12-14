@@ -21,7 +21,7 @@
                 @else
                 <div class="alert alert-danger">
                     <h4>
-                    <i class="fas fa-exclamation-circle"></i> Płatność została zaakceptowana!
+                    <i class="fas fa-exclamation-circle"></i> Płatność nie została zaakceptowana!
                     </h4>
                     {{ (isset($results['msg']) ? $results['msg'] : "") }}
                 </div>
