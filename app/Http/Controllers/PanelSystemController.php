@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\OrderHelper;
 use App\Helpers\UserHelper;
 use App\Helpers\Payments\PayPalHelper;
+use App\Helpers\Payments\PayUHelper;
 use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderProduct;
@@ -464,6 +465,10 @@ class PanelSystemController extends Controller
             case 'PAYPAL':
                 $paypal = new PayPalHelper();
                 $res    = $paypal->createPayment($order, $payment);
+                break;
+            case 'PAYU':
+                $payu = new PayUHelper();
+                $res    = $payu->createPayment($order, $payment);
                 break;
             default:
                 $res['success'] = false;
