@@ -298,7 +298,7 @@ class PanelSystemController extends Controller
             $data['name']   = $product->title;
             $data['price']  = $product->price;
             $data['amount'] = $value;
-            $summaryPrice += $product->price * $value;
+            $summaryPrice += ($product->price * $value);
             array_push($productsData, $data);
         }
 

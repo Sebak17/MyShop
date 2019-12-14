@@ -56,7 +56,7 @@ class PayPalHelper
             $item->setName($product->name)
                 ->setCurrency('PLN')
                 ->setQuantity($product->amount)
-                ->setPrice($product->price * $product->amount);
+                ->setPrice($product->price);
 
             array_push($productsList, $item);
         }
