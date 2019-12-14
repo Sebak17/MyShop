@@ -58,6 +58,10 @@ Route::group([], function () {
     Route::get('/zamowienie/{id}', 'PanelController@orderPage')->where('id', '[0-9]+')->name('orderIDPage');
 
     Route::get('/platnosc/status', 'PanelController@paymentStatus')->name('paymentStatusPage');
+
+    Route::get('/platnosc/status/sukces', function() {
+        return view('order.payments.success');
+    })->name('paymentStatusPage-success');
 });
 
 //
@@ -73,6 +77,14 @@ Route::prefix('panel')->group(function () {
     Route::get('/ustawienia', 'PanelController@settingsPage')->name('panel_settings');
 
     Route::get('/zgloszenia', 'PanelController@reportsPage')->name('panel_reports');
+});
+
+//
+//      SYSTEM SITE
+//
+
+Route::prefix('systemSite')->group(function () {
+    Route::post('handlePayU', 'SystemController@handlePayU')->name('systemSite_handlePayU');
 });
 
 //

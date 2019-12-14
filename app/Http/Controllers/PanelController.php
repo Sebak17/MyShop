@@ -1,9 +1,10 @@
-<?php 
+<?php
 namespace App\Http\Controllers;
 
+use App\Helpers\Payments\PayPalHelper;
+use App\Helpers\Payments\PayUHelper;
 use App\Order;
 use App\Product;
-use App\Helpers\Payments\PayPalHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -65,13 +66,13 @@ class PanelController extends Controller
 
         $order = Order::where('id', $id)->first();
 
-        if($order == null) {
+        if ($order == null) {
             return redirect()->route('home');
         }
 
         $user = Auth::user();
 
-        if($order->user_id != $user->id) {
+        if ($order->user_id != $user->id) {
             return redirect()->route('home');
         }
 
@@ -86,7 +87,7 @@ class PanelController extends Controller
             array_push($productsData, $data);
         }
 
-        $deliverInfo = json_decode($order->deliver_info, true);
+        $deliverInfo         = json_decode($order->deliver_info, true);
         $deliverInfo['type'] = $order->deliver_name;
 
         return view('order.item')->with('productsData', $productsData)->with('order', $order)->with('deliverInfo', $deliverInfo);
@@ -96,9 +97,14 @@ class PanelController extends Controller
     {
         $res = [];
 
-        if(isset($request->PayerID) && isset($request->token)) {
+        if (isset($request->PayerID) && isset($request->token)) {
             $paypal = new PayPalHelper();
-            $res = $paypal->getPaymentStatus($request->input('PayerID'), $request->input('token'));
+            $res    = $paypal->getPaymentStatus($request->input('PayerID'), $request->input('token'));
+        }
+
+        if (isset($request->payUID)) {
+            $payu = new PayUHelper();
+            $res    = $payu->getPaymentStatus($request->input('payUID'));
         }
 
         return view('order.payments.paypal_status')->with('results', $res);
