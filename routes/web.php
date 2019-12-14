@@ -232,4 +232,7 @@ Route::prefix('systemAdmin')->group(function () {
     Route::post('userBan', 'AdminSystemController@userBan')->name('systemAdmin_userBan');
     Route::post('userUnban', 'AdminSystemController@userUnban')->name('systemAdmin_userUnban');
 
+    Route::post('userChangePersonal', 'AdminSystemController@userChangePersonal')->name('systemAdmin_userChangePersonal');
+    Route::post('userChangeLocation', 'AdminSystemController@userChangeLocation')->name('systemAdmin_userChangeLocation');
+
 });

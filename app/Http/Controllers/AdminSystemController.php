@@ -2,31 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Ban;
 use App\Category;
 use App\Helpers\OrderHelper;
 use App\Helpers\UserHelper;
 use App\Order;
-use App\Ban;
 use App\OrderHistory;
 use App\Product;
 use App\ProductImage;
-use App\User;
 use App\Rules\ValidAddress;
+use App\Rules\ValidBanDescription;
 use App\Rules\ValidCategoryName;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
-use App\Rules\ValidBanDescription;
+use App\Rules\ValidFirstName;
 use App\Rules\ValidIconFA;
 use App\Rules\ValidID;
 use App\Rules\ValidLockerName;
 use App\Rules\ValidOrderStatus;
+use App\Rules\ValidPhoneNumber;
 use App\Rules\ValidProductCategory;
 use App\Rules\ValidProductDescription;
 use App\Rules\ValidProductImage;
 use App\Rules\ValidProductName;
 use App\Rules\ValidProductParams;
 use App\Rules\ValidProductPrice;
+use App\Rules\ValidSurName;
 use App\Rules\ValidZipCode;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -682,7 +685,7 @@ class AdminSystemController extends Controller
         $results = array();
 
         $validator = Validator::make($request->all(), [
-            'id' => new ValidID,
+            'id'           => new ValidID,
             'deliver.type' => "required|in:INPOST_LOCKER,COURIER",
         ]);
 
@@ -742,12 +745,11 @@ class AdminSystemController extends Controller
 
         $order = Order::where('id', $request->id)->first();
 
-        if($order == null) {
-           $results['success'] = false;
+        if ($order == null) {
+            $results['success'] = false;
             $results['msg']     = "Wystapił bład z zamówieniem!";
-            return response()->json($results); 
+            return response()->json($results);
         }
-
 
         $order->deliver_name = $request->input('deliver.type');
         $order->deliver_info = json_encode($deliver_info);
@@ -755,9 +757,8 @@ class AdminSystemController extends Controller
 
         OrderHistory::create([
             'order_id' => $order->id,
-            'data' => 'Zmiana dostawy zamówienia',
+            'data'     => 'Zmiana dostawy zamówienia',
         ]);
-
 
         $results['success'] = true;
         return response()->json($results);
@@ -766,7 +767,7 @@ class AdminSystemController extends Controller
     public function orderChangePayment(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id'     => new ValidID,
+            'id'            => new ValidID,
             'paymentMethod' => "required|in:PAYU,PAYPAL,PAYMENTCARD",
         ]);
 
@@ -790,7 +791,7 @@ class AdminSystemController extends Controller
 
         OrderHistory::create([
             'order_id' => $order->id,
-            'data' => 'Zmiana płatności z ' . $order->payment . ' na ' . $request->paymentMethod,
+            'data'     => 'Zmiana płatności z ' . $order->payment . ' na ' . $request->paymentMethod,
         ]);
 
         $order->payment = $request->paymentMethod;
@@ -803,7 +804,7 @@ class AdminSystemController extends Controller
     public function orderChangeCost(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id'     => new ValidID,
+            'id'   => new ValidID,
             'cost' => "required|numeric|min:0|not_in:0",
         ]);
 
@@ -827,7 +828,7 @@ class AdminSystemController extends Controller
 
         OrderHistory::create([
             'order_id' => $order->id,
-            'data' => 'Zmiana kosztu zamówienia z ' . $order->cost . ' na ' . $request->cost,
+            'data'     => 'Zmiana kosztu zamówienia z ' . $order->cost . ' na ' . $request->cost,
         ]);
 
         $order->cost = $request->cost;
@@ -846,7 +847,7 @@ class AdminSystemController extends Controller
         $results = array();
 
         $validator = Validator::make($request->all(), [
-            'id' => new ValidID,
+            'id'     => new ValidID,
             'reason' => new ValidBanDescription,
         ]);
 
@@ -859,14 +860,14 @@ class AdminSystemController extends Controller
 
         $user = User::where('id', $request->id)->first();
 
-        if($user == null) {
+        if ($user == null) {
             $results['success'] = false;
 
             $results['msg'] = "Nie znaleziono takiego użytkownika!";
             return response()->json($results);
         }
 
-        if($user->ban != null) {
+        if ($user->ban != null) {
             $results['success'] = false;
 
             $results['msg'] = "Użytkownik jest już zablokowany!";
@@ -875,7 +876,7 @@ class AdminSystemController extends Controller
 
         Ban::create([
             'user_id' => $user->id,
-            'reason' => $request->reason,
+            'reason'  => $request->reason,
         ]);
 
         UserHelper::addToHistory($user, 'BAN', "Konto zablokowane z powodu: " . $request->reason);
@@ -902,27 +903,116 @@ class AdminSystemController extends Controller
 
         $user = User::where('id', $request->id)->first();
 
-        if($user == null) {
+        if ($user == null) {
             $results['success'] = false;
 
             $results['msg'] = "Nie znaleziono takiego użytkownika!";
             return response()->json($results);
         }
 
-        if($user->ban == null) {
+        if ($user->ban == null) {
             $results['success'] = false;
 
             $results['msg'] = "Użytkownik nie jest zablokowany!";
             return response()->json($results);
         }
 
-        
         $user->ban->delete();
 
         UserHelper::addToHistory($user, 'BAN', "Konto odblokowane");
 
         $results['success'] = true;
 
+        return response()->json($results);
+    }
+
+    public function userChangePersonal(Request $request)
+    {
+        $results = array();
+
+        $validator = Validator::make($request->all(), [
+            'id'    => new ValidID,
+            'fname' => new ValidFirstName,
+            'sname' => new ValidSurName,
+            'phone' => new ValidPhoneNumber,
+        ]);
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+
+            return response()->json($results);
+        }
+
+        $user = User::where('id', $request->id)->first();
+
+        if ($user == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie znaleziono takiego użytkownika!";
+            return response()->json($results);
+        }
+
+        $user->personal->firstname   = $request->fname;
+        $user->personal->surname     = $request->sname;
+        $user->personal->phoneNumber = $request->phone;
+
+        $user->push();
+
+        UserHelper::addToHistory(
+            $user,
+            "AC_CHANGE",
+            "Zmiana danych osobowych przez administratora",
+        );
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function userChangeLocation(Request $request)
+    {
+        $results = array();
+
+        $validator = Validator::make($request->all(), [
+            'id'       => new ValidID,
+            'district' => new ValidDistrict,
+            'city'     => new ValidCity,
+            'zipcode'  => new ValidZipCode,
+            'address'  => new ValidAddress,
+        ]);
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+
+            return response()->json($results);
+        }
+
+        $user = User::where('id', $request->id)->first();
+
+        if ($user == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie znaleziono takiego użytkownika!";
+            return response()->json($results);
+        }
+
+        $user->location->district = $request->district;
+        $user->location->city     = $request->city;
+        $user->location->zipcode  = $request->zipcode;
+        $user->location->address  = $request->address;
+
+        $user->push();
+
+        UserHelper::addToHistory(
+            $user,
+            "AC_CHANGE",
+            "Zmiana lokalizacji przez administratora",
+        );
+
+        $results['success'] = true;
         return response()->json($results);
     }
 

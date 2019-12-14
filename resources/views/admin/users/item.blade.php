@@ -39,22 +39,22 @@
 					<hr />
 					
 					<div class="row text-left ml-2">
-						<div class="col-6">Email: </div>
+						<div class="col-6">Adres: </div>
 						<div class="col-6"><strong>{{ $user->location->address }}</strong></div>
 					</div>
 					
 					<div class="row text-left ml-2">
-						<div class="col-6">Imie: </div>
+						<div class="col-6">Miasto: </div>
 						<div class="col-6"><strong>{{ $user->location->city }}</strong></div>
 					</div>
 					
 					<div class="row text-left ml-2">
-						<div class="col-6">Nazwisko: </div>
+						<div class="col-6">Kod pocztowy: </div>
 						<div class="col-6"><strong>{{ $user->location->zipcode }}</strong></div>
 					</div>
 					
 					<div class="row text-left ml-2">
-						<div class="col-6">Numer telefonu: </div>
+						<div class="col-6">Województwo: </div>
 						<div class="col-6"><strong>{{ config('site.district_name.' . $user->location->district) }}</strong></div>
 					</div>
 					
@@ -217,9 +217,104 @@
 	</div>
 </div>
 
+<!-- User change personal -->
+<div class="modal fade" id="modalChangePersonal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-wrench"></i> Zmień dane osobowe</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="alert d-none" id="alert02"></div>
+				
+				
+				<div class="form-group">
+					<label for="inp_data_fname"><i class="fas fa-id-card"></i> Imię:</label>
+					<input type="text" class="form-control" id="inp_data_fname" value="{{ $user->personal->firstname }}">
+				</div>
+				<div class="form-group">
+					<label for="inp_data_sname"><i class="far fa-id-card"></i> Nazwisko:</label>
+					<input type="text" class="form-control" id="inp_data_sname" value="{{ $user->personal->surname }}">
+				</div>
+				<div class="form-group">
+					<label for="inp_data_phone"><i class="fas fa-mobile-alt"></i> Numer telefonu:</label>
+					<input type="number" class="form-control" id="inp_data_phone" maxlength="9" value="{{ $user->personal->phoneNumber }}">
+				</div>
+
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
+				<button type="button" class="btn btn-success" id="btnChangePersonal">Zmień <i class="fas fa-exchange-alt"></i></button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<!-- User change location -->
+<div class="modal fade" id="modalChangeLocation">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-wrench"></i> Zmień adres</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="alert d-none" id="alert03"></div>
+				
+				<div class="form-group">
+					<label for="inp_data_district"><i class="fas fa-map-marker-alt"></i> Województwo:</label>
+					<select class="custom-select" id="inp_data_district">
+						<option value="1">Dolnośląskie</option>
+						<option value="2">Kujawsko-Pomorskie</option>
+						<option value="3">Lubelskie</option>
+						<option value="4">Lubuskie</option>
+						<option value="5">Łódzkie</option>
+						<option value="6">Małopolskie</option>
+						<option value="7">Mazowieckie</option>
+						<option value="8">Opolskie</option>
+						<option value="9">Podkarpackie</option>
+						<option value="10">Podlaskie</option>
+						<option value="11">Pomorskie</option>
+						<option value="12">Śląskie</option>
+						<option value="13">Świętokrzyskie</option>
+						<option value="14">Warmińsko-Mazurskie</option>
+						<option value="15">Wielkopolskie</option>
+						<option value="16">Zachodniopomorskie</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="inp_data_city"><i class="fas fa-building"></i> Miasto:</label>
+					<input type="text" class="form-control" id="inp_data_city" value="{{ $user->location->city }}">
+				</div>
+				<div class="form-group">
+					<label for="inp_data_zipcode"><i class="fas fa-building"></i> Kod pocztowy:</label>
+					<input type="text" class="form-control" id="inp_data_zipcode" value="{{ $user->location->zipcode }}">
+				</div>
+				<div class="form-group">
+					<label for="inp_data_address"><i class="far fa-id-card"></i> Ulica:</label>
+					<input type="text" class="form-control" id="inp_data_address" value="{{ $user->location->address }}">
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
+				<button type="button" class="btn btn-success" id="btnChangeLocation">Zmień <i class="fas fa-exchange-alt"></i></button>
+			</div>
+			
+		</div>
+	</div>
+</div>
 
 
 <script>
+	var _userDisctrict = {{ $user->location->district }};
 	var isBanned = {{ ( $user->ban != null ? "true" : "false" ) }};
 	var historyData = JSON.parse(String.raw`{!! $historyData !!}`);
 </script>
