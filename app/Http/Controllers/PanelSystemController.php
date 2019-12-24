@@ -493,6 +493,57 @@ class PanelSystemController extends Controller
         return response()->json($results);
     }
 
+    public function paymentCheck(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg']     = $validator->errors()->first();
+            return response()->json($results);
+        }
+        
+        $order = Order::where('id', $request->id)->first();
+
+        if ($order == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        if (!in_array($order->status, ['PROCESSING'])) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        if ($order->payment != 'PAYU') {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $payment = $order->getCurrentPayment();
+
+        if ($payment == null) {
+            $results['success'] = false;
+            $results['msg'] = "Nie znaleziono płatności!";
+            return response()->json($results);
+        }
+
+        if ($payment->type != 'PAYU') {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        $payu = new PayUHelper();
+        $res = $payu->checkPayment($payment->externalID);
+
+        $results['success'] = $res['success'];
+        return response()->json($results);
+    }
+
     //
     //      USER DATA SETTINGS
     //

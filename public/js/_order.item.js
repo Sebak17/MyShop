@@ -17,6 +17,33 @@ function bindKeys() {
     $("#btnPay").click(function () {
         payment_process();
     });
+
+    $("#btnCheckPayment").click(function() {
+        payment_check();
+    });
+}
+
+function payment_check() {
+    let id = parseInt($("[data-order-id]").attr('data-order-id'));
+
+    if (isNaN(id)) {
+        return;
+    }
+
+    $.ajax({
+        url: "/systemUser/paymentCheck",
+        type: "POST",
+        data: {
+            id: id
+        },
+        success: function (data) {
+            if (data.success == true) {
+                location.reload();
+            }
+
+        },
+        error: function () {},
+    });
 }
 
 function payment_cancel() {
@@ -62,6 +89,8 @@ function payment_process() {
                 if (data.url != '') {
                     let win = window.open(data.url, '_blank');
                     win.focus();
+
+                    location.reload();
                 }
             }
 
@@ -114,6 +143,4 @@ function buttonPayChange(loading = true) {
         button.addClass('btn-success');
         button.html(String.raw`Zapłać <i class="far fa-money-bill-alt"></i>`);
     }
-
-
 }

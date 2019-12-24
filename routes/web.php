@@ -126,6 +126,7 @@ Route::prefix('systemUser')->group(function () {
 
     Route::post('paymentCancel', 'PanelSystemController@paymentCancel')->name('systemUser_paymentCancel');
     Route::post('paymentPay', 'PanelSystemController@paymentPay')->name('systemUser_paymentPay');
+    Route::post('paymentCheck', 'PanelSystemController@paymentCheck')->name('systemUser_paymentCheck');
 
 
     Route::post('changeDataPersonal', 'PanelSystemController@changeDataPersonal')->name('systemUser_changeDataPersonal');

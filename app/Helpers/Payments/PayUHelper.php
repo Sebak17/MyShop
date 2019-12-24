@@ -64,8 +64,6 @@ class PayUHelper
 
         $response = \OpenPayU_Order::create($payu_order);
 
-        Log::debug("CREATED PAYU");
-
         if ($response->getStatus() == 'SUCCESS') {
             OrderHelper::changeOrderStatus($order, 'PROCESSING');
 
@@ -145,6 +143,12 @@ class PayUHelper
 
         $response = \OpenPayU_Order::retrieve($order_id);
 
+        if ($response->getStatus() != 'SUCCESS') {
+            $results['msg']     = "Płatność nie została zakończona sukcesem!";
+            $results['success'] = false;
+            return $results;
+        }
+
         $payment = Payment::where('externalID', $order_id)->first();
 
         if ($payment == null) {
@@ -170,13 +174,8 @@ class PayUHelper
         $this->isNeedToUpdate($order, $payment, $response);
 
         $results['orderID'] = $order->id;
-
-        if ($response->getStatus() == 'SUCCESS') {
-            $results['success'] = true;
-        } else {
-            $results['success'] = false;
-        }
-
+        
+        $results['success'] = true;
         return $results;
     }
 
@@ -185,6 +184,10 @@ class PayUHelper
     	$results['success'] = false;
     	
         $response = \OpenPayU_Order::retrieve($order_id);
+
+        if ($response->getStatus() != 'SUCCESS') {
+            return $results;
+        }
 
         $payment = Payment::where('externalID', $order_id)->first();
 
@@ -210,6 +213,9 @@ class PayUHelper
 
     private function isNeedToUpdate(Order $order, Payment $payment, $response)
     {
+        if ($response->getStatus() != 'SUCCESS') {
+            return $results;
+        }
 
         if ($order->status != 'PROCESSING') {
             return;

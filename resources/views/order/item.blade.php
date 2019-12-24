@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-12">
                         <p>
-                        {!! nl2br($order->note) !!}
+                            {!! nl2br($order->note) !!}
                         </p>
                     </div>
                 </div>
@@ -70,6 +70,14 @@
                 
                 <hr />
                 
+                @if($order->status == 'PROCESSING' && $order->payment == 'PAYU')
+                <div class="row mb-3">
+                    <div class="col-12 col-lg-6 offset-lg-3 text-center">
+                        <button class="btn btn-info btn-block" id="btnCheckPayment">Sprawdź status płatności <i class="fas fa-sync"></i></button>
+                    </div>
+                </div>
+                @endif
+                
                 @if(in_array($order->status, ['CREATED','UNPAID']))
                 <button class="btn btn-success" id="btnPay" {{ ( $order->status == 'PROCESSING' ? "disabled" : "") }}>Zapłać <i class="far fa-money-bill-alt"></i></button>
                 @elseif(in_array($order->status, ['PROCESSING']))
@@ -89,7 +97,7 @@
                 <legend><i class="fas fa-stream"></i> Status zamówienia</legend>
                 
                 <hr />
-
+                
                 @if($order->status == 'CANCELED')
                 <div class="alert alert-danger"><i class="fas fa-times"></i> Zamówienie zostało anulowane!</div>
                 @endif
