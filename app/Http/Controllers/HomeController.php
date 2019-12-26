@@ -255,7 +255,7 @@ class HomeController extends Controller
         $product = Product::where('id', $request->id)->first();
 
         if ($product == null || $product->status == 'INVISIBLE') {
-            // TODO
+            return view('products.not_exist');
             return "Not found!";
         }
 
