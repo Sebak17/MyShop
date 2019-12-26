@@ -361,7 +361,7 @@ class PanelSystemController extends Controller
         $request->session()->forget('SHOPPINGCART_STATUS');
         $request->session()->forget('SHOPPINGCART_DATA');
 
-        Mail::to($user->email)->send(new OrderCreateMail($order));
+        Mail::to($user->email)->subject('Dziękujemy za złożenie zamówienia nr. ' . $order->id)->send(new OrderCreateMail($order));
 
         $results['success'] = true;
         $results['url']     = route('orderIDPage', $order->id);

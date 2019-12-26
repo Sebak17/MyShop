@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Helpers\Security;
 use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
+use App\Mail\AuthActiveAccountMail;
+use App\Mail\AuthResetPasswordMail;
+use App\Mail\AuthCreateAccountMail;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
@@ -24,6 +27,7 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 
 class AuthorizationController extends Controller
 {
@@ -256,7 +260,7 @@ class AuthorizationController extends Controller
             "Stworzono konto",
         );
 
-        // TODO - wysyłanie maila
+        Mail::to($user->email)->subject('Dziękujemy za rejestracę w naszym serwisie')->send(new AuthCreateAccountMail($user));
 
         $results['success'] = true;
         $results['msg']     = "Potwierdź swoje konta na email'u!";
@@ -313,7 +317,7 @@ class AuthorizationController extends Controller
             "Wysłano maila aktywującego",
         );
 
-        // TODO - wysyłanie maila
+        Mail::to($user->email)->subject('Aktywacja konta')->send(new AuthActiveAccountMail($user));
 
         $results['success'] = true;
         return response()->json($results);
@@ -369,7 +373,7 @@ class AuthorizationController extends Controller
             "Wysłano maila resetującego hasło",
         );
 
-        // TODO - wysyłanie maila
+        Mail::to($user->email)->subject('Resetowanie hasła')->send(new AuthResetPasswordMail($user));
 
         $results['success'] = true;
         return response()->json($results);
