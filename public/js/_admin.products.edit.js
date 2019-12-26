@@ -1,6 +1,9 @@
 var productParams = [];
+var _productID = -1;
 
 window.onload = function () {
+
+    _productID = $("[data-id]").attr('data-id');
 
     loadCategories();
     loadProductInfo();
@@ -63,10 +66,12 @@ function productEdit() {
         url: "/systemAdmin/productEdit",
         method: "POST",
         data: {
+            id: _productID,
             name: d_name,
             price: parseFloat(d_price),
             description: d_description,
             category: d_category,
+            status: $('#inp_status').val(),
             params: d_params,
         },
         success: function (data) {
@@ -121,11 +126,11 @@ function productAddParam() {
     $('#fmParamAddName').val('');
     $('#fmParamAddValue').val('');
 
-    showParams();
+    bindParams();
 
 }
 
-function showParams() {
+function bindParams() {
 
     let m = '';
 
@@ -162,7 +167,7 @@ function showParams() {
                 return item.name != param.name;
             });
 
-            showParams();
+            bindParams();
         });
     });
 
@@ -207,16 +212,17 @@ function loadProductInfo() {
     $.ajax({
         url: "/systemAdmin/productLoadCurrent",
         method: "POST",
+        data: {
+            id: _productID,
+        },
         success: function (data) {
             if (data.success == true) {
 
                 let product = data.product;
                 let images = product.images;
 
-                $('#inp_name').val(product.name);
-                $('#inp_price').val(product.price);
-                $('#inp_description').val(product.description);
                 $('#inp_category').val(product.category_id);
+                $('#inp_status').val(product.status);
 
                 if(JSON.parse(product.params) != null)
                     productParams = JSON.parse(product.params);
@@ -224,7 +230,7 @@ function loadProductInfo() {
                 parseImages(images);
                 bindImagesRemove();
 
-                showParams();
+                bindParams();
             }
         },
         error: function () {}
@@ -236,6 +242,8 @@ function uploadImages(input) {
     for (let i = 0; i < input.files.length; i++) {
         formData.append('images[' + i + ']', input.files[i]);
     }
+
+    formData.append('id', _productID,);
 
     $.ajax({
         url: "/systemAdmin/productEditImageAdd",
@@ -259,6 +267,7 @@ function loadImages() {
         url: "/systemAdmin/productEditImageList",
         method: "POST",
         data: {
+            id: _productID,
             name: $(this).attr("data-btn-remove"),
         },
         success: function (data) {
@@ -295,6 +304,7 @@ function bindImagesRemove() {
                 url: "/systemAdmin/productEditImageRemove",
                 method: "POST",
                 data: {
+                    id: _productID,
                     name: $(this).attr("data-btn-remove"),
                 },
                 success: function (data) {

@@ -58,9 +58,7 @@ class AdminController extends Controller
             return redirect()->route('admin_dashboardPage');
         }
 
-        $request->session()->put('ADMIN_PRODUCT_EDIT_ID', $id);
-
-        return view('admin.products.edit');
+        return view('admin.products.edit')->with('product', $product);
     }
 
     public function ordersListPage()

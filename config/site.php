@@ -39,6 +39,13 @@ return [
         'PAYMENTCARD' => "Karta kredytowa/debetowa",
     ],
 
+    'product_status' => [
+        'INVISIBLE' => "Niewidoczny",
+        'IN_STOCK' => "Dostępny",
+        'INACCESSIBLE' => "Niedostępny",
+        'INACTIVE' => "Nieaktywny",
+    ],
+
     'order_status' => [
         'CREATED' => "Stworzone",
         'UNPAID' => "Niezapłacone",

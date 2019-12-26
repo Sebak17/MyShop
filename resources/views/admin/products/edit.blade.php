@@ -2,7 +2,7 @@
 
 @section('content_sub')
 
-<div class="container-fluid">
+<div class="container-fluid" data-id="{{ $product->id }}">
 	
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
 		<h1 class="h3 mb-0 text-gray-800">Edytuj produkt</h1>
@@ -17,14 +17,14 @@
 				
 				<div class="form-group">
 					<label for="inp_name">Nazwę produktu:</label>
-					<input id="inp_name" type="text" class="form-control">
+					<input id="inp_name" type="text" class="form-control" value="{{ $product->title }}">
 				</div>
 				
 				<div class="form-group">
 					<label for="inp_price">Cena za produkt:</label>
 					<div class="form-group">
 						<div class="input-group mb-3">
-							<input id="inp_price" type="number" class="form-control">
+							<input id="inp_price" type="number" class="form-control" value="{{ $product->price }}">
 							<div class="input-group-append">
 								<span class="input-group-text">{{ config('site.currency') }}</span>
 							</div>
@@ -34,7 +34,7 @@
 				
 				<div class="form-group">
 					<label for="inp_description">Opis produktu:</label>
-					<textarea id="inp_description" class="form-control" rows="6" ></textarea>
+					<textarea id="inp_description" class="form-control" rows="6">{{ $product->description }}</textarea>
 				</div>
 				
 				<div class="form-group">
@@ -77,6 +77,19 @@
 						</div>
 					</div>
 				</div>
+				
+			</div>
+			
+			<div class="card card-body mb-3">
+				<legend><i class="fas fa-tasks"></i> Status produktu</legend>
+				<hr />
+				
+				
+				<select id="inp_status" class="form-control">
+					@foreach(config('site.product_status') as $key => $value)
+					<option value="{{ $key }}">{{ $value }}</option>
+					@endforeach
+				</select>
 				
 			</div>
 			

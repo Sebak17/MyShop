@@ -9,7 +9,7 @@
 	</div>
 	
 	<div class="row">
-		<div class="col-12 col-sm-8">
+		<div class="col-12 col-sm-8 mb-3">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><i class="fas fa-info"></i> Znaleziono <strong id="productsAmount">?</strong> produkty/ów</li>
 			</ol>
@@ -21,6 +21,7 @@
 						<tr>
 							<th>#</th>
 							<th>Nazwa produktu</th>
+							<th>Status</th>
 							<th>Cena</th>
 							<th>Opcje</th>
 						</tr>

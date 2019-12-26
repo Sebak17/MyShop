@@ -128,9 +128,10 @@ class AdminSystemController extends Controller
 
             $list[$i] = array();
 
-            $list[$i]['id']    = $prod['id'];
-            $list[$i]['name']  = $prod['title'];
-            $list[$i]['price'] = number_format((float) $prod['price'], 2, '.', '');
+            $list[$i]['id']     = $prod['id'];
+            $list[$i]['name']   = $prod['title'];
+            $list[$i]['status'] = config('site.product_status.' . $prod['status']);
+            $list[$i]['price']  = number_format((float) $prod['price'], 2, '.', '');
 
             $list[$i]['image1'] = (count($prod->images) > 0 ? $prod->images[0]->name : null);
 
@@ -324,11 +325,19 @@ class AdminSystemController extends Controller
 
     public function productLoadCurrent(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
+        ]);
+
         $results = array();
 
-        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg']     = $validator->errors()->first();
+            return response()->json($results);
+        }
 
-        $product = Product::where('id', $current_id)->first();
+        $product = Product::where('id', $request->id)->first();
 
         if ($product == null) {
             $results['success'] = false;
@@ -337,10 +346,8 @@ class AdminSystemController extends Controller
 
         $results['product'] = array();
 
-        $results['product']['name']        = $product['title'];
-        $results['product']['description'] = $product['description'];
-        $results['product']['price']       = $product['price'];
         $results['product']['category_id'] = $product['category_id'];
+        $results['product']['status']      = $product['status'];
         $results['product']['params']      = $product['params'];
 
         $results['product']['images'] = array();
@@ -358,10 +365,12 @@ class AdminSystemController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
+            'id'          => new ValidID,
             'name'        => new ValidProductName,
             'price'       => new ValidProductPrice,
             'description' => new ValidProductDescription,
             'category'    => new ValidProductCategory,
+            'status'      => "required|in:INVISIBLE,IN_STOCK,INACCESSIBLE,INACTIVE",
             'params'      => new ValidProductParams,
         ]);
 
@@ -375,9 +384,7 @@ class AdminSystemController extends Controller
             return response()->json($results);
         }
 
-        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
-
-        $product = Product::where('id', $current_id)->first();
+        $product = Product::where('id', $request->id)->first();
 
         if ($product == null) {
             $results['success'] = false;
@@ -388,6 +395,7 @@ class AdminSystemController extends Controller
         $product->price       = $request->price;
         $product->description = $request->description;
         $product->category_id = $request->category;
+        $product->status      = $request->status;
         $product->params      = $request->params;
 
         $product->save();
@@ -400,11 +408,19 @@ class AdminSystemController extends Controller
     public function productEditImageList(Request $request)
     {
 
+        $validator = Validator::make($request->all(), [
+            'id' => new ValidID,
+        ]);
+
         $results = array();
 
-        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
+        if ($validator->fails()) {
+            $results['success'] = false;
+            $results['msg']     = $validator->errors()->first();
+            return response()->json($results);
+        }
 
-        $product = Product::where('id', $current_id)->first();
+        $product = Product::where('id', $request->id)->first();
 
         if ($product == null) {
             $results['success'] = false;
@@ -432,6 +448,7 @@ class AdminSystemController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
+            'id'       => new ValidID,
             'images'   => 'required',
             'images.*' => 'mimes:png,jpeg',
         ]);
@@ -445,9 +462,7 @@ class AdminSystemController extends Controller
             return response()->json($results);
         }
 
-        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
-
-        $product = Product::where('id', $current_id)->first();
+        $product = Product::where('id', $request->id)->first();
 
         if ($product == null) {
             $results['success'] = false;
@@ -474,6 +489,7 @@ class AdminSystemController extends Controller
     public function productEditImageRemove(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'id'   => new ValidID,
             'name' => new ValidProductImage,
         ]);
 
@@ -487,9 +503,7 @@ class AdminSystemController extends Controller
             return response()->json($results);
         }
 
-        $current_id = $request->session()->get("ADMIN_PRODUCT_EDIT_ID");
-
-        $product = Product::where('id', $current_id)->first();
+        $product = Product::where('id', $request->id)->first();
 
         if ($product == null) {
             $results['success'] = false;

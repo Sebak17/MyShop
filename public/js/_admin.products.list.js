@@ -8,12 +8,12 @@ window.onload = function () {
 }
 
 function screenProductsEmpty() {
-    $('#productsList').html(String.raw`<tr class="table-danger"><td class="text-center" colspan="4"><i class="fas fa-times-circle"></i> Nie znaleziono produktów!</td></tr>`);
+    $('#productsList').html(String.raw`<tr class="table-danger"><td class="text-center" colspan="5"><i class="fas fa-times-circle"></i> Nie znaleziono produktów!</td></tr>`);
     $('#productsAmount').html("0");
 }
 
 function screenLoading() {
-    $('#productsList').html(String.raw`<tr><td class="text-center" colspan="4"><i class="fas fa-circle-notch fa-spin fa-3x"></i> <h4>Ładowanie produktów...</h4></td></tr>`);
+    $('#productsList').html(String.raw`<tr><td class="text-center" colspan="5"><i class="fas fa-circle-notch fa-spin fa-3x"></i> <h4>Ładowanie produktów...</h4></td></tr>`);
     $('#productsAmount').html("?");
 }
 
@@ -71,11 +71,14 @@ function loadProducts() {
                 for (let i = 0; i < data.list.length; i++) {
 
                     row += String.raw `<tr>
-                                            <td style="width: 196px">
-                                                <img class="img-fluid" width="196px" height="146px" src="/storage/products_images/` + data.list[i].image1 + `">
+                                            <td style="width: 100px">
+                                                <img class="img-fluid" width="100px" max-height="60px" src="/storage/products_images/` + data.list[i].image1 + `">
                                             </td>
                                             <td class="align-middle text-left">
-                                                <h5>` + data.list[i].name + `</h5>
+                                                <h6>` + data.list[i].name + `</h6>
+                                            </td>
+                                            <td>
+                                                ` + data.list[i].status + `
                                             </td>
                                             <td class="align-middle text-left">
                                                 <h5>` + data.list[i].price + ` ` + cfg_currency +  `</h5>
