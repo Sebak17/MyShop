@@ -55,7 +55,7 @@
                             <hr />
                             
                             <!-- TODO:  -->
-                            <div class="row" id="proposedOffers">
+                            <div class="row" id="proposedProducts">
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-3">
                                     <a href="#" class="tdn">
                                         <div class="card">

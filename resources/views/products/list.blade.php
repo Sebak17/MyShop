@@ -125,9 +125,9 @@
 							
 							@foreach ($productsList as $product)
 							<a href="/produkt?id={{ $product['id'] }}" class="tdn">
-								<div class="offer-block row pt-3 pb-3 border-top border-bottom">
+								<div class="product-block row pt-3 pb-3 border-top border-bottom">
 									<div class="col-3 col-md-3">
-										<img src="/storage/products_images/{{ $product['image'] }}" class="img-thumbnail offers-list-image" alt="{{ $product['name'] }}">
+										<img src="/storage/products_images/{{ $product['image'] }}" class="img-thumbnail products-list-image" alt="{{ $product['name'] }}">
 									</div>
 									<div class="col-5 col-md-6">
 										<h4>{{ $product['name'] }}</h4>
@@ -153,7 +153,7 @@
 	</div>
 </div>
 
-<script src="{{ asset('js/_offers.list.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_products.list.js') }}" charset="utf-8"></script>
 <script src="{{ asset('js/_search.engine.js') }}" charset="utf-8"></script>
 
 @endsection

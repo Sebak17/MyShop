@@ -12,10 +12,10 @@ window.onload = function () {
     });
 
     $("#btnImageInput").click(function (event) {
-        $("#offerUpload").trigger('click');
+        $("#productUpload").trigger('click');
     });
 
-    $("#offerUpload").change(function (event) {
+    $("#productUpload").change(function (event) {
         if (this.files && this.files.length > 0) {
             uploadImages(this);
         }

@@ -128,7 +128,7 @@
 
 <script src="{{ asset('js/_search.engine.js') }}" charset="utf-8"></script>
 @if(Auth::guard('web')->check())
-<script src="{{ asset('js/_offer.item.js') }}" charset="utf-8"></script>
+<script src="{{ asset('js/_product.item.js') }}" charset="utf-8"></script>
 @endif
 
 @endsection

@@ -59,16 +59,16 @@
     cursor: pointer;
 }
 
-.offer-block:hover {
+.product-block:hover {
     color: #444;
     background-color: #EDEDED;
 }
 
-.offer-block:hover>div:nth-child(2)>h4 {
+.product-block:hover>div:nth-child(2)>h4 {
     color: #2196F3;
 }
 
-.offer-block>div:nth-child(3)>h2 {
+.product-block>div:nth-child(3)>h2 {
     color: #444;
 }
 
@@ -76,7 +76,7 @@
     text-decoration: none !important;
 }
 
-.offers-list-image {
+.products-list-image {
     width: 104px !important;
     height: 74px !important;
 }

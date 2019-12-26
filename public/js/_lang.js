@@ -47,7 +47,7 @@ var Lang = {
     SETTINGS_PASSWORD_IN_PROGRESS: "Trwa zmienianie hasła...",
     SETTINGS_PASSWORD_SUCCESS: "Hasło zostało zmienione!",
 
-    OFFERSLIST_ERROR_LOADING: "Wystąpił błąd podczas ładowania ofert!",
+    PRODUCTSLIST_ERROR_LOADING: "Wystąpił błąd podczas ładowania ofert!",
 
     CATEGORY_CHOOSE: "Najpierw musisz wybrać kategorie!",
     CATEGORY_NAME_ERROR: "Błędna nazwa kategorii!",

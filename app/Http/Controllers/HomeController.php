@@ -239,7 +239,7 @@ class HomeController extends Controller
                 break;
         }
 
-        return view('offers.list')->with('categoriesList', $categoriesList)->with('currentCategory', $currentCategory)->with('overCategory', $overCategoryInfo)->with('productsList', $productsData);
+        return view('products.list')->with('categoriesList', $categoriesList)->with('currentCategory', $currentCategory)->with('overCategory', $overCategoryInfo)->with('productsList', $productsData);
     }
 
     public function productPage(Request $request)
@@ -310,7 +310,7 @@ class HomeController extends Controller
         if(json_last_error() !== JSON_ERROR_NONE)
             $params = array();
 
-        return view('offers.item')->with('categoriesPath', $categoriesPath)->with('product', $product)->with('status', $status)->with('params', $params);
+        return view('products.item')->with('categoriesPath', $categoriesPath)->with('product', $product)->with('status', $status)->with('params', $params);
     }
 
 }

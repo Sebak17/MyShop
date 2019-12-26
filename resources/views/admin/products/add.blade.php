@@ -83,7 +83,7 @@
 			<div class="card card-body mb-3">
 				<legend><i class="fas fa-image"></i> Zdjęcia podglądowe</legend>
 				
-				<input type="file" class="d-none" id="offerUpload" accept="image/x-png,image/jpeg" multiple>
+				<input type="file" class="d-none" id="productUpload" accept="image/x-png,image/jpeg" multiple>
 				
 				<div class="row mb-2">
 					<div class="col">

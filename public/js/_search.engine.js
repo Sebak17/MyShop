@@ -4,16 +4,16 @@ $( document ).ready(function() {
 
 function searchEngine_bindKeys() {
 	$("#searchBtn").click(function () {
-		searchOffers();
+		searchProducts();
 	});
 
 	$('#searchBox').keyup(function (event) {
 		if (event.keyCode === 13)
-			searchOffers();
+			searchProducts();
     });
 }
 
-function searchOffers() {
+function searchProducts() {
 	let val = $("#searchBox").val();
 	val = val.replace(/[^\w\s]/gi, '');
 

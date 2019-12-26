@@ -10,7 +10,7 @@ window.onload = function () {
     });
 
     $("#btnImageInput").click(function (event) {
-        $("#offerUpload").trigger('click');
+        $("#productUpload").trigger('click');
     });
 
     $('#btnParamAddModal').click(function () {
@@ -21,7 +21,7 @@ window.onload = function () {
         productAddParam();
     });
 
-    $("#offerUpload").change(function (event) {
+    $("#productUpload").change(function (event) {
         if (this.files && this.files.length > 0) {
             uploadImages(this);
         }
