@@ -12,6 +12,7 @@ use App\OrderProduct;
 use App\OrderHistory;
 use App\Payment;
 use App\Product;
+use App\Mail\OrderCreateMail;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
@@ -26,6 +27,7 @@ use App\Rules\ValidZipCode;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Session;
 
@@ -358,6 +360,8 @@ class PanelSystemController extends Controller
 
         $request->session()->forget('SHOPPINGCART_STATUS');
         $request->session()->forget('SHOPPINGCART_DATA');
+
+        Mail::to($user->email)->send(new OrderCreateMail($order));
 
         $results['success'] = true;
         $results['url']     = route('orderIDPage', $order->id);
