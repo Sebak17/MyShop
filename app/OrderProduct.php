@@ -15,4 +15,9 @@ class OrderProduct extends Model
         'order_id', 'product_id', 'price', 'amount', 'name',
     ];
 
+    public function order()
+    {
+    	return $this->belongsTo('App\Order');
+    }
+
 }

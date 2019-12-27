@@ -178,7 +178,7 @@ class HomeController extends Controller
             $product['id']     = $value->id;
             $product['name']   = $value->title;
             $product['price']  = number_format((float) $value->price, 2, '.', '');
-            $product['buyers'] = rand(0, 100);
+            $product['buyers'] = $value->getBuyedAmount();
             $product['image']  = (count($value->images) > 0 ? $value->images[0]->name : null);
 
             $productsData[$value->id] = $product;

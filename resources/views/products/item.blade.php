@@ -47,8 +47,12 @@
 						
 						<hr />
 						
-						<p>0 osób kupiło ten produkt</p>
-						
+						@if($product->getBuyedAmount() > 0)
+						<p>{{ $product->getBuyedAmount() }} osób kupiło ten produkt</p>
+						@else
+						<p></p>
+						@endif
+
 						<h2>{{ number_format((float) $product->price, 2, '.', '') . " " . config('site.currency') }}</h2>
 						
 						<hr />
