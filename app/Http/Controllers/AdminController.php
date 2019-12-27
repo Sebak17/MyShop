@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Order;
 use App\OrderHistory;
-use App\UserHistory;
 use App\Product;
-use App\Rules\ValidID;
 use App\Rules\ValidEmail;
+use App\Rules\ValidID;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -92,7 +92,7 @@ class AdminController extends Controller
         $deliverInfo         = json_decode($order->deliver_info, true);
         $deliverInfo['type'] = $order->deliver_name;
 
-        $buyerInfo         = json_decode($order->buyer_info, true);
+        $buyerInfo = json_decode($order->buyer_info, true);
 
         $orderHistory = OrderHistory::where('order_id', $order->id)->get();
 
@@ -112,10 +112,11 @@ class AdminController extends Controller
         return view('admin.users.list');
     }
 
-    public function userPage(Request $request) {
+    public function userPage(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
-            'id' => new ValidID,
+            'id'    => new ValidID,
             'email' => new ValidEmail,
         ]);
 
@@ -131,7 +132,7 @@ class AdminController extends Controller
             $user = User::where('email', $request->email)->first();
         }
 
-        if($user == null) {
+        if ($user == null) {
             return view('admin.users.not_exist');
         }
 
@@ -139,13 +140,13 @@ class AdminController extends Controller
 
         foreach ($user->history as $his) {
 
-            $obj           = array();
+            $obj = array();
 
-            $obj['type'] = $his->type;
+            $obj['type']     = $his->type;
             $obj['typeName'] = config('site.user_history.' . $his->type);
-            $obj['data'] = $his->data;
-            $obj['ip'] = $his->ip;
-            $obj['time'] = $his->created_at->format('Y-m-d H:i:s');
+            $obj['data']     = $his->data;
+            $obj['ip']       = $his->ip;
+            $obj['time']     = $his->created_at->format('Y-m-d H:i:s');
 
             array_push($historyData, $obj);
         }
@@ -153,6 +154,34 @@ class AdminController extends Controller
         $historyData = json_encode($historyData);
 
         return view('admin.users.item')->with('user', $user)->with('historyData', $historyData);
+    }
+
+    public function settingsPage()
+    {
+        $data = array();
+
+        if (file_exists(storage_path('framework/down'))) {
+            $data['enabled'] = true;
+
+            $mainInfo = json_decode(file_get_contents(storage_path('framework/down')), true);
+
+            $data['msg'] = $mainInfo['message'];
+
+            $data['allowed'] = array();
+
+            foreach ($mainInfo['allowed'] as $v) {
+                array_push($data['allowed'], $v);
+            }
+
+        } else {
+            $data['enabled'] = false;
+        }
+
+        $ips = array();
+        if(Storage::exists('allowed_ips.json'))
+            $ips = json_decode(Storage::get('allowed_ips.json'), true);
+
+        return view('admin.settings')->with('data', $data)->with('ips', $ips);
     }
 
 }

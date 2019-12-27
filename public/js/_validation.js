@@ -107,9 +107,9 @@ function validateCategoryID(id) {
 }
 
 function validateIconFA(iconName) {
-    if(!(/^[a-zA-Z0-9-]+$/.test(iconName)))
+    if (!(/^[a-zA-Z0-9-]+$/.test(iconName)))
         return false;
-    if(iconName.length <= 0)
+    if (iconName.length <= 0)
         return true;
     return true;
 }
@@ -122,6 +122,7 @@ function validateProductName(name) {
 
     return true;
 }
+
 function validateProductPrice(price) {
     if (!/^[0-9.]+$/.test(price))
         return false;
@@ -131,12 +132,14 @@ function validateProductPrice(price) {
 
     return true;
 }
+
 function validateProductDescription(description) {
     if (description.length < 4)
         return false;
 
     return true;
 }
+
 function validateBanDescription(description) {
     if (description.length < 4)
         return false;
@@ -147,5 +150,12 @@ function validateBanDescription(description) {
     if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9-\(\)'"\/ ]+$/.test(description))
         return false;
 
+    return true;
+}
+
+function validateIP(ipaddress) {
+    if (!/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+        return false;
+    }
     return true;
 }

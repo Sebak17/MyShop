@@ -165,6 +165,10 @@ Route::prefix('admin')->group(function () {
 
 
 
+    Route::get('ustawienia', 'AdminController@settingsPage')->name('admin_settingsPage');
+
+
+
 
 });
 
@@ -247,5 +251,13 @@ Route::prefix('systemAdmin')->group(function () {
 
     Route::post('userChangePersonal', 'AdminSystemController@userChangePersonal')->name('systemAdmin_userChangePersonal');
     Route::post('userChangeLocation', 'AdminSystemController@userChangeLocation')->name('systemAdmin_userChangeLocation');
+    
+    //
+    //      SETTINGS SITES
+    //
+
+    Route::post('settingsMaintenanceChange', 'AdminSystemController@settingsMaintenanceChange');
+    Route::post('settingsMaintenanceAddIP', 'AdminSystemController@settingsMaintenanceAddIP');
+    Route::post('settingsMaintenanceDelIP', 'AdminSystemController@settingsMaintenanceDelIP');
 
 });

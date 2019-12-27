@@ -102,4 +102,10 @@ var Lang = {
     BAN_REASON_ERROR: "Powód bana jest błędny! (4-200)",
     USER_BAN_SUCCESS: "Użytkownik został zablokowany!",
 
+
+
+    IP_NOT_CORRECT: "IP jest niepoprawne!",
+    IP_ADDING: "Dodawanie do listy...",
+    IP_ADDED: "Dodano poprawnie!",
+
 };
