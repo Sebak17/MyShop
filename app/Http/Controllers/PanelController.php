@@ -104,7 +104,7 @@ class PanelController extends Controller
 
         if (isset($request->payUID)) {
             $payu = new PayUHelper();
-            $res    = $payu->getPaymentStatus($request->input('payUID'));
+            $res  = $payu->getPaymentStatus($request->input('payUID'));
         }
 
         return view('order.payments.paypal_status')->with('results', $res);
@@ -112,7 +112,28 @@ class PanelController extends Controller
 
     public function favoritesPage()
     {
-        return view('home.favorites');
+        $favoritesData = array();
+
+        $user = Auth::user();
+
+        $favs = json_decode($user->getFavorites()->products, true);
+
+        foreach ($favs as $id) {
+            $product = Product::where('id', $id)->first();
+
+            if ($product == null || $product->status == 'INVISIBLE') {
+                continue;
+            }
+
+            $pr          = array();
+            $pr['url']   = route('productPage') . '?id=' . $product->id;
+            $pr['name']  = $product->title;
+            $pr['price'] = number_format((float) $product->price, 2, '.', '');
+            $pr['image'] = (count($product->images) > 0 ? $product->images[0]->name : null);
+            array_push($favoritesData, $pr);
+        }
+
+        return view('home.favorites')->with('favoritesData', $favoritesData);
     }
 
     public function dashboardPage()

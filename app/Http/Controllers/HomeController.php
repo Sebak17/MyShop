@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Category;
 use App\Helpers\CategoriesHelper;
 use App\Product;
@@ -256,7 +257,6 @@ class HomeController extends Controller
 
         if ($product == null || $product->status == 'INVISIBLE') {
             return view('products.not_exist');
-            return "Not found!";
         }
 
         $categoriesPath = "";
@@ -310,7 +310,18 @@ class HomeController extends Controller
         if(json_last_error() !== JSON_ERROR_NONE)
             $params = array();
 
-        return view('products.item')->with('categoriesPath', $categoriesPath)->with('product', $product)->with('status', $status)->with('params', $params);
+        $isFavorite = false;
+
+        if(Auth::guard('web')->check()) {
+            $favs = json_decode(Auth::user()->getFavorites()->products, true);
+
+            if(in_array($request->id, $favs))
+                $isFavorite = true;
+
+        }
+
+
+        return view('products.item')->with('categoriesPath', $categoriesPath)->with('product', $product)->with('status', $status)->with('params', $params)->with('isFavorite', $isFavorite);
     }
 
 }

@@ -113,6 +113,8 @@ Route::prefix('system')->group(function () {
 
 Route::prefix('systemUser')->group(function () {
 
+    Route::post('changeFavoriteStatus', 'PanelSystemController@changeFavoriteStatus');
+
     Route::post('loadShoppingCartProducts', 'PanelSystemController@loadShoppingCartProducts');
     Route::post('addToShoppingCart', 'PanelSystemController@addProductToShoppingCart');
     Route::post('updateShoppingCart', 'PanelSystemController@updateShoppingCart');

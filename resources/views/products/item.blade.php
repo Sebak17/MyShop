@@ -39,7 +39,11 @@
 				
 				<div class="col-6 mb-3">
 					<div class="card card-body">
-						<legend><i class="far fa-star" id="_favoriteIcon" data-favorite="false"></i> {{ $product->title }}</legend>
+						<legend>
+							@if(Auth::guard('web')->check())
+							<i class="fa{{ ($isFavorite ? 's' : 'r') }} fa-star" id="_favoriteIcon" data-favorite="{{ $isFavorite }}"></i> 
+							@endif
+							{{ $product->title }}</legend>
 						
 						<hr />
 						

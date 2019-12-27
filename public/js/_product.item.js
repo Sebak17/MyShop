@@ -1,36 +1,56 @@
-$( document ).ready(function() {
-	
-	$('#btnShoppingCartAdd').click(function() {
-		addProductToShoppingCart();
-	});
+var changingFavorite = false;
 
-    $("[data-favorite]").click(function() {
-        changeFavoriteStatus( ($(this).attr("data-favorite") == 'true' ? true : false) );
-        
+$(document).ready(function () {
+
+    $('#btnShoppingCartAdd').click(function () {
+        addProductToShoppingCart();
+    });
+
+    $("[data-favorite]").click(function () {
+        changeFavoriteStatus(($(this).attr("data-favorite") == 'true' ? true : false));
     });
 
 });
 
 function changeFavoriteStatus(b) {
-    
-    let o = $("[data-favorite]");
 
-    if(b) {
-        o.removeClass('fas')
-        o.addClass('far');
-        o.attr("data-favorite", false);
-    } else {
-        o.removeClass('far')
-        o.addClass('fas');
-        o.attr("data-favorite", true);
-    }
+    if(changingFavorite)
+        return;
 
+    changingFavorite = true;
+
+    $.ajax({
+        url: "/systemUser/changeFavoriteStatus",
+        method: "POST",
+        data: {
+            id: $("[data-id]").attr("data-id"),
+        },
+        success: function (data) {
+            if (data.success == true) {
+                let o = $("[data-favorite]");
+
+                if (!data.status) {
+                    o.removeClass('fas')
+                    o.addClass('far');
+                    o.attr("data-favorite", false);
+                } else {
+                    o.removeClass('far')
+                    o.addClass('fas');
+                    o.attr("data-favorite", true);
+                }
+            }
+        },
+        error: function () {},
+        complete: function() {
+            changingFavorite = false;
+        }
+    });
 
 }
 
 function addProductToShoppingCart() {
 
-	$.ajax({
+    $.ajax({
         url: "/systemUser/addToShoppingCart",
         method: "POST",
         data: {
@@ -41,9 +61,8 @@ function addProductToShoppingCart() {
                 showAlertDismissible(AlertType.SUCCESS, Lang.PRODUCT_ADDED_TO_SHOPPINGCART);
             }
         },
-        error: function () {
-        }
+        error: function () {}
     });
-	
+
 
 }

@@ -66,4 +66,22 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\UserHistory');
     }
+
+    public function favorites() 
+    {
+        return $this->hasOne('App\UserFavorites');
+    }
+
+     public function getFavorites() {
+        $fav = $this->favorites;
+
+        if($fav == null) {
+            $fav = \App\UserFavorites::create([
+                'user_id' => $this->id,
+                'products' => json_encode([]),
+            ]);
+        }
+
+        return $fav;
+    }
 }
