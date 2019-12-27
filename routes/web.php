@@ -34,11 +34,9 @@ Route::group([], function () {
     Route::get('/rejestracja', 'AuthorizationController@registerPage')->name('registerPage');
 
     Route::get('/aktywuj_konto', 'AuthorizationController@activeAccountPage')->name('activeAccountPage');
-
     Route::get('/aktywuj_konto/{hash}', 'AuthorizationController@activeAccountCheckPage')->name('activeAccountCheckPage');
 
     Route::get('/resetuj_haslo', 'AuthorizationController@resetPasswordPage')->name('resetPasswordPage');
-
     Route::get('/resetuj_haslo/{hash}', 'AuthorizationController@resetPasswordCheckPage')->name('resetPasswordCheckPage');
 
     Route::any('/wyloguj', 'AuthorizationController@logout')->name('logout');
@@ -100,14 +98,13 @@ Route::prefix('system')->group(function () {
     //
     //      AUTH
     //
+    Route::post('signIn', 'AuthorizationController@signIn');
+    Route::post('signUp', 'AuthorizationController@signUp');
 
-    Route::post('signIn', 'AuthorizationController@signIn')->name('system_signIn');
-    Route::post('signUp', 'AuthorizationController@signUp')->name('system_signUp');
+    Route::post('activateAccountMail', 'AuthorizationController@activateAccountMail');
 
-    Route::post('activateAccountMail', 'AuthorizationController@activateAccountMail')->name('system_activateAccountMail');
-
-    Route::post('resetPasswordMail', 'AuthorizationController@resetPasswordMail')->name('system_resetPasswordMail');
-    Route::post('resetPasswordChange', 'AuthorizationController@resetPasswordChange')->name('system_resetPasswordChange');
+    Route::post('resetPasswordMail', 'AuthorizationController@resetPasswordMail');
+    Route::post('resetPasswordChange', 'AuthorizationController@resetPasswordChange');
 });
 
 //
@@ -116,23 +113,21 @@ Route::prefix('system')->group(function () {
 
 Route::prefix('systemUser')->group(function () {
 
-    Route::post('loadShoppingCartProducts', 'PanelSystemController@loadShoppingCartProducts')->name('systemUser_loadShoppingCartProducts');
-    Route::post('addToShoppingCart', 'PanelSystemController@addProductToShoppingCart')->name('systemUser_addToShoppingCart');
-    Route::post('updateShoppingCart', 'PanelSystemController@updateShoppingCart')->name('systemUser_updateShoppingCart');
-    Route::post('confirmShoppingCart', 'PanelSystemController@confirmShoppingCart')->name('systemUser_confirmShoppingCart');
+    Route::post('loadShoppingCartProducts', 'PanelSystemController@loadShoppingCartProducts');
+    Route::post('addToShoppingCart', 'PanelSystemController@addProductToShoppingCart');
+    Route::post('updateShoppingCart', 'PanelSystemController@updateShoppingCart');
+    Route::post('confirmShoppingCart', 'PanelSystemController@confirmShoppingCart');
 
-    Route::post('createOrder', 'PanelSystemController@createOrder')->name('systemUser_createOrder');
+    Route::post('createOrder', 'PanelSystemController@createOrder');
+
+    Route::post('paymentCancel', 'PanelSystemController@paymentCancel');
+    Route::post('paymentPay', 'PanelSystemController@paymentPay');
+    Route::post('paymentCheck', 'PanelSystemController@paymentCheck');
 
 
-    Route::post('paymentCancel', 'PanelSystemController@paymentCancel')->name('systemUser_paymentCancel');
-    Route::post('paymentPay', 'PanelSystemController@paymentPay')->name('systemUser_paymentPay');
-    Route::post('paymentCheck', 'PanelSystemController@paymentCheck')->name('systemUser_paymentCheck');
-
-
-    Route::post('changeDataPersonal', 'PanelSystemController@changeDataPersonal')->name('systemUser_changeDataPersonal');
-    Route::post('changeDataLocation', 'PanelSystemController@changeDataLocation')->name('systemUser_changeDataLocation');
-    Route::post('changePassword', 'PanelSystemController@changePassword')->name('systemUser_changePassword');
-
+    Route::post('changeDataPersonal', 'PanelSystemController@changeDataPersonal');
+    Route::post('changeDataLocation', 'PanelSystemController@changeDataLocation');
+    Route::post('changePassword', 'PanelSystemController@changePassword');
 });
 
 //
@@ -163,13 +158,7 @@ Route::prefix('admin')->group(function () {
     Route::get('uzytkownicy', 'AdminController@usersListPage')->name('admin_usersListPage');
     Route::get('uzytkownik', 'AdminController@userPage')->name('admin_userPage');
 
-
-
     Route::get('ustawienia', 'AdminController@settingsPage')->name('admin_settingsPage');
-
-
-
-
 });
 
 //
@@ -181,83 +170,62 @@ Route::prefix('systemAdmin')->group(function () {
     //
     //      GENERAL
     //
-
-    Route::post('categoryList', 'AdminSystemController@categoryList')->name('systemAdmin_categoryList');
-
-    Route::post('productLoadList', 'AdminSystemController@productLoadList')->name('systemAdmin_productLoadList');
-
-    Route::post('dashboardData', 'AdminSystemController@dashboardData')->name('systemAdmin_dashboardData');
+    Route::post('categoryList', 'AdminSystemController@categoryList');
+    Route::post('productLoadList', 'AdminSystemController@productLoadList');
+    Route::post('dashboardData', 'AdminSystemController@dashboardData');
 
     //
     //      AUTH
     //
-
-    Route::post('signIn', 'AdminAuthController@signIn')->name('systemAdmin_signIn');
+    Route::post('signIn', 'AdminAuthController@signIn');
 
     //
     //      CATEGORIES MANAGER SITES
     //
-
-    Route::post('categoryAdd', 'AdminSystemController@categoryAdd')->name('systemAdmin_categoryAdd');
-
-    Route::post('categoryRemove', 'AdminSystemController@categoryRemove')->name('systemAdmin_categoryRemove');
-
-    Route::post('categoryEdit', 'AdminSystemController@categoryEdit')->name('systemAdmin_categoryEdit');
-
-    Route::post('categoryChangeOrder', 'AdminSystemController@categoryChangeOrder')->name('systemAdmin_categoryChangeOrder');
+    Route::post('categoryAdd', 'AdminSystemController@categoryAdd');
+    Route::post('categoryRemove', 'AdminSystemController@categoryRemove');
+    Route::post('categoryEdit', 'AdminSystemController@categoryEdit');
+    Route::post('categoryChangeOrder', 'AdminSystemController@categoryChangeOrder');
 
     //
     //      PRODUCT CREATE SITES
     //
-
-    Route::post('productCreate', 'AdminSystemController@productCreate')->name('systemAdmin_productCreate');
-
-    Route::post('productAddImageUpload', 'AdminSystemController@productAddImageUpload')->name('systemAdmin_productAddImageUpload');
-
-    Route::post('productAddImageRemove', 'AdminSystemController@productAddImageRemove')->name('systemAdmin_productAddImageRemove');
-
-    Route::post('productLoadOldImages', 'AdminSystemController@productLoadOldImages')->name('systemAdmin_productLoadOldImages');
+    Route::post('productCreate', 'AdminSystemController@productCreate');
+    Route::post('productAddImageUpload', 'AdminSystemController@productAddImageUpload');
+    Route::post('productAddImageRemove', 'AdminSystemController@productAddImageRemove');
+    Route::post('productLoadOldImages', 'AdminSystemController@productLoadOldImages');
 
     //
     //      PRODUCT EDIT SITES
     //
-
-    Route::post('productLoadCurrent', 'AdminSystemController@productLoadCurrent')->name('systemAdmin_productLoadCurrent');
-
-    Route::post('productEdit', 'AdminSystemController@productEdit')->name('systemAdmin_productEdit');
-
-    Route::post('productEditImageList', 'AdminSystemController@productEditImageList')->name('systemAdmin_productEditImageList');
-
-    Route::post('productEditImageAdd', 'AdminSystemController@productEditImageAdd')->name('systemAdmin_productEditImageAdd');
-
-    Route::post('productEditImageRemove', 'AdminSystemController@productEditImageRemove')->name('systemAdmin_productEditImageRemove');
+    Route::post('productLoadCurrent', 'AdminSystemController@productLoadCurrent');
+    Route::post('productEdit', 'AdminSystemController@productEdit');
+    Route::post('productEditImageList', 'AdminSystemController@productEditImageList');
+    Route::post('productEditImageAdd', 'AdminSystemController@productEditImageAdd');
+    Route::post('productEditImageRemove', 'AdminSystemController@productEditImageRemove');
 
     //
     //      ORDER MANAGE SITES
     //
-    
-    Route::post('orderChangeStatus', 'AdminSystemController@orderChangeStatus')->name('systemAdmin_orderChangeStatus');
-    Route::post('orderChangeDeliverLoc', 'AdminSystemController@orderChangeDeliverLoc')->name('systemAdmin_orderChangeDeliverLoc');
-    Route::post('orderChangePayment', 'AdminSystemController@orderChangePayment')->name('systemAdmin_orderChangePayment');
-    Route::post('orderChangeCost', 'AdminSystemController@orderChangeCost')->name('systemAdmin_orderChangeCost');
+    Route::post('orderChangeStatus', 'AdminSystemController@orderChangeStatus');
+    Route::post('orderChangeDeliverLoc', 'AdminSystemController@orderChangeDeliverLoc');
+    Route::post('orderChangePayment', 'AdminSystemController@orderChangePayment');
+    Route::post('orderChangeCost', 'AdminSystemController@orderChangeCost');
 
 
     //
     //      USER MANAGE SITES
     //
-    
-    Route::post('userBan', 'AdminSystemController@userBan')->name('systemAdmin_userBan');
-    Route::post('userUnban', 'AdminSystemController@userUnban')->name('systemAdmin_userUnban');
+    Route::post('userBan', 'AdminSystemController@userBan');
+    Route::post('userUnban', 'AdminSystemController@userUnban');
 
-    Route::post('userChangePersonal', 'AdminSystemController@userChangePersonal')->name('systemAdmin_userChangePersonal');
-    Route::post('userChangeLocation', 'AdminSystemController@userChangeLocation')->name('systemAdmin_userChangeLocation');
+    Route::post('userChangePersonal', 'AdminSystemController@userChangePersonal');
+    Route::post('userChangeLocation', 'AdminSystemController@userChangeLocation');
     
     //
     //      SETTINGS SITES
     //
-
     Route::post('settingsMaintenanceChange', 'AdminSystemController@settingsMaintenanceChange');
     Route::post('settingsMaintenanceAddIP', 'AdminSystemController@settingsMaintenanceAddIP');
     Route::post('settingsMaintenanceDelIP', 'AdminSystemController@settingsMaintenanceDelIP');
-
 });
