@@ -185,16 +185,22 @@ class HomeController extends Controller
         }
 
         //   SORT
-        //      1 od najnowszych
-        //      2 od najstarszych
+        //      1 nazwa produktu od A do Z
+        //      2 nazwa produktu od Z do A
         //      3 popularności
         //      4 cena rosnąco
         //      5 cena malejąco
 
         switch ($req_sort) {
             case 1:
+                usort($productsData, function ($a, $b) {
+                    return strcmp($a['name'], $b['name']);
+                });
                 break;
             case 2:
+                usort($productsData, function ($a, $b) {
+                    return strcmp($b['name'], $a['name']);
+                });
                 break;
             case 3:
                 usort($productsData, function ($a, $b) {

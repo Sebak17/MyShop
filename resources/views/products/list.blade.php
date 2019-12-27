@@ -55,8 +55,8 @@
 								
 								<div class="sortList">
 									<select class="custom-select" id="sortType">
-										<option value="1">&nbsp;&nbsp; od najnowszych</option>
-										<option value="2">&nbsp;&nbsp; od najstarszych</option>
+										<option value="1">&nbsp;&nbsp; nazwa produktu od A do Z</option>
+										<option value="2">&nbsp;&nbsp; nazwa produktu od Z do A</option>
 										<option value="3">&nbsp;&nbsp; popularności</option>
 										<option value="4">&nbsp;&nbsp; cena rosnąco</option>
 										<option value="5">&nbsp;&nbsp; cena malejąco</option>

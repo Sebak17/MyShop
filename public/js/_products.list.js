@@ -73,8 +73,7 @@ function generateURL() {
     if (categoryID != -1)
         url += "&category=" + categoryID;
 
-    if (sortType != 1)
-        url += "&sort=" + sortType;
+    url += "&sort=" + sortType;
 
     if (filtersValues['product-price-min'])
         url += "&price-min=" + parseFloat(filtersValues['product-price-min']).toFixed(2);
