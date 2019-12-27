@@ -120,14 +120,14 @@
 			</div>
 			@endif
 			
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-12">
 					<div class="card card-body">
 						<legend><i class="fas fa-star"></i> Opinie klientów</legend>
 						<hr />
 					</div>
 				</div>
-			</div>
+			</div> -->
 			
 		</div>
 		
