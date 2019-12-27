@@ -47,6 +47,6 @@ class ValidBanDescription implements Rule
      */
     public function message()
     {
-        return 'E-Mail jest niepoprawny!';
+        return 'Opis jest niepoprawny!';
     }
 }
