@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
 use App\Category;
 use App\Helpers\CategoriesHelper;
 use App\Product;
 use App\Rules\ValidID;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,7 +17,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
 
-        $categories = Category::where('active', 1)->where('visible', 1)->where('overcategory', 0)->orderBy('orderID', 'ASC')->get();
+        $categories     = Category::where('active', 1)->where('visible', 1)->where('overcategory', 0)->orderBy('orderID', 'ASC')->get();
         $categoriesData = array();
 
         foreach ($categories as $category) {
@@ -30,29 +30,109 @@ class HomeController extends Controller
             array_push($categoriesData, $cat);
         }
 
-
-
-
         $productsHistorySession = $request->session()->get('PRODUCTS_SEEN_HISTORY', []);
-        $productsHistoryData = array();
+        $productsHistoryData    = array();
 
         foreach ($productsHistorySession as $id) {
             $product = Product::where('id', $id)->first();
+
             if ($product == null || $product->status == 'INVISIBLE') {
                 continue;
             }
 
-            $pr           = array();
-            $pr['url']     = route('productPage') . '?id=' . $product->id;
-            $pr['name']   = $product->title;
-            $pr['price']  = number_format((float) $product->price, 2, '.', '');
-            $pr['image']  = (count($product->images) > 0 ? $product->images[0]->name : null);
+            $pr          = array();
+            $pr['url']   = route('productPage') . '?id=' . $product->id;
+            $pr['name']  = $product->title;
+            $pr['price'] = number_format((float) $product->price, 2, '.', '');
+            $pr['image'] = (count($product->images) > 0 ? $product->images[0]->name : null);
             array_push($productsHistoryData, $pr);
         }
 
         $productsHistoryData = array_reverse($productsHistoryData);
 
-        return view('home/main')->with('categories', $categoriesData)->with('productsHistory', $productsHistoryData);
+        $productsProposed = array();
+
+        if (empty($productsHistorySession)) {
+
+            while (count($productsProposed) != 4) {
+
+                $product = Product::all()->random();
+
+                if ($product == null || $product->status == 'INVISIBLE') {
+                    continue;
+                }
+
+                if (isset($productsProposed[$product->id])) {
+                    continue;
+                }
+
+                $pr                             = array();
+                $pr['url']                      = route('productPage') . '?id=' . $product->id;
+                $pr['name']                     = $product->title;
+                $pr['price']                    = number_format((float) $product->price, 2, '.', '');
+                $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
+                $productsProposed[$product->id] = $pr;
+
+            }
+
+        } else {
+
+            foreach ($productsHistorySession as $id) {
+
+                $op = Product::where('id', $id)->first();
+
+                for ($i = 0; $i < 4; $i++) {
+
+                    $product = Product::where('category_id', $op->category_id)->get()->random();
+
+                    if ($product == null || $product->status == 'INVISIBLE') {
+                        continue;
+                    }
+
+                    if (isset($productsProposed[$product->id])) {
+                        continue;
+                    }
+
+                    $pr                             = array();
+                    $pr['url']                      = route('productPage') . '?id=' . $product->id;
+                    $pr['name']                     = $product->title;
+                    $pr['price']                    = number_format((float) $product->price, 2, '.', '');
+                    $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
+                    $productsProposed[$product->id] = $pr;
+
+                }
+
+            }
+
+
+            shuffle($productsProposed);
+            $productsProposed = array_slice($productsProposed, 0, 4, true);
+
+
+            while (count($productsProposed) < 4) {
+
+                $product = Product::all()->random();
+
+                if ($product == null || $product->status == 'INVISIBLE') {
+                    continue;
+                }
+
+                if (isset($productsProposed[$product->id])) {
+                    continue;
+                }
+
+                $pr                             = array();
+                $pr['url']                      = route('productPage') . '?id=' . $product->id;
+                $pr['name']                     = $product->title;
+                $pr['price']                    = number_format((float) $product->price, 2, '.', '');
+                $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
+                $productsProposed[$product->id] = $pr;
+
+            }
+
+        }
+
+        return view('home/main')->with('categories', $categoriesData)->with('productsHistory', $productsHistoryData)->with('productsProposed', $productsProposed);
     }
 
     public function productsPage(Request $request)
@@ -272,7 +352,7 @@ class HomeController extends Controller
 
             $category = Category::where('id', $currCategoryID)->first();
 
-            $categoriesPath = '<li class="breadcrumb-item"><a href="' . route('productsPage') .'?category=' . $currCategoryID . '">' . $category->name . '</a></li>' . $categoriesPath;
+            $categoriesPath = '<li class="breadcrumb-item"><a href="' . route('productsPage') . '?category=' . $currCategoryID . '">' . $category->name . '</a></li>' . $categoriesPath;
 
             $currCategoryID = $category->overcategory;
 
@@ -290,14 +370,13 @@ class HomeController extends Controller
 
         array_push($productsHistory, $product->id);
 
-        if(count($productsHistory) > 10) {
+        if (count($productsHistory) > 10) {
             array_shift($productsHistory);
         }
 
-
         $request->session()->put('PRODUCTS_SEEN_HISTORY', $productsHistory);
 
-        $categoriesPath = '<li class="breadcrumb-item"><a href="' . route('productsPage') .'?category=0"><i class="fas fa-home"></i></a></li>' . $categoriesPath;
+        $categoriesPath = '<li class="breadcrumb-item"><a href="' . route('productsPage') . '?category=0"><i class="fas fa-home"></i></a></li>' . $categoriesPath;
 
         $status = "<strong class='text-muted'>BRAK DANYCH</strong>";
 
@@ -310,22 +389,22 @@ class HomeController extends Controller
                 break;
         }
 
-
         $params = json_decode($product->params);
 
-        if(json_last_error() !== JSON_ERROR_NONE)
+        if (json_last_error() !== JSON_ERROR_NONE) {
             $params = array();
+        }
 
         $isFavorite = false;
 
-        if(Auth::guard('web')->check()) {
+        if (Auth::guard('web')->check()) {
             $favs = json_decode(Auth::user()->getFavorites()->products, true);
 
-            if(in_array($request->id, $favs))
+            if (in_array($request->id, $favs)) {
                 $isFavorite = true;
+            }
 
         }
-
 
         return view('products.item')->with('categoriesPath', $categoriesPath)->with('product', $product)->with('status', $status)->with('params', $params)->with('isFavorite', $isFavorite);
     }

@@ -56,7 +56,23 @@
                             
                             <!-- TODO:  -->
                             <div class="row" id="proposedProducts">
+                                @foreach($productsProposed as $product)
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-3">
+                                    <a href="{{ $product['url'] }}" class="tdn">
+                                        <div class="card">
+                                            <img style="height: 200px; width: 100%; display: block;"
+                                            src="/storage/products_images/{{ $product['image'] }}"
+                                            alt="{{ $product['name'] }}">
+
+                                            <div class="card-body">
+                                                <h3 class="card-title">{{ $product['price'] . " " . config('site.currency') }}</h3>
+                                                <h5 class="card-subtitle text-muted">{{ $product['name'] }}</h5>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                @endforeach
+                                <!-- <div class="col-6 col-md-4 col-lg-3 col-xl-3">
                                     <a href="#" class="tdn">
                                         <div class="card">
                                             <img style="height: 200px; width: 100%; display: block;"
@@ -69,7 +85,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
