@@ -31,6 +31,7 @@ use App\Rules\ValidProductPrice;
 use App\Rules\ValidSurName;
 use App\Rules\ValidZipCode;
 use App\User;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -151,10 +152,48 @@ class AdminSystemController extends Controller
         $results = array();
 
         $results['total']                  = array();
-        $results['total']['earningsAll']   = 0;
-        $results['total']['earningsMonth'] = 0;
+
+
+        $res_earningsTotal = DB::table("orders")
+            ->select(DB::raw("SUM(orders.cost) as sum"))
+            ->where(function ($query) {
+                $query->where('orders.status', '=', 'PAID')->orWhere('orders.status', '=', 'REALIZE')->orWhere('orders.status', '=', 'SENT')->orWhere('orders.status', '=', 'RECEIVE');
+            })
+            ->first();
+
+
+        $results['total']['earningsAll']   = number_format(($res_earningsTotal->sum ?? 0), 2, '.', ' ');
+
+
+        $res_earningsMonth = DB::table("orders")
+            ->select(DB::raw("SUM(orders.cost) as sum"))
+            ->where(function ($query) {
+                $query->where('orders.status', '=', 'PAID')->orWhere('orders.status', '=', 'REALIZE')->orWhere('orders.status', '=', 'SENT')->orWhere('orders.status', '=', 'RECEIVE');
+            })
+            ->whereRaw('YEAR(orders.created_at) = YEAR(CURDATE()) AND MONTH(orders.created_at) = MONTH(CURDATE())')
+            ->first();
+
+        $results['total']['earningsMonth'] = number_format(($res_earningsMonth->sum ?? 0), 2, '.', ' ');
+
+
         $results['total']['products']      = count(Product::all());
-        $results['total']['reports']       = 0;
+        $results['total']['orders']      = count(Order::all());
+
+        $results['earningsMonth'] = array();
+
+        $res_earningsByMonth = DB::table("orders")
+            ->select(DB::raw("MONTH(orders.created_at) as month, SUM(orders_products.price) as sum"))
+            ->join('orders_products', 'orders.id', '=', 'orders_products.order_id')
+            ->where(function ($query) {
+                $query->where('orders.status', '=', 'PAID')->orWhere('orders.status', '=', 'REALIZE')->orWhere('orders.status', '=', 'SENT')->orWhere('orders.status', '=', 'RECEIVE');
+            })
+            ->whereRaw('YEAR(orders.created_at) = YEAR(CURDATE())')
+            ->groupBy(DB::raw('YEAR(orders.created_at), MONTH(orders.created_at)'))
+            ->get();
+
+        foreach ($res_earningsByMonth as $v) {
+            $results['earningsMonth'][$v->month] = $v->sum;
+        }
 
         $results['success'] = true;
         return response()->json($results);
@@ -1066,8 +1105,9 @@ class AdminSystemController extends Controller
             $data['retry']   = null;
             $data['allowed'] = array();
 
-            if(Storage::exists('allowed_ips.json'))
+            if (Storage::exists('allowed_ips.json')) {
                 $data['allowed'] = json_decode(Storage::get('allowed_ips.json'), true);
+            }
 
             File::put(storage_path('framework/down'), json_encode($data, JSON_PRETTY_PRINT));
         } else {
@@ -1094,8 +1134,10 @@ class AdminSystemController extends Controller
         }
 
         $ips = array();
-        if(Storage::exists('allowed_ips.json'))
+
+        if (Storage::exists('allowed_ips.json')) {
             $ips = json_decode(Storage::get('allowed_ips.json'), true);
+        }
 
         if (in_array($request->ip, $ips)) {
             $results['success'] = false;
@@ -1107,14 +1149,14 @@ class AdminSystemController extends Controller
 
         Storage::put('allowed_ips.json', json_encode($ips, JSON_PRETTY_PRINT));
 
-        if(File::exists(storage_path('framework/down'))) {
-            $mainInfo = json_decode(File::get(storage_path('framework/down')), true);
+        if (File::exists(storage_path('framework/down'))) {
+            $mainInfo            = json_decode(File::get(storage_path('framework/down')), true);
             $mainInfo['allowed'] = $ips;
             File::put(storage_path('framework/down'), json_encode($mainInfo, JSON_PRETTY_PRINT));
         }
 
         $results['success'] = true;
-        $results['list'] = $ips;
+        $results['list']    = $ips;
         return response()->json($results);
     }
 
@@ -1155,14 +1197,14 @@ class AdminSystemController extends Controller
 
         Storage::put('allowed_ips.json', json_encode($ips, JSON_PRETTY_PRINT));
 
-        if(File::exists(storage_path('framework/down'))) {
-            $mainInfo = json_decode(File::get(storage_path('framework/down')), true);
+        if (File::exists(storage_path('framework/down'))) {
+            $mainInfo            = json_decode(File::get(storage_path('framework/down')), true);
             $mainInfo['allowed'] = $ips;
             File::put(storage_path('framework/down'), json_encode($mainInfo, JSON_PRETTY_PRINT));
         }
 
         $results['success'] = true;
-        $results['list'] = $ips;
+        $results['list']    = $ips;
         return response()->json($results);
     }
 
