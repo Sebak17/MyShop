@@ -13,15 +13,17 @@ class OrderCreateMail extends Mailable
     use Queueable, SerializesModels;
 
     public $order;
+    public $subject;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct(Order $order, $subject)
     {
         $this->order = $order;
+        $this->subject = $subject;
     }
 
     /**
@@ -36,6 +38,6 @@ class OrderCreateMail extends Mailable
 
         $buyerInfo         = json_decode($this->order->buyer_info, true);
 
-        return $this->markdown('emails.order_create')->with('order', $this->order)->with('deliverInfo', $deliverInfo)->with('buyerInfo', $buyerInfo);
+        return $this->markdown('emails.order_create')->subject($this->subject)->with('order', $this->order)->with('deliverInfo', $deliverInfo)->with('buyerInfo', $buyerInfo);
     }
 }

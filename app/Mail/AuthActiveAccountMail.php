@@ -13,15 +13,17 @@ class AuthActiveAccountMail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+    public $subject;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, $subject)
     {
         $this->user = $user;
+        $this->subject = $subject;
     }
 
     /**
@@ -31,6 +33,6 @@ class AuthActiveAccountMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.auth_activeaccount');
+        return $this->markdown('emails.auth_activeaccount')->subject($this->subject);
     }
 }

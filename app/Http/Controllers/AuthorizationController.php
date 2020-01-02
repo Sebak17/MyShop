@@ -260,7 +260,9 @@ class AuthorizationController extends Controller
             "Stworzono konto",
         );
 
-        Mail::to($user->email)->subject('Dziękujemy za rejestracę w naszym serwisie')->send(new AuthCreateAccountMail($user));
+        $subject = 'Dziękujemy za rejestracę w naszym serwisie';
+
+        Mail::to($user->email)->send(new AuthCreateAccountMail($user, $subject));
 
         $results['success'] = true;
         $results['msg']     = "Potwierdź swoje konta na email'u!";
@@ -317,7 +319,9 @@ class AuthorizationController extends Controller
             "Wysłano maila aktywującego",
         );
 
-        Mail::to($user->email)->subject('Aktywacja konta')->send(new AuthActiveAccountMail($user));
+        $subject = 'Aktywacja konta';
+
+        Mail::to($user->email)->send(new AuthActiveAccountMail($user, $subject));
 
         $results['success'] = true;
         return response()->json($results);
@@ -373,7 +377,9 @@ class AuthorizationController extends Controller
             "Wysłano maila resetującego hasło",
         );
 
-        Mail::to($user->email)->subject('Resetowanie hasła')->send(new AuthResetPasswordMail($user));
+        $subject = 'Resetowanie hasła';
+
+        Mail::to($user->email)->send(new AuthResetPasswordMail($user, $subject));
 
         $results['success'] = true;
         return response()->json($results);
