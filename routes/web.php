@@ -73,8 +73,6 @@ Route::prefix('panel')->group(function () {
     Route::get('/zamowienia', 'PanelController@ordersPage')->name('panel_orders');
 
     Route::get('/ustawienia', 'PanelController@settingsPage')->name('panel_settings');
-
-    Route::get('/zgloszenia', 'PanelController@reportsPage')->name('panel_reports');
 });
 
 //

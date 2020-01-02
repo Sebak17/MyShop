@@ -55,13 +55,6 @@
 
 		</li>
 
-		<li class="nav-item">
-			<a class="nav-link" href="">
-				<i class="fas fa-fw fa-user-injured"></i>
-				<span>Zgłoszenia</span>
-			</a>
-		</li>
-
 		<hr class="sidebar-divider d-none d-md-block">
 		
 		<li class="nav-item">

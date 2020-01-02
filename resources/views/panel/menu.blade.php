@@ -12,11 +12,6 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="{{ route('panel_reports') }}">
-					<i class="fas fa-envelope fa-1x"></i> Zgłoszenia
-				</a>
-			</li>
-			<li class="nav-item">
 				<a class="nav-link" href="{{ route('panel_settings') }}">
 					<i class="fas fa-cog fa-1x"></i> Ustawienia
 				</a>

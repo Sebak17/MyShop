@@ -156,11 +156,6 @@ class PanelController extends Controller
         return view('panel.orders')->with('orders', $orders);
     }
 
-    public function reportsPage()
-    {
-        return view('panel.reports');
-    }
-
     public function settingsPage()
     {
         return view('panel.settings');
