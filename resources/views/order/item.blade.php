@@ -153,6 +153,14 @@
                 <div id="lockerInfo">
                 </div>
                 @endif
+
+                <hr >
+
+                <div class="row text-left ml-2">
+                    <div class="col-6 lead">Numer przesyłki: </div>
+                    <div class="col-6 lead">{!! $order->deliver_parcelID ?? '<i class="fas fa-question-circle"></i>' !!}</div>
+                </div>
+                
                 
                 <hr />
                 

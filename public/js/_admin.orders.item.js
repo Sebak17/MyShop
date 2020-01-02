@@ -33,6 +33,10 @@ function bindButtons() {
         $('#modalChangeCost').modal('show');
     });
 
+    $('#btnChangeParcelIDModal').click(function () {
+        $('#modalChangeParcelID').modal('show');
+    });
+
 
 
     $("#inp_orderDeliverType").each(function (index) {
@@ -56,6 +60,10 @@ function bindButtons() {
 
     $('#btnChangeCost').click(function () {
         changeOrderCost();
+    });
+
+    $('#btnChangeParcelID').click(function () {
+        changeParcelID();
     });
 
 }
@@ -283,6 +291,40 @@ function changeOrderCost() {
         },
         error: function () {
             showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert03');
+        }
+    });
+}
+
+function changeParcelID() {
+    let parcelID = $("#inp_orderParcelID").val();
+
+    if (parcelID == null)
+        return;
+
+    $.ajax({
+        url: "/systemAdmin/orderChangeParcelID",
+        method: "POST",
+        data: {
+            id: _orderID,
+            parcelID: parcelID,
+        },
+        success: function (data) {
+            try {
+                if (data.success == true) {
+                    showAlert(AlertType.SUCCESS, Lang.ORDER_PARCELID_SUCCESS, '#alert04');
+
+                    setTimeout(function (argument) {
+                        location.reload();
+                    }, 800);
+                } else {
+                    showAlert(AlertType.ERROR, data.msg, '#alert04');
+                }
+            } catch (e) {
+                showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert04');
+            }
+        },
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert04');
         }
     });
 }

@@ -893,6 +893,43 @@ class AdminSystemController extends Controller
         return response()->json($results);
     }
 
+    public function orderChangeParcelID(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'   => new ValidID,
+            'parcelID' => "required|string|min:10|max:120",
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $order = Order::where('id', $request->id)->first();
+
+        if ($order == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie znaleziono zamówienia!";
+            return response()->json($results);
+        }
+
+        OrderHistory::create([
+            'order_id' => $order->id,
+            'data'     => 'Zmiana numeru przesyłki na ' . $request->parcelID,
+        ]);
+
+        $order->deliver_parcelID = $request->parcelID;
+        $order->save();
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
     //
     //      USER MANAGER SITES
     //

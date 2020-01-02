@@ -211,6 +211,7 @@ Route::prefix('systemAdmin')->group(function () {
     Route::post('orderChangeDeliverLoc', 'AdminSystemController@orderChangeDeliverLoc');
     Route::post('orderChangePayment', 'AdminSystemController@orderChangePayment');
     Route::post('orderChangeCost', 'AdminSystemController@orderChangeCost');
+    Route::post('orderChangeParcelID', 'AdminSystemController@orderChangeParcelID');
 
 
     //

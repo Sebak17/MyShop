@@ -94,12 +94,18 @@
 					<div id="lockerInfo">
 					</div>
 					@endif
+
+					<div class="row text-left ml-2">
+						<div class="col-6">Numer przesyłki: </div>
+						<div class="col-6"><strong>{!! $order->deliver_parcelID ?? '<i class="fas fa-question-circle"></i>' !!}</strong></div>
+					</div>
 					
 					@if($deliverInfo['type'] == 'INPOST_LOCKER')
 					<div class="form-group text-right">
 						<button class="btn btn-info" id="btnShowLocLocker">Pokaż na mapie <i class="fas fa-map-marker-alt"></i></button>
 					</div>
 					@endif
+					
 				</div>
 				
 			</div>
@@ -146,6 +152,8 @@
 						<button class="btn btn-info" id="btnChangeStatusModal"><i class="fas fa-edit"></i> Nadaj status</button>
 						
 						<button class="btn btn-info mt-2" id="btnChangeCostModal"><i class="fas fa-money-bill-wave-alt"></i> Zmień koszt</button>
+
+						<button class="btn btn-info mt-2" id="btnChangeParcelIDModal"><i class="fas fa-truck-loading"></i> Nadaj numer przesyłki</button>
 					</div>
 				</div>
 			</div>
@@ -434,6 +442,35 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
 				<button type="button" class="btn btn-success" id="btnChangePayment">Zmień <i class="fas fa-exchange-alt"></i></button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<!-- Order change deliver parcel ID -->
+<div class="modal fade" id="modalChangeParcelID">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-wrench"></i> Zmień numer przesyłki</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="alert d-none" id="alert04"></div>
+				
+				<div class="form-group">
+					<label for="inp_orderParcelID">Podaj numer przesyłki:</label>
+					<input type="text" id="inp_orderParcelID" class="form-control">
+				</div>
+				
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
+				<button type="button" class="btn btn-success" id="btnChangeParcelID">Zmień <i class="fas fa-exchange-alt"></i></button>
 			</div>
 			
 		</div>
