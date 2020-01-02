@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Payments\PayPalHelper;
 use App\Helpers\Payments\PayUHelper;
 use App\Order;
+use App\OrderProduct;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -143,8 +144,36 @@ class PanelController extends Controller
         $user = Auth::user();
 
         $summary['orders'] = count($user->orders);
+        $summary['products'] = count($user->orders);
 
-        return view('panel.dashboard')->with('summary', $summary);
+        $lastProducts = array();
+
+        $orders_products = OrderProduct::join('orders', 'orders_products.order_id', '=', 'orders.id')
+            ->where(function ($query) {
+                $query->where('orders.status', '=', 'PAID')->orWhere('orders.status', '=', 'REALIZE')->orWhere('orders.status', '=', 'SENT')->orWhere('orders.status', '=', 'RECEIVE');
+            })->where(function ($query) use ($user) {
+                $query->where('orders.user_id', '=', $user->id);
+            })
+            ->orderBy('orders_products.id', 'desc')
+            ->limit(5)
+            ->get();
+
+        foreach ($orders_products as $pr) {
+            $product = Product::where('id', $pr->id)->first();
+
+            if ($product == null || $product->status == 'INVISIBLE') {
+                continue;
+            }
+
+            $pr          = array();
+            $pr['url']   = route('productPage') . '?id=' . $product->id;
+            $pr['name']  = $product->title;
+            $pr['price'] = number_format((float) $product->price, 2, '.', '');
+            $pr['image'] = (count($product->images) > 0 ? $product->images[0]->name : null);
+            array_push($lastProducts, $pr);
+        }
+
+        return view('panel.dashboard')->with('user', $user)->with('summary', $summary)->with('lastProducts', $lastProducts);
     }
 
     public function ordersPage()
@@ -152,6 +181,8 @@ class PanelController extends Controller
         $user = Auth::user();
 
         $orders = $user->orders;
+
+
 
         return view('panel.orders')->with('orders', $orders);
     }
