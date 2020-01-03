@@ -1,6 +1,4 @@
 window.onload = function () {
-    stickFooter();
-
     $("#btnResetPass").click(function () {
         emailResetPassword();
     });

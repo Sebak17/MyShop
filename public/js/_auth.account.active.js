@@ -1,6 +1,4 @@
 window.onload = function () {
-    stickFooter();
-
     $("#btnActive").click(function () {
         emailActivation();
     });

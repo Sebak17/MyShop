@@ -8,8 +8,6 @@ var registerProgress = 0,
 
 window.onload = function () {
 
-    stickFooter();
-
     loadAuthSignUp();
     startProccess();
 

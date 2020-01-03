@@ -3,8 +3,6 @@ grecaptcha.ready(function () {
 });
 
 window.onload = function () {
-    stickFooter();
-
     $("#btnChange").click(function () {
         formResetPassword();
     });

@@ -2,8 +2,6 @@ var products = [];
 
 window.onload = function () {
 
-    stickFooter();
-
     loadProducts();
 
     $("#btnNext").click(function() {

@@ -25,10 +25,4 @@
 
 <script src="{{ asset('js/_search.engine.js') }}" charset="utf-8"></script>
 
-<script>
-$(document).ready(function() {
-stickFooter();
-});
-</script>
-
 @endsection

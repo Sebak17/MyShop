@@ -104,13 +104,6 @@ function showAlertDismissible(type, text = '', id = '', useIcon = false) {
     }
 }
 
-function stickFooter() {
-
-    $("#footer").addClass("fixed-bottom");
-    $("#footer").css("z-index", "-1");
-
-}
-
 function changeTitle(a) {
     if (a != "")
         a = " - " + a;
