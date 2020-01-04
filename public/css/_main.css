@@ -163,3 +163,7 @@ ul.timeline>li.ready:before {
 ul.timeline>li.active:before {
     background: #64d2ee;
 }
+
+.btn.dropdown-toggle::before {
+    display: none !important;
+}

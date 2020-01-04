@@ -12,7 +12,8 @@
 	</button>
 	<div class="navbar-collapse collapse justify-content-center" id="menuMav">
 	<ul class="nav navbar-nav justify-content-end col-sm-0 col-md-1 col-lg-0"></ul>
-	<ul class="nav navbar-nav justify-content-center col-md-5 col-lg-6 col-xl-7">
+
+	<ul class="nav navbar-nav justify-content-center col-md-5 col-lg-6 col-xl-7 mt-0 mt-sm-3" style="padding-right: 0;">
 		<fieldset class="w-100">
 			<div class="input-group">
 				<input type="text" class="form-control" id="searchBox" placeholder="Wpisz podaną frazę">
@@ -22,28 +23,29 @@
 			</div>
 		</fieldset>
 	</ul>
+
 	<ul class="nav navbar-nav d-flex align-items-center justify-content-end col-md-6 col-lg-5 col-xl-4">
 		
 		@auth('web')
-		<li class="nav-item h-100 col-3 col-md-2">
+		<li class="nav-item h-100 col-12 col-md-2 text-center mt-0 mt-sm-3">
 			<a href="{{ route('favoritesPage') }}">
 				<i class="fas fa-heart fa-2x"></i>
 			</a>
 		</li>
 		
-		<li class="nav-item h-100 col-3 col-md-2">
+		<li class="nav-item h-100 col-12 col-md-2 text-center mt-0 mt-sm-3">
 			<a href="{{ route('shoppingCartPage') }}">
 				<i class="fas fa-shopping-basket fa-2x"></i>
 			</a>
 		</li>
 		
-		<li class="nav-item h-100 col-6 col-md-8 dropdown">
+		<li class="nav-item h-100 col-12 col-md-8 dropdown mt-0 mt-sm-3 text-center">
 			
-			<a class="" id="navbardrop" data-toggle="dropdown">
-				<button type="button" class="btn btn-primary"><i class="far fa-user-circle"></i> {{ Auth::user()->email }} &nbsp;<i class="fas fa-arrow-down"></i></button>
-			</a>
+			<button class="btn btn-primary dropdown-toggle" type="button" id="navbardrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<i class="far fa-user-circle"></i> {{ Auth::user()->email }} &nbsp;<i class="fas fa-arrow-down"></i>
+			</button>
 			
-			<div class="dropdown-menu">
+			<div class="dropdown-menu" style="left: 15%; right: 15%;">
 				<a class="dropdown-item" href="{{ route('panel_main') }}">
 					<i class="fas fa-solar-panel"></i> Panel
 				</a>
