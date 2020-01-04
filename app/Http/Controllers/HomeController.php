@@ -52,38 +52,68 @@ class HomeController extends Controller
 
         $productsProposed = array();
 
-        if (empty($productsHistorySession)) {
+        if(Product::all()->count() > 0) {
 
-            while (count($productsProposed) != 4) {
+            if (empty($productsHistorySession)) {
 
-                $product = Product::all()->random();
+                while (count($productsProposed) != 4) {
 
-                if ($product == null || $product->status == 'INVISIBLE') {
-                    continue;
+                    $product = Product::all()->random();
+
+                    if ($product == null || $product->status == 'INVISIBLE') {
+                        continue;
+                    }
+
+                    if (isset($productsProposed[$product->id])) {
+                        continue;
+                    }
+
+                    $pr                             = array();
+                    $pr['url']                      = route('productPage') . '?id=' . $product->id;
+                    $pr['name']                     = $product->title;
+                    $pr['price']                    = number_format((float) $product->price, 2, '.', '');
+                    $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
+                    $productsProposed[$product->id] = $pr;
+
                 }
 
-                if (isset($productsProposed[$product->id])) {
-                    continue;
+            } else {
+
+                foreach ($productsHistorySession as $id) {
+
+                    $op = Product::where('id', $id)->first();
+
+                    for ($i = 0; $i < 4; $i++) {
+
+                        $product = Product::where('category_id', $op->category_id)->get()->random();
+
+                        if ($product == null || $product->status == 'INVISIBLE') {
+                            continue;
+                        }
+
+                        if (isset($productsProposed[$product->id])) {
+                            continue;
+                        }
+
+                        $pr                             = array();
+                        $pr['url']                      = route('productPage') . '?id=' . $product->id;
+                        $pr['name']                     = $product->title;
+                        $pr['price']                    = number_format((float) $product->price, 2, '.', '');
+                        $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
+                        $productsProposed[$product->id] = $pr;
+
+                    }
+
                 }
 
-                $pr                             = array();
-                $pr['url']                      = route('productPage') . '?id=' . $product->id;
-                $pr['name']                     = $product->title;
-                $pr['price']                    = number_format((float) $product->price, 2, '.', '');
-                $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
-                $productsProposed[$product->id] = $pr;
 
-            }
+                shuffle($productsProposed);
+                $productsProposed = array_slice($productsProposed, 0, 4, true);
 
-        } else {
 
-            foreach ($productsHistorySession as $id) {
+                while (count($productsProposed) < 4) {
 
-                $op = Product::where('id', $id)->first();
-
-                for ($i = 0; $i < 4; $i++) {
-
-                    $product = Product::where('category_id', $op->category_id)->get()->random();
+                    $product = Product::all()->random();
 
                     if ($product == null || $product->status == 'INVISIBLE') {
                         continue;
@@ -103,33 +133,6 @@ class HomeController extends Controller
                 }
 
             }
-
-
-            shuffle($productsProposed);
-            $productsProposed = array_slice($productsProposed, 0, 4, true);
-
-
-            while (count($productsProposed) < 4) {
-
-                $product = Product::all()->random();
-
-                if ($product == null || $product->status == 'INVISIBLE') {
-                    continue;
-                }
-
-                if (isset($productsProposed[$product->id])) {
-                    continue;
-                }
-
-                $pr                             = array();
-                $pr['url']                      = route('productPage') . '?id=' . $product->id;
-                $pr['name']                     = $product->title;
-                $pr['price']                    = number_format((float) $product->price, 2, '.', '');
-                $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
-                $productsProposed[$product->id] = $pr;
-
-            }
-
         }
 
         return view('home/main')->with('categories', $categoriesData)->with('productsHistory', $productsHistoryData)->with('productsProposed', $productsProposed);
