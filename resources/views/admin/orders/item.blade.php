@@ -159,8 +159,15 @@
 			</div>
 			
 			<div class="card card-body mb-3">
-				<legend><i class="fas fa-money-bill-wave-alt"></i> Informacje płatnicze</legend>
+				<legend><i class="fas fa-info"></i> Informacje</legend>
 				
+				<hr />
+
+				<div class="row text-left ml-2">
+					<div class="col-6">Data złożenia: </div>
+					<div class="col-6"><strong>{{ $order->created_at }}</strong></div>
+				</div>
+
 				<hr />
 				
 				<div class="row text-left ml-2">

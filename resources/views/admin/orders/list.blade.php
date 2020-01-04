@@ -23,6 +23,7 @@
 							<th>Ilość produktów</th>
 							<th>Koszt</th>
 							<th>Status</th>
+							<th>Data złożenia</th>
 							<th>Opcje</th>
 						</tr>
 					</thead>
@@ -37,6 +38,7 @@
 							<td>{{ count($order->products) }}</td>
 							<td>{{ $order->cost }} {{ config('site.currency') }}</td>
 							<td>{{ config('site.order_status.'.$order->status) }}</td>
+							<td>{{ $order->created_at }}</td>
 							<td>
 								<a href="{{ route('admin_orderPageID', $order->id) }}" target="_blank">
 									<button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i> Pokaż</button>
