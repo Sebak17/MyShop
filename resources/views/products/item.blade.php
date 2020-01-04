@@ -15,14 +15,14 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-6">
+				<div class="col-12 col-md-6">
 					<div class="card card-body mb-3">
 						<div id="imgCarousel" class="carousel slide" data-ride="carousel">
 							
-							<div class="carousel-inner" style="height: 400px;">
+							<div class="carousel-inner" style="height: 45vh">
 								@for ($i = 0 ; $i < count($product->images) ; $i++)
 								<div class="carousel-item {{ ( $i == 0 ? 'active' : '') }}">
-									<img src="/storage/products_images/{{ $product->images[$i]->name }}" alt="Zdjęcie {{ $i }}" class="mx-auto d-block" style="width: 100%; max-height: 400px;">
+									<img src="/storage/products_images/{{ $product->images[$i]->name }}" alt="Zdjęcie {{ $i }}" class="mx-auto d-block" style="max-width: 100%; max-height: 400px;">
 								</div>
 								@endfor
 							</div>
@@ -37,7 +37,7 @@
 					</div>
 				</div>
 				
-				<div class="col-6 mb-3">
+				<div class="col-12 col-md-6 mb-3">
 					<div class="card card-body">
 						<legend>
 							@if(Auth::guard('web')->check())
