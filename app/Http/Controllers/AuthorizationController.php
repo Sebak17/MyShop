@@ -120,7 +120,7 @@ class AuthorizationController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'grecaptcha' => new ValidReCaptcha,
+            'grecaptcha' => ['required', new ValidReCaptcha],
             'email'      => new ValidEMail,
             'password'   => new ValidPassword,
         ]);
@@ -193,7 +193,7 @@ class AuthorizationController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'grecaptcha' => new ValidReCaptcha,
+            'grecaptcha' => ['required', new ValidReCaptcha],
             'email'      => new ValidEMail,
             'pass'       => new ValidPassword,
             'firstname'  => new ValidFirstName,
@@ -272,7 +272,7 @@ class AuthorizationController extends Controller
     public function activateAccountMail(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'grecaptcha' => new ValidReCaptcha,
+            'grecaptcha' => ['required', new ValidReCaptcha],
             'email'      => new ValidEMail,
         ]);
 
@@ -330,7 +330,7 @@ class AuthorizationController extends Controller
     public function resetPasswordMail(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'grecaptcha' => new ValidReCaptcha,
+            'grecaptcha' => ['required', new ValidReCaptcha],
             'email'      => new ValidEMail,
             'phone'      => new ValidPhoneNumber,
         ]);
@@ -388,7 +388,7 @@ class AuthorizationController extends Controller
     public function resetPasswordChange(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'grecaptcha' => new ValidReCaptcha,
+            'grecaptcha' => ['required', new ValidReCaptcha],
             'password'   => new ValidPassword,
         ]);
 

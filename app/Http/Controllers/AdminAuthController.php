@@ -35,7 +35,7 @@ class AdminAuthController extends Controller
     public function signIn(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'grecaptcha' => new ValidReCaptcha,
+            'grecaptcha' => ['required', new ValidReCaptcha],
             'login'      => new ValidLogin,
             'password'   => new ValidPassword,
         ]);
