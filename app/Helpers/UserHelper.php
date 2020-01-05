@@ -18,7 +18,7 @@ class UserHelper
             'user_id' => $user->id,
             'type'    => $type,
             'data'    => $msg,
-            'ip'      => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';,
+            'ip'      => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
         ]);
 
     }
