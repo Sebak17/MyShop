@@ -6,9 +6,12 @@ use App\User;
 use App\UserLocation;
 use App\UserPersonal;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class AuthTest extends TestCase
 {
+
+    use WithFaker;
 
     private $currentUser;
 
@@ -60,7 +63,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function form_signin_in_correct_email()
+    public function form_signin_incorrect_email()
     {
     	$this->withoutExceptionHandling();
 
@@ -79,7 +82,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function form_signin_in_correct_password()
+    public function form_signin_incorrect_password()
     {
     	$this->withoutExceptionHandling();
 
@@ -98,7 +101,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function form_signin_in_correct_recaptcha()
+    public function form_signin_incorrect_recaptcha()
     {
     	$this->withoutExceptionHandling();
 
@@ -114,5 +117,40 @@ class AuthTest extends TestCase
 
         if($result['success'])
 	        $this->fail('Succes sign in to panel with incorrect recaptcha');
+    }
+
+
+    /** @test */
+    public function form_signup_only_not_logged_in_users_can_see()
+    {
+        $response = $this->post('/system/signUp')->assertOk();
+    }
+
+    /** @test */
+    public function form_signup_only_not_authenticated_users_can_see()
+    {
+        $this->actingAsUser();
+
+        $response = $this->post('/system/signUp')->assertRedirect('/');
+    }
+
+    /** @test */
+    public function form_signup_correct_data()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->createUser();
+
+        $response = $this->post('/system/signUp', [
+            'email' => $this->faker->unique()->safeEmail, 
+            'password' => 'password',
+            'grecaptcha' => 'PHP_UNIT_TEST_API_DSAIUBAVS9A47TGB47A804GBS'
+        ]
+        )->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if(!$result['success'])
+            $this->fail($result['msg']);
     }
 }

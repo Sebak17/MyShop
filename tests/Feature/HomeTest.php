@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,5 +16,13 @@ class HomeTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function page_products_sites()
+    {
+    	foreach (Product::all() as $product) {
+    		$response = $this->get(route('productPage') . "?id=" . $product->id)->assertOk();
+    	}
     }
 }
