@@ -129,8 +129,11 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'grecaptcha' => [
+            'required' =>  'Błędny kod recaptcha!',
+        ],
+        'email' => [
+            'required' => 'Musisz podać adres email!',
         ],
     ],
 
