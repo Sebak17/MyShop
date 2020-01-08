@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidOrderStatus implements Rule
+class ValidOrderStatus implements ImplicitRule
 {
+
+    private $msg = "Status jest niepoprawny!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidOrderStatus implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+
         if(!in_array($value, ['CREATED','UNPAID','PROCESSING','PAID','REALIZE','SENT','RECEIVE','CANCELED']))
             return false;
         return true;
@@ -37,6 +44,6 @@ class ValidOrderStatus implements Rule
      */
     public function message()
     {
-        return 'Status jest niepoprawny!';
+        return $this->msg;
     }
 }

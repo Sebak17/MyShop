@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidEMail implements Rule
+class ValidEMail implements ImplicitRule
 {
+
+    private $msg = "E-Mail jest niepoprawny!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidEMail implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+        
         if (strlen($value) < 5) {
             return false;
         }
@@ -47,6 +54,6 @@ class ValidEMail implements Rule
      */
     public function message()
     {
-        return 'E-Mail jest niepoprawny!';
+        return $this->msg;
     }
 }

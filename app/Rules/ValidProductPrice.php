@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidProductPrice implements Rule
+class ValidProductPrice implements ImplicitRule
 {
+
+    private $msg = "Cena produktu jest niepoprawna!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidProductPrice implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+
         if (!is_numeric($value)) {
             return false;
         }
@@ -43,6 +50,6 @@ class ValidProductPrice implements Rule
      */
     public function message()
     {
-         return 'Cena produktu jest niepoprawna!';
+         return $this->msg;
     }
 }

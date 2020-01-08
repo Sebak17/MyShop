@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidCategoryName implements Rule
+class ValidCategoryName implements ImplicitRule
 {
+
+    private $msg = "Nazwa kategorii jest niepoprawna!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidCategoryName implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+        
         if (!preg_match('/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+$/', $value)) {
             return false;
         }
@@ -42,6 +49,6 @@ class ValidCategoryName implements Rule
      */
     public function message()
     {
-        return 'Nazwa kategorii jest niepoprawna!';
+        return $this->msg;
     }
 }

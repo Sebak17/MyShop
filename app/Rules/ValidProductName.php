@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidProductName implements Rule
+class ValidProductName implements ImplicitRule
 {
+
+    private $msg = "Nazwa pruduktu jest niepoprawna! (4-120)";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidProductName implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+
         if (mb_strlen($value) < 4) {
             return false;
         }
@@ -47,6 +54,6 @@ class ValidProductName implements Rule
      */
     public function message()
     {
-        return 'Nazwa pruduktu jest niepoprawna! (4-120)';
+        return $this->msg;
     }
 }

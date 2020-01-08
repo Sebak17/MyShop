@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidLogin implements Rule
+class ValidLogin implements ImplicitRule
 {
+
+    private $msg = "Login jest niepoprawny!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,9 @@ class ValidLogin implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
 
     	if (!preg_match("/^[a-zA-Z0-9]+$/", $value)) {
             return false;
@@ -48,7 +54,7 @@ class ValidLogin implements Rule
      */
     public function message()
     {
-        return 'Login jest niepoprawny!';
+        return $this->msg;
     }
 
 }

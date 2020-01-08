@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidDistrict implements Rule
+class ValidDistrict implements ImplicitRule
 {
+
+    private $msg = "Województwo jest niepoprawne!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidDistrict implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+        
         if (!is_numeric($value)) {
             return false;
         }
@@ -43,6 +50,6 @@ class ValidDistrict implements Rule
      */
     public function message()
     {
-        return 'Województwo jest niepoprawne!';
+        return $this->msg;
     }
 }

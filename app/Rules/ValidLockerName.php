@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidLockerName implements Rule
+class ValidLockerName implements ImplicitRule
 {
+
+    private $msg = "Nazwa paczkomatu jest nieprawidłowa!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,9 @@ class ValidLockerName implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
 
         if (mb_strlen($value) > 14) {
             return false;
@@ -48,7 +54,7 @@ class ValidLockerName implements Rule
      */
     public function message()
     {
-        return 'Nazwa paczkomatu jest nieprawidłowa!';
+        return $this->msg;
     }
 
 }

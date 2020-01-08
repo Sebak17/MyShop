@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidFirstName implements Rule
+class ValidFirstName implements ImplicitRule
 {
+
+    private $msg = "Imię jest niepoprawne!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidFirstName implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+        
         if (mb_strlen($value) < 3) {
             return false;
         }
@@ -47,6 +54,6 @@ class ValidFirstName implements Rule
      */
     public function message()
     {
-        return 'Imię jest niepoprawne!';
+        return $this->msg;
     }
 }

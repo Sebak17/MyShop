@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidPhoneNumber implements Rule
+class ValidPhoneNumber implements ImplicitRule
 {
+
+    private $msg = "Numer telefonu jest niepoprawny!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidPhoneNumber implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+
         if (!is_numeric($value)) {
             return false;
         }
@@ -43,6 +50,6 @@ class ValidPhoneNumber implements Rule
      */
     public function message()
     {
-        return 'Numer telefonu jest niepoprawny!';
+        return $this->msg;
     }
 }

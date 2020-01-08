@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidProductImage implements Rule
+class ValidProductImage implements ImplicitRule
 {
+
+    private $msg = "Zdjęcie jest niepoprawne!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,9 @@ class ValidProductImage implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
 
         if (strlen($value) < 20) {
             return false;
@@ -44,7 +50,7 @@ class ValidProductImage implements Rule
      */
     public function message()
     {
-        return 'Zdjęcie jest niepoprawne!';
+        return $this->msg;
     }
 
 }

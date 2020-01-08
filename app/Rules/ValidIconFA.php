@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidIconFA implements Rule
+class ValidIconFA implements ImplicitRule
 {
+
+    private $msg = "Ikona jest niepoprawna!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidIconFA implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+        
         if (!preg_match('/^[a-zA-Z0-9-]+$/', $value)) {
             return false;
         }
@@ -43,6 +50,6 @@ class ValidIconFA implements Rule
      */
     public function message()
     {
-        return 'Ikona jest niepoprawna!';
+        return $this->msg;
     }
 }

@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidMaintenanceMessage implements Rule
+class ValidMaintenanceMessage implements ImplicitRule
 {
+
+    private $msg = "Opis jest niepoprawny!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidMaintenanceMessage implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+
         if (mb_strlen($value) < 4) {
             return false;
         }
@@ -47,6 +54,6 @@ class ValidMaintenanceMessage implements Rule
      */
     public function message()
     {
-        return 'Opis jest niepoprawny!';
+        return $this->msg;
     }
 }

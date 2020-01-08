@@ -6,6 +6,9 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidBanDescription implements Rule
 {
+
+    private $msg = "Opis jest niepoprawny!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,11 @@ class ValidBanDescription implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            $this->msg = "Podaj opis blokady!";
+            return false;
+        }
+
         if (mb_strlen($value) < 4) {
             return false;
         }
@@ -47,6 +55,6 @@ class ValidBanDescription implements Rule
      */
     public function message()
     {
-        return 'Opis jest niepoprawny!';
+        return $this->msg;
     }
 }

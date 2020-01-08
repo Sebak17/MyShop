@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidReCaptcha implements Rule
+class ValidReCaptcha implements ImplicitRule
 {
+
+    private $msg = "Nie poprawny kod ReCaptcha!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidReCaptcha implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            $this->msg = "Brak kodu recaptcha!";
+            return false;
+        }
 
         if($value == 'PHP_UNIT_TEST_API_DSAIUBAVS9A47TGB47A804GBS')
             return true;
@@ -42,6 +49,6 @@ class ValidReCaptcha implements Rule
      */
     public function message()
     {
-        return 'Nie poprawny kod ReCaptcha!';
+        return $this->msg;
     }
 }

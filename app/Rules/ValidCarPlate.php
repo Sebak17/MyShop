@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidCarPlate implements Rule
+class ValidCarPlate implements ImplicitRule
 {
+
+    private $msg = "Tablica rejestracyjna jest niepoprawna!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,11 @@ class ValidCarPlate implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            $this->msg = "Podaj tablicę rejestracyjną!";
+            return false;
+        }
+
         if (strlen($value) < 5) {
             return false;
         }
@@ -47,6 +55,6 @@ class ValidCarPlate implements Rule
      */
     public function message()
     {
-        return 'Tablica rejestracyjna jest niepoprawna!';
+        return $this->msg;
     }
 }

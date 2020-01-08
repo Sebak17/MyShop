@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidProductCategory implements Rule
+class ValidProductCategory implements ImplicitRule
 {
+
+    private $msg = "Kategoria jest niepoprawna!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidProductCategory implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+
         if (!is_numeric($value)) {
             return false;
         }
@@ -39,6 +46,6 @@ class ValidProductCategory implements Rule
      */
     public function message()
     {
-        return 'Kategoria jest niepoprawna!';
+        return $this->msg;
     }
 }

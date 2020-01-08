@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidCity implements Rule
+class ValidCity implements ImplicitRule
 {
+
+    private $msg = "Nazwa miasta jest niepoprawna!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidCity implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+        
         if (mb_strlen($value) < 2 || mb_strlen($value) > 32) {
             return false;
         }
@@ -43,6 +50,6 @@ class ValidCity implements Rule
      */
     public function message()
     {
-        return 'Nazwa miasta jest niepoprawna!';
+        return $this->msg;
     }
 }

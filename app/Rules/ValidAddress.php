@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidAddress implements Rule
+class ValidAddress implements ImplicitRule
 {
+
+    private $msg = "Adres jest niepoprawny!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,11 @@ class ValidAddress implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            $this->msg = "Podaj adres!";
+            return false;
+        }
+
         if (mb_strlen($value) < 4 || mb_strlen($value) > 40) {
             return false;
         }
@@ -43,6 +51,6 @@ class ValidAddress implements Rule
      */
     public function message()
     {
-        return 'Adres jest niepoprawny!';
+        return $this->msg;
     }
 }

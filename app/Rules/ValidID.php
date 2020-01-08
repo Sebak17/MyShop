@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidID implements Rule
+class ValidID implements ImplicitRule
 {
+
+    private $msg = "Bład identyfikatora!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidID implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+        
         if (!is_numeric($value)) {
             return false;
         }
@@ -43,7 +50,7 @@ class ValidID implements Rule
      */
     public function message()
     {
-        return 'Bład identyfikatora!';
+        return $this->msg;
     }
 
 }

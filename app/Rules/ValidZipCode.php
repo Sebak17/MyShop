@@ -2,10 +2,13 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidZipCode implements Rule
+class ValidZipCode implements ImplicitRule
 {
+
+    private $msg = "Błędny kod pocztowy!";
+
     /**
      * Create a new rule instance.
      *
@@ -25,6 +28,10 @@ class ValidZipCode implements Rule
      */
     public function passes($attribute, $value)
     {
+        if($value == '') {
+            return false;
+        }
+
         if (strlen($value) != 6) {
             return false;
         }
@@ -43,6 +50,6 @@ class ValidZipCode implements Rule
      */
     public function message()
     {
-        return 'Błędny kod pocztowy!';
+        return $this->msg;
     }
 }
