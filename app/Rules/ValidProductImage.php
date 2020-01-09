@@ -29,6 +29,7 @@ class ValidProductImage implements ImplicitRule
     public function passes($attribute, $value)
     {
         if($value == '') {
+            $this->msg = "Podaj zdjęcie!";
             return false;
         }
 

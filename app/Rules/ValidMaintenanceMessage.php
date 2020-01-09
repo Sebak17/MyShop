@@ -29,6 +29,7 @@ class ValidMaintenanceMessage implements ImplicitRule
     public function passes($attribute, $value)
     {
         if($value == '') {
+            $this->msg = "Podaj opis wiadomości!";
             return false;
         }
 

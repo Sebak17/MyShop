@@ -29,6 +29,7 @@ class ValidZipCode implements ImplicitRule
     public function passes($attribute, $value)
     {
         if($value == '') {
+             $this->msg = "Podaj kod pocztowy!";
             return false;
         }
 

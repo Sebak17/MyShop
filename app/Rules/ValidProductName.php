@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\ImplicitRule;
 class ValidProductName implements ImplicitRule
 {
 
-    private $msg = "Nazwa pruduktu jest niepoprawna! (4-120)";
+    private $msg = "Nazwa produktu jest niepoprawna! (4-120)";
 
     /**
      * Create a new rule instance.
@@ -29,6 +29,7 @@ class ValidProductName implements ImplicitRule
     public function passes($attribute, $value)
     {
         if($value == '') {
+            $this->msg = "Podaj nazwę produktu!";
             return false;
         }
 

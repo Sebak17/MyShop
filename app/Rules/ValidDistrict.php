@@ -29,6 +29,7 @@ class ValidDistrict implements ImplicitRule
     public function passes($attribute, $value)
     {
         if($value == '') {
+            $this->msg = "Podaj województwo!";
             return false;
         }
         

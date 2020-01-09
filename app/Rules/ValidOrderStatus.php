@@ -29,6 +29,7 @@ class ValidOrderStatus implements ImplicitRule
     public function passes($attribute, $value)
     {
         if($value == '') {
+            $this->msg = "Podaj status zamówienia!";
             return false;
         }
 

@@ -29,6 +29,7 @@ class ValidSurName implements ImplicitRule
     public function passes($attribute, $value)
     {
         if($value == '') {
+             $this->msg = "Podaj nazwisko!";
             return false;
         }
 

@@ -29,6 +29,7 @@ class ValidID implements ImplicitRule
     public function passes($attribute, $value)
     {
         if($value == '') {
+            $this->msg = "Podaj ID!";
             return false;
         }
         
