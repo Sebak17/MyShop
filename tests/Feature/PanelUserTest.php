@@ -6,9 +6,12 @@ use App\User;
 use App\UserPersonal;
 use App\UserLocation;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PanelUserTest extends TestCase
 {
+
+    use RefreshDatabase;
 
     private function actingAsUser() {
         $user = factory(User::class)->create();
