@@ -250,7 +250,7 @@ class AuthorizationController extends Controller
 
         UserInfo::create([
             'user_id'        => $user->id,
-            'firstIP'        => $_SERVER['REMOTE_ADDR'],
+            'firstIP'        => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
             'activationHash' => $hash_2,
         ]);
 
