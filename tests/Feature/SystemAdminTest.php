@@ -64,7 +64,7 @@ class SystemAdminTest extends TestCase
     	$this->actingAsAdmin();
 
         $response = $this->post('/systemAdmin/categoryAdd', [
-            'name' => str_replace(".", "", $this->faker->sentence(2)),
+            'name' => $this->faker->word . " " . $this->faker->word,
             'icon' => 'fa-question',
             'ovcat' => 1,
         ])->assertJsonStructure();
@@ -96,7 +96,7 @@ class SystemAdminTest extends TestCase
     	$this->actingAsAdmin();
 
         $response = $this->post('/systemAdmin/categoryAdd', [
-        	'name' => $this->faker->sentence(2) . " ? ",
+        	'name' => $this->faker->word . "?" . $this->faker->word,
             'icon' => 'fa-question',
             'ovcat' => 1,
         ])->assertJsonStructure();
@@ -110,7 +110,7 @@ class SystemAdminTest extends TestCase
     	$this->actingAsAdmin();
 
         $response = $this->post('/systemAdmin/categoryAdd', [
-            'name' => str_replace(".", "", $this->faker->sentence(2)),
+            'name' => $this->faker->word . " " . $this->faker->word,
             'ovcat' => 1,
         ])->assertJsonStructure();
 
@@ -123,7 +123,7 @@ class SystemAdminTest extends TestCase
     	$this->actingAsAdmin();
 
         $response = $this->post('/systemAdmin/categoryAdd', [
-            'name' => str_replace(".", "", $this->faker->sentence(2)),
+            'name' => $this->faker->word . " " . $this->faker->word,
             'icon' => 'fa?question',
             'ovcat' => 1,
         ])->assertJsonStructure();
@@ -137,7 +137,7 @@ class SystemAdminTest extends TestCase
     	$this->actingAsAdmin();
 
         $response = $this->post('/systemAdmin/categoryAdd', [
-            'name' => str_replace(".", "", $this->faker->sentence(2)),
+            'name' => $this->faker->word . " " . $this->faker->word,
             'icon' => 'fa-question',
         ])->assertJsonStructure();
 
@@ -150,7 +150,7 @@ class SystemAdminTest extends TestCase
     	$this->actingAsAdmin();
 
         $response = $this->post('/systemAdmin/categoryAdd', [
-            'name' => str_replace(".", "", $this->faker->sentence(2)),
+            'name' => $this->faker->word . " " . $this->faker->word,
             'icon' => 'fa-question',
             'ovcat' => 'abc',
         ])->assertJsonStructure();

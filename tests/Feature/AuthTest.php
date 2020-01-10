@@ -158,9 +158,9 @@ class AuthTest extends TestCase
         ]
         )->assertJsonStructure();
 
-        //$result = json_decode($response->getContent(), true);
-        // if(!$result['success'])
-        //     $this->fail($result['msg']);
+        $result = json_decode($response->getContent(), true);
+        if(!$result['success'])
+            $this->fail($result['msg']);
 
         $this->assertCount(1, User::all());
     }
