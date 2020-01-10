@@ -691,7 +691,10 @@ class AdminSystemController extends Controller
 
         foreach ($request->newids as $id => $index) {
 
-            $category          = Category::where('id', $id)->first();
+            $category = Category::where('id', $id)->first();
+            if($category == null)
+                continue;
+
             $category->orderID = $index;
             $category->save();
         }
