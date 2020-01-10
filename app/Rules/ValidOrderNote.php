@@ -2,9 +2,9 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\ImplicitRule;
+use Illuminate\Contracts\Validation\Rule;
 
-class ValidOrderNote implements ImplicitRule
+class ValidOrderNote implements Rule
 {
 
     private $msg = "Komentarz jest nieprawidłowy! (4-1000 znaków)";
@@ -29,8 +29,7 @@ class ValidOrderNote implements ImplicitRule
     public function passes($attribute, $value)
     {
         if($value == '') {
-            $this->msg = "Podaj komentarz!";
-            return false;
+            return true;
         }
 
         if (mb_strlen($value) < 4) {
