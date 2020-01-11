@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\User;
 use App\UserPersonal;
 use App\UserLocation;
+use Tests\Helpers as Helper;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -12,15 +13,7 @@ class PanelUserTest extends TestCase
 {
 
     use RefreshDatabase;
-
-    private function actingAsUser() {
-        $user = factory(User::class)->create();
-        $user_personal = factory(UserPersonal::class)->create(['user_id' => $user->id]);
-        $user_location = factory(UserLocation::class)->create(['user_id' => $user->id]);
-
-        $this->actingAs($user);
-    }
-
+    use Helper;
 
     /** @test */
     public function dashboard_only_logged_in_users_can_see()
@@ -31,8 +24,6 @@ class PanelUserTest extends TestCase
     /** @test */
     public function dashboard_only_authenticated_users_can_see()
     {
-        //$this->withoutExceptionHandling();
-
         $this->actingAsUser();
 
         $response = $this->get('/panel')->assertOk();

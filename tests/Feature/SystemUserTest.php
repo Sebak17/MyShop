@@ -6,6 +6,7 @@ use App\User;
 use App\UserLocation;
 use App\UserPersonal;
 use Tests\TestCase;
+use Tests\Helpers as Helper;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -14,24 +15,7 @@ class SystemUserTest extends TestCase
 
 	use WithFaker;
     use RefreshDatabase;
-
-    private $currentUser;
-
-    private function createUser()
-    {
-    	$this->currentUser = factory(User::class)->create();
-        $user_personal     = factory(UserPersonal::class)->create(['user_id' => $this->currentUser->id]);
-        $user_location     = factory(UserLocation::class)->create(['user_id' => $this->currentUser->id]);
-    }
-
-    private function actingAsUser()
-    {
-        if($this->currentUser == null)
-            $this->createUser();
-
-        $this->actingAs($this->currentUser);
-    }
-
+    use Helper;
 
     /** @test */
     public function form_change_password_correct()

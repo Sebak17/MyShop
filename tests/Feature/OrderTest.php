@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Order;
 use App\Product;
 use App\User;
 use App\UserLocation;
 use App\UserPersonal;
+use Tests\Helpers as Helper;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,40 +17,8 @@ class OrderTest extends TestCase
 
     use WithFaker;
     use RefreshDatabase;
-
-    private $currentUser;
-
-    private function createUser()
-    {
-        $this->currentUser = factory(User::class)->create();
-        $user_personal     = factory(UserPersonal::class)->create(['user_id' => $this->currentUser->id]);
-        $user_location     = factory(UserLocation::class)->create(['user_id' => $this->currentUser->id]);
-    }
-
-    private function actingAsUser()
-    {
-
-        if ($this->currentUser == null) {
-            $this->createUser();
-        }
-
-        $this->actingAs($this->currentUser);
-    }
-
-    public function addProductToUserFavorites()
-    {
-
-        if ($this->currentUser == null) {
-            $this->createUser();
-        }
-
-        for ($i = 0; $i < 2; $i++) {
-            $product = factory(Product::class)->create();
-            $this->post('/systemUser/addToShoppingCart', ['id' => $product->id])->assertJsonStructure();
-        }
-
-    }
-
+    use Helper;
+    
     /** @test */
     public function form_load_shopping_cart_only_not_logged_in_users_can_see()
     {
@@ -103,7 +73,7 @@ class OrderTest extends TestCase
         $product = factory(Product::class)->create();
 
         $response = $this->post('/systemUser/addToShoppingCart', [
-        	'id' => $product->id,
+            'id' => $product->id,
         ])->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
@@ -125,8 +95,9 @@ class OrderTest extends TestCase
 
         $result = json_decode($response->getContent(), true);
 
-        if ($result['success'])
+        if ($result['success']) {
             $this->fail("Added product to shopping cart without id!");
+        }
 
     }
 
@@ -138,16 +109,16 @@ class OrderTest extends TestCase
         $product = factory(Product::class)->create();
 
         $response = $this->post('/systemUser/addToShoppingCart', [
-        	'id' => $product->id . " a ",
+            'id' => $product->id . " a ",
         ])->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
 
-        if ($result['success'])
+        if ($result['success']) {
             $this->fail("Added product to shopping cart with bad id!");
+        }
 
     }
-
 
     /** @test */
     public function form_confirm_shopping_correct()
@@ -159,9 +130,11 @@ class OrderTest extends TestCase
         $response = $this->post('/systemUser/confirmShoppingCart', [])->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
+
         if (!$result['success']) {
             $this->fail($result['msg']);
         }
+
     }
 
     /** @test */
