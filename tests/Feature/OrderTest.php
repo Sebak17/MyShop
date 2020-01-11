@@ -149,6 +149,58 @@ class OrderTest extends TestCase
         if ($result['success']) {
             $this->fail("Confirmed shopping cart without any products!");
         }
+
+    }
+
+    // ADD CHECK METHODS
+    /** @test */
+    public function form_create_order_correct_payu_locker()
+    {
+        $this->actingAsUser();
+
+        $this->addProductToUserFavorites();
+        $this->confirmShoppingCart();
+
+        $response = $this->post('/systemUser/createOrder', [
+            'paymentType' => "PAYU",
+            'clientFName' => $this->faker->firstName,
+            'clientSName' => $this->faker->lastName,
+            'clientPhone' => $this->faker->numberBetween(111111111, 999999999),
+            'deliver'     => [
+                'type'       => "INPOST_LOCKER",
+                'lockerName' => "GWI02N",
+            ],
+            'note'        => $this->faker->text(150),
+        ])->assertJsonStructure();
+
+        $this->assertCount(1, Order::all());
+    }
+
+    // ADD CHECK METHODS
+    /** @test */
+    public function form_create_order_correct_paypal_courier()
+    {
+        $this->actingAsUser();
+
+        $this->addProductToUserFavorites();
+        $this->confirmShoppingCart();
+
+        $response = $this->post('/systemUser/createOrder', [
+            'paymentType' => "PAYPAL",
+            'clientFName' => $this->faker->firstName,
+            'clientSName' => $this->faker->lastName,
+            'clientPhone' => $this->faker->numberBetween(111111111, 999999999),
+            'deliver'     => [
+                'type'     => "COURIER",
+                'district' => $this->faker->numberBetween(1, 16),
+                'city'     => $this->faker->city,
+                'zipcode'  => '11-111',
+                'address'  => $this->faker->streetName,
+            ],
+            'note'        => $this->faker->text(150),
+        ])->assertJsonStructure();
+
+        $this->assertCount(1, Order::all());
     }
 
 }

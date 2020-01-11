@@ -143,4 +143,73 @@ class SystemAdminTest extends TestCase
         $this->assertCount(0, Category::all());
     }
 
+
+
+    // ADD CHECK METHODS
+    /** @test */
+    public function form_category_edit_correct()
+    {
+        $this->actingAsAdmin();
+
+        $category = factory(Category::class)->create();
+
+        $response = $this->post('/systemAdmin/categoryEdit', [
+            'id' => $category->id,
+            'name' => $this->faker->word . " " . $this->faker->word,
+            'icon' => 'fa-question',
+        ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if(!$result['success'])
+            $this->fail($result['msg']);
+
+        $this->assertCount(1, Category::all());
+    }
+
+    // ADD CHECK METHODS
+    /** @test */
+    public function form_category_remove_correct()
+    {
+        $this->actingAsAdmin();
+
+        $category = factory(Category::class)->create();
+
+        $response = $this->post('/systemAdmin/categoryRemove', [
+            'id' => $category->id,
+        ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if(!$result['success'])
+            $this->fail($result['msg']);
+
+        $this->assertCount(0, Category::all());
+    }
+
+
+    // ADD CHECK METHODS
+    /** @test */
+    public function form_category_change_order_correct()
+    {
+        $this->actingAsAdmin();
+
+        $keys = array(1, 2, 3);
+        shuffle($keys);
+
+        $data = array();
+        $data[factory(Category::class)->create()->id] = $keys[0];
+        $data[factory(Category::class)->create()->id] = $keys[1];
+        $data[factory(Category::class)->create()->id] = $keys[2];
+
+        $response = $this->post('/systemAdmin/categoryChangeOrder', [
+            'newids' => $data,
+        ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if(!$result['success'])
+            $this->fail($result['msg']);
+    }
+
 }
