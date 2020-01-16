@@ -173,6 +173,11 @@ class OrderTest extends TestCase
             'note'        => $this->faker->text(150),
         ])->assertJsonStructure();
 
+        $result = json_decode($response->getContent(), true);
+        if (!$result['success']) {
+            $this->fail($result['msg']);
+        }
+
         $this->assertCount(1, Order::all());
     }
 
@@ -199,6 +204,11 @@ class OrderTest extends TestCase
             ],
             'note'        => $this->faker->text(150),
         ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+        if (!$result['success']) {
+            $this->fail($result['msg']);
+        }
 
         $this->assertCount(1, Order::all());
     }
