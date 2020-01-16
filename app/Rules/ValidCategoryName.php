@@ -28,6 +28,9 @@ class ValidCategoryName implements ImplicitRule
      */
     public function passes($attribute, $value)
     {
+        if(config('site.debug.rules'))
+            $this->msg .= " |" . $value . "|";
+
         if($value == '') {
             $this->msg = "Podaj nazwę kategorii!";
             return false;

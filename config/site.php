@@ -2,19 +2,23 @@
 
 return [
 
-    'currency'      => "zł",
+    'debug'          => [
+        'rules' => true,
+    ],
 
-    'deliver_cost'  => [
+    'currency'       => "zł",
+
+    'deliver_cost'   => [
         'locker'  => 8.99,
         'courier' => 15.99,
     ],
 
-    'deliver_name' => [
+    'deliver_name'   => [
         'INPOST_LOCKER' => "InPost - Paczkomat",
-        'COURIER' => "Kurier",
+        'COURIER'       => "Kurier",
     ],
 
-    'district_name' => [
+    'district_name'  => [
         '1'  => "Dolnośląskie",
         '2'  => "Kujawsko-Pomorskie",
         '3'  => "Lubelskie",
@@ -33,35 +37,35 @@ return [
         '16' => "Zachodniopomorskie",
     ],
 
-    'payment_name'  => [
+    'payment_name'   => [
         'PAYU'        => "PayU",
         'PAYPAL'      => "PayPal",
         'PAYMENTCARD' => "Karta kredytowa/debetowa",
     ],
 
     'product_status' => [
-        'INVISIBLE' => "Niewidoczny",
-        'IN_STOCK' => "Dostępny",
+        'INVISIBLE'    => "Niewidoczny",
+        'IN_STOCK'     => "Dostępny",
         'INACCESSIBLE' => "Niedostępny",
-        'INACTIVE' => "Nieaktywny",
+        'INACTIVE'     => "Nieaktywny",
     ],
 
-    'order_status' => [
-        'CREATED' => "Stworzone",
-        'UNPAID' => "Niezapłacone",
+    'order_status'   => [
+        'CREATED'    => "Stworzone",
+        'UNPAID'     => "Niezapłacone",
         'PROCESSING' => "Przetwarzanie płatności",
-        'PAID' => "Zapłacone",
-        'REALIZE' => "Realizowane",
-        'SENT' => "Wysłane",
-        'RECEIVE' => "Odebrane",
-        'CANCELED' => "Anulowana",
+        'PAID'       => "Zapłacone",
+        'REALIZE'    => "Realizowane",
+        'SENT'       => "Wysłane",
+        'RECEIVE'    => "Odebrane",
+        'CANCELED'   => "Anulowana",
     ],
 
-    'user_history' => [
-        'ALL' => "Wszystko",
+    'user_history'   => [
+        'ALL'       => "Wszystko",
         'AC_CHANGE' => "Zmiany na koncie",
-        'AUTH' => "Autoryzacja",
-        'BAN' => "Blokada",
+        'AUTH'      => "Autoryzacja",
+        'BAN'       => "Blokada",
     ],
 
 ];
