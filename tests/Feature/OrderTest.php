@@ -161,17 +161,10 @@ class OrderTest extends TestCase
         $this->addProductToUserFavorites();
         $this->confirmShoppingCart();
 
-        $response = $this->post('/systemUser/createOrder', [
-            'paymentType' => "PAYU",
-            'clientFName' => $this->faker->firstName,
-            'clientSName' => $this->faker->lastName,
-            'clientPhone' => $this->faker->numberBetween(111111111, 999999999),
-            'deliver'     => [
-                'type'       => "INPOST_LOCKER",
-                'lockerName' => "GWI02N",
-            ],
-            'note'        => $this->faker->text(150),
-        ])->assertJsonStructure();
+        $data = $this->getOrderCreateData();
+        $data['paymentType'] = "PAYU";
+
+        $response = $this->post('/systemUser/createOrder', $data)->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
         if (!$result['success']) {
@@ -190,20 +183,10 @@ class OrderTest extends TestCase
         $this->addProductToUserFavorites();
         $this->confirmShoppingCart();
 
-        $response = $this->post('/systemUser/createOrder', [
-            'paymentType' => "PAYPAL",
-            'clientFName' => $this->faker->firstName,
-            'clientSName' => $this->faker->lastName,
-            'clientPhone' => $this->faker->numberBetween(111111111, 999999999),
-            'deliver'     => [
-                'type'     => "COURIER",
-                'district' => $this->faker->numberBetween(1, 16),
-                'city'     => $this->faker->city,
-                'zipcode'  => '11-111',
-                'address'  => $this->faker->streetName,
-            ],
-            'note'        => $this->faker->text(150),
-        ])->assertJsonStructure();
+        $data = $this->getOrderCreateData();
+        $data['paymentType'] = "PAYPAL";
+
+        $response = $this->post('/systemUser/createOrder', $data)->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
         if (!$result['success']) {

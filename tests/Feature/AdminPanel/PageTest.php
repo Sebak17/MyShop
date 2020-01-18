@@ -1,19 +1,15 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\AdminPanel;
 
-use App\User;
-use App\UserLocation;
-use App\UserPersonal;
-use App\Admin;
-use Tests\TestCase;
-use Tests\Helpers as Helper;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Helpers as Helper;
+use Tests\TestCase;
 
-class PanelAdminTest extends TestCase
+class PageTest extends TestCase
 {
 
-	use RefreshDatabase;
+    use RefreshDatabase;
     use Helper;
 
     /** @test */
@@ -25,7 +21,7 @@ class PanelAdminTest extends TestCase
     /** @test */
     public function pages_authenticated_users_cannot_see()
     {
-    	$this->actingAsUser();
+        $this->actingAsUser();
 
         $response = $this->get('/admin/panel')->assertRedirect('/admin/not_authorizated');
     }
@@ -37,5 +33,4 @@ class PanelAdminTest extends TestCase
 
         $response = $this->get('/admin/panel')->assertOk();
     }
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\UserSystem;
 
 use App\User;
 use App\UserLocation;
@@ -10,10 +10,9 @@ use Tests\Helpers as Helper;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class SystemUserTest extends TestCase
+class SettingsTest extends TestCase
 {
-
-	use WithFaker;
+    use WithFaker;
     use RefreshDatabase;
     use Helper;
 
@@ -146,5 +145,4 @@ class SystemUserTest extends TestCase
         if($result['success'])
             $this->fail('User personal data changed without given phone number!');
     }
-
 }

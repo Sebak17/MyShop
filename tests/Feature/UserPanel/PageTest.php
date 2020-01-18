@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\UserPanel;
 
 use App\User;
 use App\UserPersonal;
@@ -9,10 +9,10 @@ use Tests\Helpers as Helper;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class PanelUserTest extends TestCase
+class PageTest extends TestCase
 {
 
-    use RefreshDatabase;
+	use RefreshDatabase;
     use Helper;
 
     /** @test */
