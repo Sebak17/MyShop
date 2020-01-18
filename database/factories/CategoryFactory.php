@@ -17,7 +17,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Category::class, function (Faker $faker) {
     return [
-        'name'         => str_replace(".", "", $faker->sentence(2)),
+        'name'         => str_replace(".", "", $faker->text(18)),
         'orderID'      => Category::where('overcategory', 0)->count() + 1,
         'overcategory' => 0,
         'active'       => 1,
