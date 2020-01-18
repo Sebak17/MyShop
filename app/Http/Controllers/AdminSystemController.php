@@ -319,6 +319,14 @@ class AdminSystemController extends Controller
             return response()->json($results);
         }
 
+        $category = Category::where('id', $request->category)->first();
+
+        if($category == null) {
+            $results['success'] = false;
+            $results['msg'] = "Podana kategoria nie istnieje!";
+            return response()->json($results);
+        }
+
         $images = array();
 
         if (is_array($request->session()->get('tmp_images'))) {
@@ -340,7 +348,7 @@ class AdminSystemController extends Controller
             'price'       => $request->price,
             'description' => $request->description,
             'status'      => "INVISIBLE",
-            'category_id' => $request->category,
+            'category_id' => $category->id,
             'params'      => $request->params,
         ]);
 
