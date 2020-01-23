@@ -21,15 +21,22 @@ class SettingsTest extends TestCase
     {
     	$this->actingAsUser();
 
+        $newPassword = 'password1';
+
         $response = $this->post('/systemUser/changePassword', [
             'password_old' => 'password',
-            'password_new' => 'password1',
+            'password_new' => $newPassword,
         ])->assertJsonStructure();
 
+        $this->currentUser->refresh();
         $result = json_decode($response->getContent(), true);
 
         if(!$result['success'])
             $this->fail($result['msg']);
+
+        if(!password_verify($newPassword, $this->currentUser->password))
+            $this->fail('Password has not been changed!');
+
     }
 
     /** @test */
@@ -85,16 +92,30 @@ class SettingsTest extends TestCase
     {
         $this->actingAsUser();
 
+        $newFirstName = $this->faker->firstName;
+        $newSurName = $this->faker->lastName;
+        $newPhoneNumber = $this->faker->numberBetween(111111111, 999999999);
+
         $response = $this->post('/systemUser/changeDataPersonal', [
-            'fname' => $this->faker->firstName,
-            'sname' => $this->faker->lastName,
-            'phone' => $this->faker->numberBetween(111111111, 999999999),
+            'fname' => $newFirstName,
+            'sname' => $newSurName,
+            'phone' => $newPhoneNumber,
         ])->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
 
         if(!$result['success'])
             $this->fail($result['msg']);
+
+        if($this->currentUser->personal->firstname != $newFirstName)
+            $this->fail('First name have old value!');
+
+        if($this->currentUser->personal->surname != $newSurName)
+            $this->fail('Surname have old value!');
+        
+        if($this->currentUser->personal->phoneNumber != $newPhoneNumber)
+            $this->fail('Phone number have old value!');
+
     }
 
     /** @test */
@@ -145,4 +166,8 @@ class SettingsTest extends TestCase
         if($result['success'])
             $this->fail('User personal data changed without given phone number!');
     }
+
+
+
+    // TODO - USER LOCATION CHANGE
 }
