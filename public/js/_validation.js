@@ -57,7 +57,7 @@ function validateCityLength(city) {
 }
 
 function validateCityString(city) {
-    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+$/.test(city))
+    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ- ]+$/.test(city))
         return false;
     return true;
 }
