@@ -40,7 +40,7 @@ class ValidAddress implements ImplicitRule
             return false;
         }
 
-        if (!preg_match("/^([a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9 \/]+)$/", $value)) {
+        if (!preg_match("/^([a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9\-,. \/]+)$/", $value)) {
             return false;
         }
 

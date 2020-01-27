@@ -33,7 +33,7 @@ function validateAdressLength(address) {
 }
 
 function validateAdressString(address) {
-    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9 /]+$/.test(address))
+    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9.,\- /]+$/.test(address))
         return false;
     return true;
 }
@@ -57,7 +57,7 @@ function validateCityLength(city) {
 }
 
 function validateCityString(city) {
-    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ- ]+$/.test(city))
+    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ\-. ]+$/.test(city))
         return false;
     return true;
 }
