@@ -3,7 +3,10 @@
 namespace Tests;
 
 use App\Admin;
+use App\Ban;
 use App\Category;
+use App\Order;
+use App\OrderProduct;
 use App\Product;
 use App\User;
 use App\UserInfo;
@@ -50,8 +53,7 @@ trait Helpers
 
     public function actingAsUser()
     {
-
-        if ($this->currentUser == null) {
+        if ($this->currentUser == null || User::count() == 0) {
             $this->createUser();
         }
 
@@ -65,18 +67,27 @@ trait Helpers
         $this->actingAs($this->currentAdmin, 'admin');
     }
 
-    public function addProductToUserFavorites()
+    public function banUser()
+    {
+        if ($this->currentUser == null) {
+            $this->createUser();
+        }
+
+        return factory(Ban::class)->create(['user_id' => $this->currentUser->id]);
+    }
+
+
+    public function addProductToUserFavorites($amountOfProducts = 2)
     {
 
         if ($this->currentUser == null) {
             $this->createUser();
         }
 
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < $amountOfProducts; $i++) {
             $product = factory(Product::class)->create();
             $this->post('/systemUser/addToShoppingCart', ['id' => $product->id])->assertJsonStructure();
         }
-
     }
 
     public function confirmShoppingCart()
@@ -87,7 +98,6 @@ trait Helpers
         if (!$result['success']) {
             $this->fail("Error while confirming shopping cart!");
         }
-
     }
 
     public function productUploadImages()
@@ -109,7 +119,6 @@ trait Helpers
         if (!$result['success']) {
             $this->fail($result['msg'] ?? "Failed to upload images to product!");
         }
-
     }
 
 
@@ -153,6 +162,33 @@ trait Helpers
         }
 
         return $result['images'];
+    }
+
+    public function createOrder()
+    {
+        $this->actingAsUser();
+
+        $this->addProductToUserFavorites();
+        $this->confirmShoppingCart();
+
+        $data = $this->getOrderCreateData();
+        $data['clientFName'] = $this->currentUser->personal->firstname;
+        $data['clientSName'] = $this->currentUser->personal->surname;
+        $data['clientPhone'] = $this->currentUser->personal->phoneNumber;
+
+        $response = $this->post('/systemUser/createOrder', $data)->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+        if (!$result['success']) {
+            $this->fail($result['msg']);
+        }
+
+        $order = Order::first();
+
+        if($order == null)
+            $this->fail('After success creation, order is null!');
+
+        return $order;
     }
 
     public function getSignUpData()

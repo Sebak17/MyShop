@@ -15,6 +15,7 @@ class ProductEditTest extends TestCase
     use RefreshDatabase;
     use Helper;
 
+    // ADD CHECK METHODS
     /** @test */
     public function form_product_load_data_correct()
     {
@@ -34,6 +35,7 @@ class ProductEditTest extends TestCase
 
     }
 
+    // ADD CHECK METHODS
     /** @test */
     public function form_product_edit_correct()
     {
@@ -64,6 +66,7 @@ class ProductEditTest extends TestCase
 
     }
 
+    // ADD CHECK METHODS
     /** @test */
     public function form_product_images_list_correct()
     {
@@ -87,6 +90,7 @@ class ProductEditTest extends TestCase
 
     }
 
+    // ADD CHECK METHODS
     /** @test */
     public function form_product_image_add_correct()
     {
@@ -116,6 +120,7 @@ class ProductEditTest extends TestCase
 
     }
 
+    // ADD CHECK METHODS
     /** @test */
     public function form_product_image_remove_correct()
     {
