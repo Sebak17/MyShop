@@ -9,7 +9,7 @@ $factory->define(UserLocation::class, function (Faker $faker) {
     return [
         'district' => $faker->numberBetween(1, 16),
         'city' => $faker->city,
-        'zipcode' => '11-111',
+        'zipcode' => $faker->numberBetween(10, 99) . '-' . $faker->numberBetween(100, 999),
         'address' => $faker->streetName,
     ];
 });
