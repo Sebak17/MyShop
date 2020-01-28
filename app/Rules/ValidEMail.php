@@ -40,7 +40,7 @@ class ValidEMail implements ImplicitRule
             return false;
         }
 
-        if (strlen($value) > 32) {
+        if (strlen($value) > 40) {
             return false;
         }
 

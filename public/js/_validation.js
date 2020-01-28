@@ -147,7 +147,7 @@ function validateBanDescription(description) {
     if (description.length > 200)
         return false;
 
-    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9-\(\)'"\/ ]+$/.test(description))
+    if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9.,\-\(\)'"\/ ]+$/.test(description))
         return false;
 
     return true;

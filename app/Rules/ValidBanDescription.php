@@ -2,9 +2,9 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class ValidBanDescription implements Rule
+class ValidBanDescription implements ImplicitRule
 {
 
     private $msg = "Opis jest niepoprawny!";
@@ -41,7 +41,7 @@ class ValidBanDescription implements Rule
             return false;
         }
 
-        if (!preg_match("/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9-\(\)\'\"\/ ]+$/", $value)) {
+        if (!preg_match("/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9,.\-\(\)\'\"\/ ]+$/", $value)) {
             return false;
         }
 
