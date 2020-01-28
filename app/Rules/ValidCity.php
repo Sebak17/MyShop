@@ -40,7 +40,7 @@ class ValidCity implements ImplicitRule
             return false;
         }
 
-        if (!preg_match("/^[a-zA-Z żźćńółęąśŻŹĆĄŚĘŁÓŃ-]+$/", $value)) {
+        if (!preg_match("/^[a-zA-Z żźćńółęąśŻŹĆĄŚĘŁÓŃ\-.]+$/", $value)) {
             return false;
         }
 
