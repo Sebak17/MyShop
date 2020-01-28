@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Admin;
+use App\Category;
 use App\Product;
 use App\User;
 use App\UserInfo;
@@ -109,6 +110,36 @@ trait Helpers
             $this->fail($result['msg'] ?? "Failed to upload images to product!");
         }
 
+    }
+
+
+    public function createProduct($withImages = true)
+    {
+        if($withImages)
+            $this->productUploadImages();
+
+        $category = factory(Category::class)->create();
+
+        $response = $this->post('/systemAdmin/productCreate', [
+            'name'        => str_replace(".", "", $this->faker->sentence(5)),
+            'price'       => $this->faker->randomFloat(2, 1, 10000),
+            'description' => $this->faker->text(200),
+            'category'    => $category->id,
+            'params'      => '[{"name":"Nazwa","value":"Wartość"}]',
+        ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if (!$result['success']) {
+            $this->fail($result['msg']);
+        }
+
+        $product = Product::first();
+
+        if($product == null)
+            $this->fail('After success creation, product is null!');
+
+        return $product;
     }
 
     public function productUploadedImagesList()
