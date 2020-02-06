@@ -40,7 +40,7 @@ class ValidCategoryName implements ImplicitRule
             return false;
         }
 
-        if (strlen($value) <= 0 || strlen($value) > 20) {
+        if (strlen($value) <= 0 || strlen($value) > 30) {
             return false;
         }
         return true;

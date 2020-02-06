@@ -2,17 +2,14 @@
 
 namespace Tests\Feature\UserPanel;
 
-use App\User;
-use App\UserPersonal;
-use App\UserLocation;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Helpers as Helper;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PageTest extends TestCase
 {
 
-	use RefreshDatabase;
+    use RefreshDatabase;
     use Helper;
 
     /** @test */
@@ -29,8 +26,6 @@ class PageTest extends TestCase
         $response = $this->get('/panel')->assertOk();
     }
 
-
-
     /** @test */
     public function orders_only_logged_in_users_can_see()
     {
@@ -44,7 +39,6 @@ class PageTest extends TestCase
 
         $response = $this->get('/panel/zamowienia')->assertOk();
     }
-
 
     /** @test */
     public function settings_only_logged_in_users_can_see()
@@ -60,7 +54,6 @@ class PageTest extends TestCase
         $response = $this->get('/panel/ustawienia')->assertOk();
     }
 
-
     /** @test */
     public function favorites_only_logged_in_users_can_see()
     {
@@ -74,7 +67,6 @@ class PageTest extends TestCase
 
         $response = $this->get('/ulubione')->assertOk();
     }
-
 
     /** @test */
     public function shoppingCart_only_logged_in_users_can_see()

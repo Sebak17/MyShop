@@ -2,18 +2,15 @@
 
 namespace Tests\Feature\UserAuth;
 
-use App\User;
-use App\UserLocation;
-use App\UserPersonal;
-use Tests\TestCase;
-use Tests\Helpers as Helper;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\Helpers as Helper;
+use Tests\TestCase;
 
 class SignInTest extends TestCase
 {
-    
-	use WithFaker;
+
+    use WithFaker;
     use RefreshDatabase;
     use Helper;
 
@@ -34,71 +31,79 @@ class SignInTest extends TestCase
     /** @test */
     public function form_signin_correct_data()
     {
-    	$this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
 
-    	$this->createUser();
+        $this->createUser();
 
         $response = $this->post('/system/signIn', [
-        	'email' => $this->currentUser->email, 
-        	'password' => 'password',
-        	'grecaptcha' => 'PHP_UNIT_TEST_API_DSAIUBAVS9A47TGB47A804GBS']
+            'email'      => $this->currentUser->email,
+            'password'   => 'password',
+            'grecaptcha' => 'PHP_UNIT_TEST_API_DSAIUBAVS9A47TGB47A804GBS']
         )->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
 
-        if(!$result['success'])
-	        $this->fail($result['msg']);
+        if (!$result['success']) {
+            $this->fail($result['msg']);
+        }
+
     }
 
     /** @test */
     public function form_signin_incorrect_email()
     {
-    	$this->createUser();
+        $this->createUser();
 
         $response = $this->post('/system/signIn', [
-        	'email' => 'a@a', 
-        	'password' => 'password',
-        	'grecaptcha' => 'PHP_UNIT_TEST_API_DSAIUBAVS9A47TGB47A804GBS']
+            'email'      => 'a@a',
+            'password'   => 'password',
+            'grecaptcha' => 'PHP_UNIT_TEST_API_DSAIUBAVS9A47TGB47A804GBS']
         )->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
 
-        if($result['success'])
-	        $this->fail('Succes sign in to panel with incorrect email');
+        if ($result['success']) {
+            $this->fail('Succes sign in to panel with incorrect email');
+        }
+
     }
 
     /** @test */
     public function form_signin_incorrect_password()
     {
-    	$this->createUser();
+        $this->createUser();
 
         $response = $this->post('/system/signIn', [
-        	'email' => $this->currentUser->email, 
-        	'password' => 'xdxd',
-        	'grecaptcha' => 'PHP_UNIT_TEST_API_DSAIUBAVS9A47TGB47A804GBS']
+            'email'      => $this->currentUser->email,
+            'password'   => 'xdxd',
+            'grecaptcha' => 'PHP_UNIT_TEST_API_DSAIUBAVS9A47TGB47A804GBS']
         )->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
 
-        if($result['success'])
-	        $this->fail('Succes sign in to panel with incorrect password');
+        if ($result['success']) {
+            $this->fail('Succes sign in to panel with incorrect password');
+        }
+
     }
 
     /** @test */
     public function form_signin_incorrect_recaptcha()
     {
-    	$this->createUser();
+        $this->createUser();
 
         $response = $this->post('/system/signIn', [
-        	'email' => $this->currentUser->email, 
-        	'password' => 'password',
-        	'grecaptcha' => 'XDXD']
+            'email'      => $this->currentUser->email,
+            'password'   => 'password',
+            'grecaptcha' => 'XDXD']
         )->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
 
-        if($result['success'])
-	        $this->fail('Succes sign in to panel with incorrect recaptcha');
+        if ($result['success']) {
+            $this->fail('Succes sign in to panel with incorrect recaptcha');
+        }
+
     }
 
 }

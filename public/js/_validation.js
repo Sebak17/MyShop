@@ -90,7 +90,7 @@ function validateRecaptcha() {
 function validateCategoryName(name) {
     if (!/^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+$/.test(name))
         return false;
-    if (name.length < 4 || name.length > 20)
+    if (name.length < 4 || name.length > 30)
         return false;
 
     return true;

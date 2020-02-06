@@ -18,7 +18,6 @@ class CategoryTest extends TestCase
     //      CATEGORY ADD
     //
 
-
     /** @test */
     public function form_category_add_correct()
     {
@@ -142,6 +141,7 @@ class CategoryTest extends TestCase
         if (!$result['success']) {
             $this->fail($result['msg']);
         }
+
     }
 
     /** @test */
@@ -160,6 +160,7 @@ class CategoryTest extends TestCase
         if ($result['success']) {
             $this->fail('Category edit success with id not exist!');
         }
+
     }
 
     /** @test */
@@ -177,6 +178,7 @@ class CategoryTest extends TestCase
         if ($result['success']) {
             $this->fail('Category edit success with not id given!');
         }
+
     }
 
     /** @test */
@@ -196,8 +198,8 @@ class CategoryTest extends TestCase
         if ($result['success']) {
             $this->fail('Category edit success with empty name!');
         }
+
     }
-    
 
     /** @test */
     public function form_category_edit_incorrect_name_wrong()
@@ -217,6 +219,7 @@ class CategoryTest extends TestCase
         if ($result['success']) {
             $this->fail('Category edit success with wrong name!');
         }
+
     }
 
     /** @test */
@@ -236,6 +239,7 @@ class CategoryTest extends TestCase
         if ($result['success']) {
             $this->fail('Category edit success with empty icon!');
         }
+
     }
 
     /** @test */
@@ -256,6 +260,7 @@ class CategoryTest extends TestCase
         if ($result['success']) {
             $this->fail('Category edit success with wrong icon!');
         }
+
     }
 
     //
@@ -340,7 +345,6 @@ class CategoryTest extends TestCase
         $this->assertCount(1, Category::all());
     }
 
-
     //
     //      CATEGORY CHANGE ORDER
     //
@@ -367,6 +371,7 @@ class CategoryTest extends TestCase
         if (!$result['success']) {
             $this->fail($result['msg']);
         }
+
     }
 
     /** @test */
@@ -395,7 +400,7 @@ class CategoryTest extends TestCase
         $data                                         = array();
         $data[factory(Category::class)->create()->id] = $keys[0];
         $data[factory(Category::class)->create()->id] = $keys[1];
-        $data[5] = $keys[2];
+        $data[5]                                      = $keys[2];
 
         $response = $this->post('/systemAdmin/categoryChangeOrder', [
             'newids' => $data,
@@ -406,6 +411,7 @@ class CategoryTest extends TestCase
         if (!$result['success']) {
             $this->fail($result['msg']);
         }
+
     }
 
 }

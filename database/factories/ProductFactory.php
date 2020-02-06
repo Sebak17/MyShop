@@ -21,6 +21,6 @@ $factory->define(Product::class, function (Faker $faker) {
         'title'       => str_replace(".", "", $this->faker->sentence(5)),
         'price'       => $faker->randomFloat(2, 1, 10000),
         'description' => $faker->text(200),
-        'status'      => "INVISIBLE",
+        'status'      => "IN_STOCK",
     ];
 });

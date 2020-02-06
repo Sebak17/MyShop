@@ -50,7 +50,7 @@ class SignUpTest extends TestCase
 
         $this->createUser();
 
-        $data = $this->getSignUpData();
+        $data          = $this->getSignUpData();
         $data['email'] = $this->currentUser->email;
 
         $response = $this->post('/system/signUp', $data)->assertJsonStructure();
@@ -94,7 +94,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function form_signup_incorrect_data_grecaptcha_incorrect()
     {
-        $data = $this->getSignUpData();
+        $data               = $this->getSignUpData();
         $data['grecaptcha'] = 'dsa798bdasas';
 
         $response = $this->post('/system/signUp', $data)->assertJsonStructure();
@@ -116,7 +116,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function form_signup_incorrect_data_fname_incorrect()
     {
-        $data = $this->getSignUpData();
+        $data              = $this->getSignUpData();
         $data['firstname'] = "John3";
 
         $response = $this->post('/system/signUp', $data)->assertJsonStructure();
@@ -138,7 +138,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function form_signup_incorrect_data_sname_incorrect()
     {
-        $data = $this->getSignUpData();
+        $data            = $this->getSignUpData();
         $data['surname'] = "McCollins1";
 
         $response = $this->post('/system/signUp', $data)->assertJsonStructure();
@@ -161,7 +161,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function form_signup_incorrect_data_phone_incorrect()
     {
-        $data = $this->getSignUpData();
+        $data          = $this->getSignUpData();
         $data['phone'] = "+123";
 
         $response = $this->post('/system/signUp', $data)->assertJsonStructure();
@@ -183,7 +183,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function form_signup_incorrect_data_district_incorrect()
     {
-        $data = $this->getSignUpData();
+        $data             = $this->getSignUpData();
         $data['district'] = "abc";
 
         $response = $this->post('/system/signUp', $data)->assertJsonStructure();
@@ -205,7 +205,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function form_signup_incorrect_data_city_incorrect()
     {
-        $data = $this->getSignUpData();
+        $data         = $this->getSignUpData();
         $data['city'] = "??";
 
         $response = $this->post('/system/signUp', $data)->assertJsonStructure();
@@ -227,7 +227,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function form_signup_incorrect_data_zipcode_incorrect()
     {
-        $data = $this->getSignUpData();
+        $data            = $this->getSignUpData();
         $data['zipcode'] = "11=111";
 
         $response = $this->post('/system/signUp', $data)->assertJsonStructure();
@@ -249,7 +249,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function form_signup_incorrect_data_address_incorrect()
     {
-        $data = $this->getSignUpData();
+        $data            = $this->getSignUpData();
         $data['address'] = $this->faker->streetName . "?";
 
         $response = $this->post('/system/signUp', $data)->assertJsonStructure();

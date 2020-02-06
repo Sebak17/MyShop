@@ -110,7 +110,7 @@ class PanelSystemController extends Controller
             return response()->json($results);
         }
 
-        $product = Product::where('id', $request->id)->first();
+        $product = Product::where('id', $request->id)->where('status', 'IN_STOCK')->first();
 
         if ($product == null) {
             $results['success'] = false;
@@ -148,7 +148,7 @@ class PanelSystemController extends Controller
 
         foreach ($request->session()->get('SHOPPINGCART_DATA', []) as $key => $value) {
 
-            $product = Product::where('id', $key)->first();
+            $product = Product::where('id', $key)->where('status', 'IN_STOCK')->first();
 
             if ($product == null) {
                 continue;
@@ -196,7 +196,7 @@ class PanelSystemController extends Controller
         if (is_array($request->products) && !empty($request->products)) {
 
             foreach ($request->products as $value) {
-                $product = Product::where('id', $value['id'])->first();
+                $product = Product::where('id', $value['id'])->where('status', 'IN_STOCK')->first();
 
                 if ($product == null) {
                     continue;
@@ -234,7 +234,7 @@ class PanelSystemController extends Controller
 
         foreach ($shoppingCartData as $key => $value) {
 
-            $product = Product::where('id', $key)->first();
+            $product = Product::where('id', $key)->where('status', 'IN_STOCK')->first();
 
             if ($product == null) {
                 continue;
@@ -342,7 +342,7 @@ class PanelSystemController extends Controller
         $summaryPrice = 0;
 
         foreach ($shoppingCartData as $key => $value) {
-            $product = Product::where('id', $key)->first();
+            $product = Product::where('id', $key)->where('status', 'IN_STOCK')->first();
 
             if ($product == null) {
                 continue;

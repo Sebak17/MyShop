@@ -80,7 +80,6 @@ class ProductAddTest extends TestCase
 
         $result = json_decode($response->getContent(), true);
 
-
         $this->assertCount(0, Product::all());
     }
 
@@ -131,10 +130,10 @@ class ProductAddTest extends TestCase
         $category = factory(Category::class)->create();
 
         $response = $this->post('/systemAdmin/productCreate', [
-            'name'        => str_replace(".", "", $this->faker->sentence(5)),
-            'price'       => $this->faker->randomFloat(2, 1, 10000),
-            'category'    => $category->id,
-            'params'      => '[{"name":"Nazwa","value":"Wartość"}]',
+            'name'     => str_replace(".", "", $this->faker->sentence(5)),
+            'price'    => $this->faker->randomFloat(2, 1, 10000),
+            'category' => $category->id,
+            'params'   => '[{"name":"Nazwa","value":"Wartość"}]',
         ])->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
@@ -190,7 +189,7 @@ class ProductAddTest extends TestCase
             'params'      => '[{"name":"Nazwa","value":"Wartość"}]',
         ])->assertJsonStructure();
 
-        $result = json_decode($response->getContent(), true); 
+        $result = json_decode($response->getContent(), true);
 
         $this->assertCount(0, Product::all());
     }
@@ -218,6 +217,7 @@ class ProductAddTest extends TestCase
         if (!$result['success']) {
             $this->fail($result['msg'] ?? "Failed to upload image to product!");
         }
+
     }
 
     /** @test */
@@ -242,6 +242,7 @@ class ProductAddTest extends TestCase
         if (!$result['success']) {
             $this->fail($result['msg'] ?? "Failed to upload images to product!");
         }
+
     }
 
     /** @test */
@@ -263,6 +264,7 @@ class ProductAddTest extends TestCase
         if ($result['success']) {
             $this->fail("Uploaded text file as a photo!");
         }
+
     }
 
     /** @test */
@@ -281,6 +283,7 @@ class ProductAddTest extends TestCase
         if ($result['success']) {
             $this->fail("Uploaded zero images!");
         }
+
     }
 
     /** @test */
@@ -297,6 +300,7 @@ class ProductAddTest extends TestCase
         if ($result['success']) {
             $this->fail("Uploaded string as a image!");
         }
+
     }
 
     //

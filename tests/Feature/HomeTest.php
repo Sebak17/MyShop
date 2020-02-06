@@ -21,6 +21,22 @@ class HomeTest extends TestCase
     }
 
     /** @test */
+    public function page_products()
+    {
+        $category = factory(Category::class)->create();
+
+        for ($i = 0; $i < 4; $i++) {
+            factory(Product::class)->create([
+                'category_id' => $category->id,
+                'status'      => "IN_STOCK",
+            ]);
+        }
+
+        $response = $this->get(route('productsPage'))->assertOk();
+
+    }
+
+    /** @test */
     public function page_products_sites()
     {
         $category = factory(Category::class)->create();

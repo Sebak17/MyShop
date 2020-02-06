@@ -126,7 +126,7 @@ class SettingsTest extends TestCase
     }
 
     /** @test */
-    public function form_change_personal_incorrect_fname_wrong() 
+    public function form_change_personal_incorrect_fname_wrong()
     {
         $this->actingAsUser();
 
@@ -141,6 +141,7 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User personal data changed with wrong firstname!');
         }
+
     }
 
     /** @test */
@@ -162,7 +163,7 @@ class SettingsTest extends TestCase
     }
 
     /** @test */
-    public function form_change_personal_incorrect_sname_wrong() 
+    public function form_change_personal_incorrect_sname_wrong()
     {
         $this->actingAsUser();
 
@@ -177,8 +178,8 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User personal data changed with wrong surname!');
         }
-    }
 
+    }
 
     /** @test */
     public function form_change_personal_incorrect_sname_empty()
@@ -199,7 +200,7 @@ class SettingsTest extends TestCase
     }
 
     /** @test */
-    public function form_change_personal_incorrect_phone_wrong() 
+    public function form_change_personal_incorrect_phone_wrong()
     {
         $this->actingAsUser();
 
@@ -214,8 +215,8 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User personal data changed with wrong phone number!');
         }
-    }
 
+    }
 
     /** @test */
     public function form_change_personal_incorrect_phone_empty()
@@ -276,9 +277,8 @@ class SettingsTest extends TestCase
 
     }
 
-
     /** @test */
-    public function form_change_location_incorrect_district_wrong() 
+    public function form_change_location_incorrect_district_wrong()
     {
         $this->actingAsUser();
 
@@ -299,10 +299,11 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User location changed with wrong district!');
         }
+
     }
 
     /** @test */
-    public function form_change_location_incorrect_district_empty() 
+    public function form_change_location_incorrect_district_empty()
     {
         $this->actingAsUser();
 
@@ -312,9 +313,9 @@ class SettingsTest extends TestCase
         $newAddress  = $this->faker->streetName;
 
         $response = $this->post('/systemUser/changeDataLocation', [
-            'city'     => $newCity,
-            'zipcode'  => $newZipCode,
-            'address'  => $newAddress,
+            'city'    => $newCity,
+            'zipcode' => $newZipCode,
+            'address' => $newAddress,
         ])->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);
@@ -322,10 +323,11 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User location changed without district given!');
         }
+
     }
 
     /** @test */
-    public function form_change_location_incorrect_city_wrong() 
+    public function form_change_location_incorrect_city_wrong()
     {
         $this->actingAsUser();
 
@@ -346,10 +348,11 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User location changed with wrong city!');
         }
+
     }
 
     /** @test */
-    public function form_change_location_incorrect_city_empty() 
+    public function form_change_location_incorrect_city_empty()
     {
         $this->actingAsUser();
 
@@ -369,10 +372,11 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User location changed without city given!');
         }
+
     }
 
     /** @test */
-    public function form_change_location_incorrect_zipcode_wrong() 
+    public function form_change_location_incorrect_zipcode_wrong()
     {
         $this->actingAsUser();
 
@@ -393,10 +397,11 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User location changed with wrong zipcode!');
         }
+
     }
 
     /** @test */
-    public function form_change_location_incorrect_zipcode_empty() 
+    public function form_change_location_incorrect_zipcode_empty()
     {
         $this->actingAsUser();
 
@@ -416,10 +421,11 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User location changed without zipcode given!');
         }
+
     }
 
     /** @test */
-    public function form_change_location_incorrect_address_wrong() 
+    public function form_change_location_incorrect_address_wrong()
     {
         $this->actingAsUser();
 
@@ -440,10 +446,11 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User location changed with wrong address!');
         }
+
     }
 
     /** @test */
-    public function form_change_location_incorrect_address_empty() 
+    public function form_change_location_incorrect_address_empty()
     {
         $this->actingAsUser();
 
@@ -463,6 +470,7 @@ class SettingsTest extends TestCase
         if ($result['success']) {
             $this->fail('User location changed without address given!');
         }
+
     }
 
 }

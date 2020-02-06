@@ -77,7 +77,7 @@ trait Helpers
     }
 
 
-    public function addProductToUserFavorites($amountOfProducts = 2)
+    public function addProductToUserShoppingCart($amountOfProducts = 2)
     {
 
         if ($this->currentUser == null) {
@@ -168,7 +168,7 @@ trait Helpers
     {
         $this->actingAsUser();
 
-        $this->addProductToUserFavorites();
+        $this->addProductToUserShoppingCart();
         $this->confirmShoppingCart();
 
         $data = $this->getOrderCreateData();
@@ -204,28 +204,37 @@ trait Helpers
 
             'district'   => $this->faker->numberBetween(1, 16),
             'city'       => $this->faker->city,
-            'zipcode'    => '11-111',
+            'zipcode'    => $this->faker->numberBetween(10, 99) . '-' . $this->faker->numberBetween(100, 999),
             'address'    => $this->faker->streetName,
         ];
         return $res;
     }
 
-    public function getOrderCreateData()
+    public function getOrderCreateData($locker = false)
     {
         $res = [
             'paymentType' => "PAYPAL",
             'clientFName' => $this->faker->firstName,
             'clientSName' => $this->faker->lastName,
             'clientPhone' => $this->faker->numberBetween(111111111, 999999999),
-            'deliver'     => [
+            'note'        => $this->faker->text(150),
+        ];
+
+        if($locker) {
+            $res['deliver'] = [
+                'type'     => "INPOST_LOCKER",
+                'lockerName' => "GWI03L",
+            ];
+        } else {
+            $res['deliver'] = [
                 'type'     => "COURIER",
                 'district' => $this->faker->numberBetween(1, 16),
                 'city'     => $this->faker->city,
-                'zipcode'  => '11-111',
+                'zipcode'  => $this->faker->numberBetween(10, 99) . '-' . $this->faker->numberBetween(100, 999),
                 'address'  => $this->faker->streetName,
-            ],
-            'note'        => $this->faker->text(150),
-        ];
+            ];
+        }
+
         return $res;
     }
 
