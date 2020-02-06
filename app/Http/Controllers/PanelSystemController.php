@@ -240,6 +240,8 @@ class PanelSystemController extends Controller
                 continue;
             }
 
+            $value = intval($value);
+
             if (!is_int($value) || $value <= 0 || $value > 100) {
                 continue;
             }

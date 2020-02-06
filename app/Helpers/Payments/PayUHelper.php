@@ -201,7 +201,11 @@ class PayUHelper
             return $results;
         }
 
-        if ($payment->amount * 100 != $response->getResponse()->orders[0]->totalAmount) {
+        $localAmount = intval($payment->amount * 100);
+        $externalTotalAmount = intval($response->getResponse()->orders[0]->totalAmount);
+
+        if ( ($localAmount != $externalTotalAmount) &&
+            (($localAmount - 1) != $externalTotalAmount)) {
             return $results;
         }
 
