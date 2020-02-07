@@ -64,7 +64,9 @@
 		
 		@auth('admin')
 		<li class="nav-item mt-2">
-			<button type="button" class="btn btn-danger" disabled><i class="fas fa-user-shield"></i> ADMINISTRATOR</button>
+			<a class="none" href="{{ route('admin_dashboardPage') }}">
+				<button type="button" class="btn btn-danger"><i class="fas fa-user-shield"></i> ADMINISTRATOR</button>
+			</a>
 		</li>
 		
 		@endauth
