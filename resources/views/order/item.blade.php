@@ -44,7 +44,10 @@
         </div>
         
         <div class="col-12 col-lg-4">
-            @if(in_array($order->status, ['PAID','REALIZE','SENT']))
+
+            @if( $order->payments->last() != null && $order->payments->last()->cancelled == true )
+            <div class="alert alert-danger"><i class="fas fa-times"></i> Płatność została odrzucona!</div>
+            @elseif(in_array($order->status, ['PAID','REALIZE','SENT']))
             <div class="alert alert-success"><i class="fas fa-check"></i> Zamówienie zostało opłacone!</div>
             @elseif(in_array($order->status, ['PROCESSING']))
             <div class="alert alert-warning"><i class="fas fa-spinner fa-spin"></i> Płatność jest przetwarzana...</div>

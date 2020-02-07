@@ -57,8 +57,11 @@ Route::group([], function () {
 
     Route::get('/platnosc/status', 'PanelController@paymentStatus')->name('paymentStatusPage');
 
-    Route::get('/platnosc/status/sukces', function() {
-        return view('order.payments.success');
+    Route::get('/platnosc/status/payu', function() {
+        if(isset($_GET['error']))
+            return view('order.payments.error');
+        else
+            return view('order.payments.success');
     })->name('paymentStatusPage-success');
 });
 

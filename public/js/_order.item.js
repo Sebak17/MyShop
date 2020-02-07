@@ -37,10 +37,7 @@ function payment_check() {
             id: id
         },
         success: function (data) {
-            if (data.success == true) {
-                location.reload();
-            }
-
+            location.reload();
         },
         error: function () {},
     });

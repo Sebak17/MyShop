@@ -4,6 +4,7 @@ namespace App\Helpers\Payments;
 
 use App\Helpers\OrderHelper;
 use App\Order;
+use App\OrderHistory;
 use App\Payment;
 use Log;
 
@@ -117,12 +118,16 @@ class PayUHelper
                     exit();
                 }
 
-                if ($payment->amount * 100 != $response->getResponse()->orders[0]->totalAmount) {
+                $localAmount = intval($payment->amount * 100);
+                $externalTotalAmount = intval($response->getResponse()->orders[0]->totalAmount);
+
+                if ( ($localAmount != $externalTotalAmount) &&
+                    (($localAmount - 1) != $externalTotalAmount)) {
                     header("HTTP/1.1 200 OK");
                     exit();
                 }
 
-                if ($payu_order->getStatus() == 'SUCCESS') {
+                if ($response->getResponse()->orders[0]->status != 'SUCCESS' && $response->getResponse()->orders[0]->status != 'COMPLETED') {
                     OrderHelper::changeOrderStatus($order, 'PAID');
 
                     header("HTTP/1.1 200 OK");
@@ -143,7 +148,13 @@ class PayUHelper
 
         $response = \OpenPayU_Order::retrieve($order_id);
 
-        if ($response->getStatus() != 'SUCCESS') {
+        if ($response->getResponse()->orders[0]->status == 'CANCELED') {
+            $results['msg']     = "Płatność została odrzucona!";
+            $results['success'] = false;
+            return $results;
+        }
+
+        if ($response->getResponse()->orders[0]->status != 'SUCCESS' && $response->getResponse()->orders[0]->status != 'COMPLETED') {
             $results['msg']     = "Płatność nie została zakończona sukcesem!";
             $results['success'] = false;
             return $results;
@@ -165,7 +176,11 @@ class PayUHelper
             return $results;
         }
 
-        if ($payment->amount * 100 != $response->getResponse()->orders[0]->totalAmount) {
+        $localAmount = intval($payment->amount * 100);
+        $externalTotalAmount = intval($response->getResponse()->orders[0]->totalAmount);
+
+        if ( ($localAmount != $externalTotalAmount) &&
+            (($localAmount - 1) != $externalTotalAmount)) {
             $results['success'] = false;
             $results['msg']     = "Wystąpił problem przy pobieraniu danych!";
             return $results;
@@ -185,13 +200,31 @@ class PayUHelper
     	
         $response = \OpenPayU_Order::retrieve($order_id);
 
-        if ($response->getStatus() != 'SUCCESS') {
-            return $results;
-        }
+        $status = $response->getResponse()->orders[0]->status;
 
         $payment = Payment::where('externalID', $order_id)->first();
 
         if ($payment == null) {
+            return $results;
+        }
+
+        if ($status != 'SUCCESS' && $status != 'COMPLETED') {
+            if($status == 'CANCELED') {
+                $payment->status = $status;
+                $payment->cancelled = true;
+                $payment->save();
+
+                $order = $payment->order;
+                if($order != null) {
+                    OrderHelper::changeOrderStatus($order, 'UNPAID');
+                }
+
+                OrderHistory::create([
+                    'order_id' => $payment->order->id,
+                    'data'     => 'Transakcja została odrzucona',
+                ]);
+            }
+
             return $results;
         }
 
@@ -217,15 +250,38 @@ class PayUHelper
 
     private function isNeedToUpdate(Order $order, Payment $payment, $response)
     {
-        if ($response->getStatus() != 'SUCCESS') {
-            return $results;
+        if($response->getResponse()->orders[0]->status == 'CANCELED') {
+                $payment->status = $response->getResponse()->orders[0]->status;
+                $payment->cancelled = true;
+                $payment->save();
+
+                if($order != null) {
+                    OrderHelper::changeOrderStatus($order, 'UNPAID');
+                }
+
+                OrderHistory::create([
+                    'order_id' => $payment->order->id,
+                    'data'     => 'Transakcja została odrzucona',
+                ]);
+            }
+
+        if ($response->getResponse()->orders[0]->status != 'SUCCESS'  && $response->getResponse()->orders[0]->status != 'COMPLETED') {
+            return;
         }
 
         if ($order->status != 'PROCESSING') {
             return;
         }
 
-        $payment->status = $response->getStatus();
+        $localAmount = intval($payment->amount * 100);
+        $externalTotalAmount = intval($response->getResponse()->orders[0]->totalAmount);
+
+        if ( ($localAmount != $externalTotalAmount) &&
+           (($localAmount - 1) != $externalTotalAmount)) {
+            return;
+        }
+
+        $payment->status = $response->getResponse()->orders[0]->status;
         $payment->save();
 
         OrderHelper::changeOrderStatus($order, 'PAID');
