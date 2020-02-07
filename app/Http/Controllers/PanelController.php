@@ -144,7 +144,9 @@ class PanelController extends Controller
         $user = Auth::user();
 
         $summary['orders'] = count($user->orders);
-        $summary['products'] = count($user->orders);
+
+
+        $summary['products'] = 0;
 
         $lastProducts = array();
 
@@ -155,11 +157,13 @@ class PanelController extends Controller
                 $query->where('orders.user_id', '=', $user->id);
             })
             ->orderBy('orders_products.id', 'desc')
-            ->limit(5)
+            ->limit(10)
             ->get();
 
         foreach ($orders_products as $pr) {
-            $product = Product::where('id', $pr->id)->first();
+            $product = Product::where('id', $pr->product_id)->first();
+
+            $summary['products'] += $pr->amount;
 
             if ($product == null || $product->status == 'INVISIBLE') {
                 continue;
