@@ -15,7 +15,7 @@ class PageTest extends TestCase
     /** @test */
     public function pages_not_logged_in_admins_cannot_see()
     {
-        $response = $this->post('/systemAdmin/categoryAdd')->assertRedirect('/not_authorizated');
+        $response = $this->post('/systemAdmin/categoryAdd')->assertRedirect('/admin/not_authorizated');
     }
 
     /** @test */
@@ -23,7 +23,7 @@ class PageTest extends TestCase
     {
         $this->actingAsUser();
 
-        $response = $this->post('/systemAdmin/categoryAdd')->assertRedirect('/not_authorizated');
+        $response = $this->post('/systemAdmin/categoryAdd')->assertRedirect('/admin/not_authorizated');
     }
 
     /** @test */
