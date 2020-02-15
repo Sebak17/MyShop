@@ -364,4 +364,50 @@ class PageTest extends TestCase
         $response = $this->get('/admin/ustawienia')->assertRedirect('/admin/not_authorizated');
     }
 
+
+
+    /** @test */
+    public function page_settings_banners_authenticated_admins_can_see()
+    {
+        $this->actingAsAdmin();
+
+        $response = $this->get('/admin/ustawienia/banery')->assertOk();
+    }
+
+    /** @test */
+    public function page_settings_banners_not_logged_in_cannot_see()
+    {
+        $response = $this->get('/admin/ustawienia/banery')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_settings_banners_authenticated_users_cannot_see()
+    {
+        $this->actingAsUser();
+
+        $response = $this->get('/admin/ustawienia/banery')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_settings_maintenance_authenticated_admins_can_see()
+    {
+        $this->actingAsAdmin();
+
+        $response = $this->get('/admin/ustawienia/przerwa_techniczna')->assertOk();
+    }
+
+    /** @test */
+    public function page_settings_maintenance_not_logged_in_cannot_see()
+    {
+        $response = $this->get('/admin/ustawienia/przerwa_techniczna')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_settings_maintenance_authenticated_users_cannot_see()
+    {
+        $this->actingAsUser();
+
+        $response = $this->get('/admin/ustawienia/przerwa_techniczna')->assertRedirect('/admin/not_authorizated');
+    }
+
 }
