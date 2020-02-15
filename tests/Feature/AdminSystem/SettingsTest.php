@@ -71,49 +71,11 @@ class SettingsTest extends TestCase
     }
 
     //
-    //      MAINTENANCE ADD IP
+    //      MAINTENANCE IP
     //
 
     /** @test */
-    public function form_maintenance_ip_add_correct()
-    {
-        $this->actingAsAdmin();
-
-        $response = $this->post('/systemAdmin/settingsMaintenanceAddIP', [
-            'ip' => $this->faker->ipv4,
-        ])->assertJsonStructure();
-
-        $result = json_decode($response->getContent(), true);
-
-        if (!$result['success']) {
-            $this->fail($result['msg']);
-        }
-
-    }
-
-    /** @test */
-    public function form_maintenance_ip_add_incorrect_ip()
-    {
-        $this->actingAsAdmin();
-
-        $response = $this->post('/systemAdmin/settingsMaintenanceAddIP', [
-            'ip' => $this->faker->ipv4 . ".000",
-        ])->assertJsonStructure();
-
-        $result = json_decode($response->getContent(), true);
-
-        if ($result['success']) {
-            $this->fail("Added wrong ip to maintenance list!");
-        }
-
-    }
-
-    //
-    //      MAINTENANCE REMOVE IP
-    //
-
-    /** @test */
-    public function form_maintenance_ip_remove_correct()
+    public function form_maintenance_ip_correct()
     {
         $this->actingAsAdmin();
 
@@ -137,6 +99,23 @@ class SettingsTest extends TestCase
 
         if (!$result['success']) {
             $this->fail($result['msg']);
+        }
+
+    }
+
+    /** @test */
+    public function form_maintenance_ip_add_incorrect_ip()
+    {
+        $this->actingAsAdmin();
+
+        $response = $this->post('/systemAdmin/settingsMaintenanceAddIP', [
+            'ip' => $this->faker->ipv4 . ".000",
+        ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if ($result['success']) {
+            $this->fail("Added wrong ip to maintenance list!");
         }
 
     }
