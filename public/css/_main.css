@@ -24,8 +24,25 @@ body>.container, body>.container-fluid {
 
 #main-baner {
     width: 100%;
-    height: 200px;
     overflow: hidden;
+}
+
+@media only screen and (max-width: 2768px) {
+    #main-baner {
+        height: 320px;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    #main-baner {
+        height: 280px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    #main-baner {
+        height: 250px;
+    }
 }
 
 #main-baner>img {

@@ -164,6 +164,9 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('uzytkownik', 'AdminController@userPage')->name('admin_userPage');
 
     Route::get('ustawienia', 'AdminController@settingsPage')->name('admin_settingsPage');
+
+    Route::get('ustawienia/banery', 'AdminController@settingsBannersPage')->name('admin_settingsBannersPage');
+    Route::get('ustawienia/przerwa_techniczna', 'AdminController@settingsMaintenancePage')->name('admin_settingsMaintenancePage');
 });
 
 //
@@ -233,4 +236,7 @@ Route::prefix('systemAdmin')->middleware('admin.auth')->group(function () {
     Route::post('settingsMaintenanceChange', 'AdminSystem\SettingsController@maintenanceChange');
     Route::post('settingsMaintenanceAddIP', 'AdminSystem\SettingsController@maintenanceAddIP');
     Route::post('settingsMaintenanceDelIP', 'AdminSystem\SettingsController@maintenanceDelIP');
+
+    Route::post('settingsBannersUploadImage', 'AdminSystem\SettingsController@bannersUploadImage');
+    Route::post('settingsBannersRemoveImage', 'AdminSystem\SettingsController@bannersRemoveImage');
 });

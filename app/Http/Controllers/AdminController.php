@@ -65,7 +65,7 @@ class AdminController extends Controller
     {
         $orders = Order::all();
 
-        $realizeOrders = Order::where('status', 'REALIZE')->count();
+        $realizeOrders = Order::where('status', 'REALIZE')->orWhere('status', 'PAID')->count();
 
         return view('admin.orders.list')->with('orders', $orders)->with('realizeOrders', $realizeOrders);
     }
@@ -102,7 +102,7 @@ class AdminController extends Controller
     public function ordersRealisingListPage()
     {
 
-        $orders = Order::where('status', 'REALIZE')->get();
+        $orders = Order::where('status', 'REALIZE')->orWhere('status', 'PAID')->get();
 
         return view('admin.orders.realising_list')->with('orders', $orders);
     }
@@ -158,6 +158,20 @@ class AdminController extends Controller
 
     public function settingsPage()
     {
+        return view('admin.settings');
+    }
+
+    public function settingsBannersPage()
+    {
+        $images = array();
+        if(Storage::exists('banners.json'))
+            $images = json_decode(Storage::get('banners.json'), true);
+
+        return view('admin.settings.banners')->with('images', $images);
+    }
+
+    public function settingsMaintenancePage() 
+    {
         $data = array();
 
         if (file_exists(storage_path('framework/down'))) {
@@ -181,7 +195,7 @@ class AdminController extends Controller
         if(Storage::exists('allowed_ips.json'))
             $ips = json_decode(Storage::get('allowed_ips.json'), true);
 
-        return view('admin.settings')->with('data', $data)->with('ips', $ips);
+        return view('admin.settings.maintenance')->with('data', $data)->with('ips', $ips);
     }
 
 }

@@ -71,8 +71,8 @@ function loadProducts() {
                 for (let i = 0; i < data.list.length; i++) {
 
                     row += String.raw `<tr>
-                                            <td style="width: 100px">
-                                                <img class="img-fluid" width="100px" max-height="60px" src="/storage/products_images/` + data.list[i].image1 + `">
+                                            <td style="width: 100px; padding: 6px;">
+                                                <img class="img-fluid" width="50px" max-height="50px" src="/storage/products_images/` + data.list[i].image1 + `">
                                             </td>
                                             <td class="align-middle text-left">
                                                 <h6>` + data.list[i].name + `</h6>
@@ -81,7 +81,7 @@ function loadProducts() {
                                                 ` + data.list[i].status + `
                                             </td>
                                             <td class="align-middle text-left">
-                                                <h5>` + data.list[i].price + ` ` + cfg_currency +  `</h5>
+                                                <h6>` + data.list[i].price + ` ` + cfg_currency +  `</h6>
                                             </td>
                                             <td class="align-middle text-right">
                                                 <a href="/produkt?id=` + data.list[i].id  + `"><button class="btn btn-sm btn-info mb-1"><i class="fas fa-arrow-right"></i> Pokaż</button></a>

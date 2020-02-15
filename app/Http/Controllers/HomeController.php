@@ -9,6 +9,7 @@ use App\Rules\ValidID;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -16,6 +17,11 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
+
+        $banners = array();
+        if (Storage::exists('banners.json')) {
+            $banners = json_decode(Storage::get('banners.json'), true);
+        }
 
         $categories     = Category::where('active', 1)->where('visible', 1)->where('overcategory', 0)->orderBy('orderID', 'ASC')->get();
         $categoriesData = array();
@@ -135,7 +141,7 @@ class HomeController extends Controller
             }
         }
 
-        return view('home/main')->with('categories', $categoriesData)->with('productsHistory', $productsHistoryData)->with('productsProposed', $productsProposed);
+        return view('home/main')->with('banners', $banners)->with('categories', $categoriesData)->with('productsHistory', $productsHistoryData)->with('productsProposed', $productsProposed);
     }
 
     public function productsPage(Request $request)
