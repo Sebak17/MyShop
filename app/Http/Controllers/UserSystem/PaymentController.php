@@ -6,16 +6,16 @@ use App\Helpers\OrderHelper;
 use App\Helpers\Payments\PayPalHelper;
 use App\Helpers\Payments\PayUHelper;
 use App\Http\Controllers\Controller;
-use App\Order;
-use App\OrderHistory;
-use App\Payment;
+use App\Models\Order;
+use App\Models\OrderHistory;
+use App\Models\Payment;
 use App\Rules\ValidID;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
-	
+
     public function paymentCancel(Request $request)
     {
 

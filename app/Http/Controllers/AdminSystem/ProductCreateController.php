@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\AdminSystem;
 
 use App\Http\Controllers\Controller;
-use App\Category;
-use App\Product;
-use App\ProductImage;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductImage;
 use App\Rules\ValidProductCategory;
 use App\Rules\ValidProductDescription;
 use App\Rules\ValidProductImage;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\UserSystem;
 
 use App\Http\Controllers\Controller;
-use App\Product;
+use App\Models\Product;
 use App\Rules\ValidID;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class GeneralController extends Controller
 {
-	
+
     public function changeFavoriteStatus(Request $request)
     {
         $validator = Validator::make($request->all(), [

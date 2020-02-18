@@ -3,7 +3,7 @@
 namespace App\Helpers\Payments;
 
 use App\Helpers\OrderHelper;
-use App\Order;
+use App\Models\Order;
 use PayPal\Api\Amount;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\AdminSystem;
 
-use App\Category;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Rules\ValidCategoryName;
 use App\Rules\ValidIconFA;
 use App\Rules\ValidID;

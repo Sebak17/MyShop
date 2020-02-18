@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\UserHistory;
+use App\Models\UserHistory;
 
 class UserHelper
 {

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\AdminSystem;
 
-use App\Category;
 use App\Http\Controllers\Controller;
-use App\Order;
-use App\Product;
-use App\Rules\ValidProductName;
-use App\Rules\ValidProductPrice;
+use App\Models\Category;
+use App\Models\Order;
+use App\Models\Product;
+use App\Rules\ValidProductName_NR;
+use App\Rules\ValidProductPrice_NR;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -58,9 +58,9 @@ class GeneralController extends Controller
     public function productLoadList(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'     => new ValidProductName,
-            'minPrice' => new ValidProductPrice,
-            'maxPrice' => new ValidProductPrice,
+            'name'     => new ValidProductName_NR,
+            'minPrice' => new ValidProductPrice_NR,
+            'maxPrice' => new ValidProductPrice_NR,
         ]);
 
         $results = array();

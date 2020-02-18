@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\AdminSystem;
 
-use App\Category;
 use App\Http\Controllers\Controller;
-use App\Product;
-use App\ProductImage;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductImage;
 use App\Rules\ValidID;
 use App\Rules\ValidProductCategory;
 use App\Rules\ValidProductDescription;
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductEditController extends Controller
 {
-    
+
     public function loadCurrentData(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -2,16 +2,16 @@
 
 namespace Tests;
 
-use App\Admin;
-use App\Ban;
-use App\Category;
-use App\Order;
-use App\OrderProduct;
-use App\Product;
-use App\User;
-use App\UserInfo;
-use App\UserLocation;
-use App\UserPersonal;
+use App\Models\Admin;
+use App\Models\Ban;
+use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
+use App\Models\User;
+use App\Models\UserInfo;
+use App\Models\UserLocation;
+use App\Models\UserPersonal;
 use Illuminate\Http\UploadedFile;
 
 trait Helpers

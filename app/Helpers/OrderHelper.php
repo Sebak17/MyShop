@@ -2,8 +2,8 @@
 
 namespace App\Helpers;
 
-use App\Order;
-use App\OrderHistory;
+use App\Models\Order;
+use App\Models\OrderHistory;
 
 class OrderHelper
 {

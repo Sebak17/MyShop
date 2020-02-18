@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
 use App\Helpers\CategoriesHelper;
-use App\Product;
+use App\Models\Category;
+use App\Models\Product;
 use App\Rules\ValidID;
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -19,6 +19,7 @@ class HomeController extends Controller
     {
 
         $banners = array();
+
         if (Storage::exists('banners.json')) {
             $banners = json_decode(Storage::get('banners.json'), true);
         }
@@ -58,7 +59,7 @@ class HomeController extends Controller
 
         $productsProposed = array();
 
-        if(Product::all()->count() > 0) {
+        if (Product::all()->count() > 0) {
 
             if (empty($productsHistorySession)) {
 
@@ -112,10 +113,8 @@ class HomeController extends Controller
 
                 }
 
-
                 shuffle($productsProposed);
                 $productsProposed = array_slice($productsProposed, 0, 4, true);
-
 
                 while (count($productsProposed) < 4) {
 
@@ -139,6 +138,7 @@ class HomeController extends Controller
                 }
 
             }
+
         }
 
         return view('home/main')->with('banners', $banners)->with('categories', $categoriesData)->with('productsHistory', $productsHistoryData)->with('productsProposed', $productsProposed);

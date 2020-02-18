@@ -5,11 +5,11 @@ namespace App\Http\Controllers\UserSystem;
 use App\Helpers\OrderHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderCreateMail;
-use App\Order;
-use App\OrderHistory;
-use App\OrderProduct;
-use App\Payment;
-use App\Product;
+use App\Models\Order;
+use App\Models\OrderHistory;
+use App\Models\OrderProduct;
+use App\Models\Payment;
+use App\Models\Product;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
@@ -28,7 +28,7 @@ use Session;
 
 class OrderController extends Controller
 {
-	
+
     public function addProductToShoppingCart(Request $request)
     {
         $validator = Validator::make($request->all(), [

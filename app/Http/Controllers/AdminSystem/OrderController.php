@@ -4,8 +4,8 @@ namespace App\Http\Controllers\AdminSystem;
 
 use App\Helpers\OrderHelper;
 use App\Http\Controllers\Controller;
-use App\Order;
-use App\OrderHistory;
+use App\Models\Order;
+use App\Models\OrderHistory;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
-    
+
     public function changeStatus(Request $request)
     {
         $validator = Validator::make($request->all(), [

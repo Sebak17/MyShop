@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\AdminSystem;
 
-use App\Category;
+use App\Models\Category;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;

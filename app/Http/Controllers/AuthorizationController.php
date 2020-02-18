@@ -6,8 +6,12 @@ use App\Helpers\Security;
 use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\AuthActiveAccountMail;
-use App\Mail\AuthResetPasswordMail;
 use App\Mail\AuthCreateAccountMail;
+use App\Mail\AuthResetPasswordMail;
+use App\Models\User;
+use App\Models\UserInfo;
+use App\Models\UserLocation;
+use App\Models\UserPersonal;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
 use App\Rules\ValidDistrict;
@@ -18,16 +22,12 @@ use App\Rules\ValidPhoneNumber;
 use App\Rules\ValidReCaptcha;
 use App\Rules\ValidSurName;
 use App\Rules\ValidZipCode;
-use App\User;
-use App\UserInfo;
-use App\UserLocation;
-use App\UserPersonal;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class AuthorizationController extends Controller
 {
@@ -312,7 +312,6 @@ class AuthorizationController extends Controller
         $user->info->activationMailTime = strtotime("+5 minutes");
         $user->push();
 
-
         UserHelper::addToHistory(
             $user,
             "AUTH",
@@ -420,8 +419,8 @@ class AuthorizationController extends Controller
 
         $user = $user_info->user;
 
-        $user->password = bcrypt($request->password);
-        $user->info->passwordResetHash = null;
+        $user->password                    = bcrypt($request->password);
+        $user->info->passwordResetHash     = null;
         $user->info->passwordResetMailTime = null;
         $user->push();
 

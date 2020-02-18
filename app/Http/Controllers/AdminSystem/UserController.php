@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\AdminSystem;
 
-use App\Ban;
 use App\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Ban;
+use App\Models\User;
 use App\Rules\ValidAddress;
 use App\Rules\ValidBanDescription;
 use App\Rules\ValidCity;
@@ -14,7 +15,6 @@ use App\Rules\ValidID;
 use App\Rules\ValidPhoneNumber;
 use App\Rules\ValidSurName;
 use App\Rules\ValidZipCode;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 

@@ -3,9 +3,9 @@
 namespace App\Helpers\Payments;
 
 use App\Helpers\OrderHelper;
-use App\Order;
-use App\OrderHistory;
-use App\Payment;
+use App\Models\Order;
+use App\Models\OrderHistory;
+use App\Models\Payment;
 use Log;
 
 class PayUHelper

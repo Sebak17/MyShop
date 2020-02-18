@@ -107,6 +107,30 @@ class AdminController extends Controller
         return view('admin.orders.realising_list')->with('orders', $orders);
     }
 
+    public function warehousePage()
+    {
+        return view('admin.warehouse');
+    }
+
+    public function warehouseListPage()
+    {
+        return view('admin.warehouse.list');
+    }
+
+    public function warehouseItemPage($id)
+    {
+
+        $product = Product::where('id', $id)->first();
+
+        if ($product == null) {
+            return redirect()->route('admin_warehousePage');
+        }
+
+        $items = $product->items;
+
+        return view('admin.warehouse.product')->with('product', $product)->with('items', $items);
+    }
+
     public function usersListPage()
     {
         return view('admin.users.list');
@@ -164,13 +188,15 @@ class AdminController extends Controller
     public function settingsBannersPage()
     {
         $images = array();
-        if(Storage::exists('banners.json'))
+
+        if (Storage::exists('banners.json')) {
             $images = json_decode(Storage::get('banners.json'), true);
+        }
 
         return view('admin.settings.banners')->with('images', $images);
     }
 
-    public function settingsMaintenancePage() 
+    public function settingsMaintenancePage()
     {
         $data = array();
 
@@ -192,8 +218,10 @@ class AdminController extends Controller
         }
 
         $ips = array();
-        if(Storage::exists('allowed_ips.json'))
+
+        if (Storage::exists('allowed_ips.json')) {
             $ips = json_decode(Storage::get('allowed_ips.json'), true);
+        }
 
         return view('admin.settings.maintenance')->with('data', $data)->with('ips', $ips);
     }

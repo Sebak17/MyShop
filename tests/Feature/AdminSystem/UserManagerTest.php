@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\AdminSystem;
 
-use App\Ban;
+use App\Models\Ban;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\Helpers as Helper;

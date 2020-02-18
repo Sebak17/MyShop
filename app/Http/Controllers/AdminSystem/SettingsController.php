@@ -154,7 +154,7 @@ class SettingsController extends Controller
     //      BANNERS
     //
 
-    public function bannersUploadImage(Request $request) 
+    public function bannersUploadImage(Request $request)
     {
         $results = array();
 
@@ -214,7 +214,6 @@ class SettingsController extends Controller
             return response()->json($results);
         }
 
-
         if (!Storage::exists("public/banners/" . $request->name)) {
             $results['success'] = false;
             $results['msg']     = "Plik nie istnieje!";
@@ -222,10 +221,10 @@ class SettingsController extends Controller
         }
 
         $banners = array();
+
         if (Storage::exists('banners.json')) {
             $banners = json_decode(Storage::get('banners.json'), true);
         }
-
 
         Storage::delete("public/banners/" . $request->name);
         Storage::put('banners.json', json_encode(array_diff($banners, [$request->name]), JSON_PRETTY_PRINT));

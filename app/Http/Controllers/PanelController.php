@@ -3,9 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Payments\PayPalHelper;
 use App\Helpers\Payments\PayUHelper;
-use App\Order;
-use App\OrderProduct;
-use App\Product;
+use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -145,7 +145,6 @@ class PanelController extends Controller
 
         $summary['orders'] = count($user->orders);
 
-
         $summary['products'] = 0;
 
         $lastProducts = array();
@@ -154,8 +153,8 @@ class PanelController extends Controller
             ->where(function ($query) {
                 $query->where('orders.status', '=', 'PAID')->orWhere('orders.status', '=', 'REALIZE')->orWhere('orders.status', '=', 'SENT')->orWhere('orders.status', '=', 'RECEIVE');
             })->where(function ($query) use ($user) {
-                $query->where('orders.user_id', '=', $user->id);
-            })
+            $query->where('orders.user_id', '=', $user->id);
+        })
             ->orderBy('orders_products.id', 'desc')
             ->limit(10)
             ->get();
@@ -185,8 +184,6 @@ class PanelController extends Controller
         $user = Auth::user();
 
         $orders = $user->orders;
-
-
 
         return view('panel.orders')->with('orders', $orders);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,17 +24,17 @@ class Order extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function products()
     {
-        return $this->hasMany('App\OrderProduct');
+        return $this->hasMany('App\Models\OrderProduct');
     }
 
     public function payments()
     {
-        return $this->hasMany('App\Payment');
+        return $this->hasMany('App\Models\Payment');
     }
 
     public function getCurrentPayment() {
