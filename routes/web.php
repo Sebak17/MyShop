@@ -159,6 +159,9 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('zamowienia/realizacja', 'AdminController@ordersRealisingListPage')->name('admin_ordersRealizeListPage');
     Route::get('zamowienia/{id}', 'AdminController@orderPage')->where('id', '[0-9]+')->name('admin_orderPageID');
     
+    Route::get('magazyn', 'AdminController@warehousePage')->name('admin_warehousePage'); // ADD TEST
+    Route::get('magazyn/lista', 'AdminController@warehouseListPage')->name('admin_warehouseListPage'); // ADD TEST
+    Route::get('magazyn/towar/{id}', 'AdminController@warehouseItemPage')->where('id', '[0-9]+')->name('admin_warehouseItemPage'); // ADD TEST
 
     Route::get('uzytkownicy', 'AdminController@usersListPage')->name('admin_usersListPage');
     Route::get('uzytkownik', 'AdminController@userPage')->name('admin_userPage');
@@ -210,6 +213,11 @@ Route::prefix('systemAdmin')->middleware('admin.auth')->group(function () {
     Route::post('productEditImageList', 'AdminSystem\ProductEditController@imageList');
     Route::post('productEditImageAdd', 'AdminSystem\ProductEditController@imageAdd');
     Route::post('productEditImageRemove', 'AdminSystem\ProductEditController@imageRemove');
+
+    //
+    //      WAREHOUSE SITES
+    //
+    Route::post('warehouseList', 'AdminSystem\WarehouseController@list'); // ADD TEST
 
     //
     //      ORDER MANAGE SITES

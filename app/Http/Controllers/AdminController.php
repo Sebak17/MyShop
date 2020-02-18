@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
-use App\OrderHistory;
-use App\Product;
+use App\Models\Order;
+use App\Models\OrderHistory;
+use App\Models\Product;
+use App\Models\User;
 use App\Rules\ValidEmail;
 use App\Rules\ValidID;
-use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {

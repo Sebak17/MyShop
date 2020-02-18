@@ -35,9 +35,18 @@
 				<i class="fas fa-fw fa-align-left"></i>
 				<span>Kategorie</span>
 			</a>
-		
+		</li>
 
-		<hr class="sidebar-divider d-none d-md-block">
+		<hr class="sidebar-divider">
+		
+		<li class="nav-item">
+			<a class="nav-link" href="{{ route('admin_warehousePage') }}">
+				<i class="fas fa-fw fa-warehouse"></i>
+				<span>Magazyn</span>
+			</a>
+		</li>
+
+		<hr class="sidebar-divider">
 
 		<li class="nav-item">
 			<a class="nav-link" href="{{ route('admin_ordersListPage') }}">
@@ -51,8 +60,6 @@
 				<i class="fas fa-fw fa-users"></i>
 				<span>Użytkownicy</span>
 			</a>
-		</li>
-
 		</li>
 
 		<hr class="sidebar-divider d-none d-md-block">
