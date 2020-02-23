@@ -152,6 +152,7 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('kategorie', 'AdminController@categoriesPage')->name('admin_categoriesPage');
 
     Route::get('produkty/lista', 'AdminController@productsListPage')->name('admin_productsListPage');
+    Route::get('produkty/info/{id}', 'AdminController@productsItemPage')->name('admin_productsItemPage'); // ADD TEST
     Route::get('produkty/dodaj', 'AdminController@productsAddPage')->name('admin_productsAddPage');
     Route::get('produkty/edytuj/{id}', 'AdminController@productsEditPage')->name('admin_productsEditPage');
 

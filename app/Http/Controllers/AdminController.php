@@ -46,6 +46,21 @@ class AdminController extends Controller
         return view('admin.products.add');
     }
 
+    public function productsItemPage(Request $request, $id)
+    {
+        if (!is_numeric($id)) {
+            return redirect()->route('admin_dashboardPage');
+        }
+
+        $product = Product::where('id', $id)->first();
+
+        if ($product == null) {
+            return redirect()->route('admin_dashboardPage');
+        }
+        
+        return view('admin.products.item')->with('product', $product);
+    }
+
     public function productsEditPage(Request $request, $id)
     {
 

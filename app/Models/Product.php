@@ -39,4 +39,9 @@ class Product extends Model
         return $this->hasMany('App\Models\WarehouseItem');
     }
 
+    public function getCategory() 
+    {
+        return \App\Models\Category::where('id', $this->category_id)->first();
+    }
+
 }
