@@ -44,7 +44,7 @@
 			<div class="row text-left ml-2">
 				<div class="col-6">Produkt: </div>
 				<div class="col-6">
-					<a href="{{ route('admin_productsEditPage', $item->product->id) }}">
+					<a href="{{ route('admin_productsItemPage', $item->product->id) }}">
 						<strong>{{ $item->product->title }}</strong>
 					</a>
 				</div>
