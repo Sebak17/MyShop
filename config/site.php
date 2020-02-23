@@ -68,4 +68,12 @@ return [
         'BAN'       => "Blokada",
     ],
 
+    'warehouse_item_status'   => [
+        'AVAILABLE'       => "Dostępne",
+        'UNAVAILABLE' => "Niedostępne",
+        'RESERVED'      => "Zarezerwowane",
+        'SENT'       => "Wysłane",
+        'INVISIBLE'       => "Niewidoczne",
+    ],
+
 ];

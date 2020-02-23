@@ -91,6 +91,14 @@ var Lang = {
     PRODUCT_PARAM_NAME_ERROR: "Niepoprawna nazwa dla parametru!",
     PRODUCT_PARAM_VALUE_ERROR: "Niepoprawna wartość parametru!",
 
+    WAREHOUSE_ITEM_CODE_ERROR: "Podaj kod towaru!",
+    WAREHOUSE_ITEM_STATUS_CHOOSE: "Podaj status towaru!",
+
+    WAREHOUSE_ITEM_ADD_SUCCESS: "Towar został dodany pomyślnie!",
+    WAREHOUSE_ITEM_ADD_ERROR: "Błąd podczas dodawania towaru!",
+
+    WAREHOUSE_ITEM_UPDATE_ERROR: "Błąd podczas aktualizowania towaru!",
+
 
     ORDER_STATUS_SUCCESS: "Status zamówienia został zmieniony!",
     ORDER_COST_SUCCESS: "Koszt zamówienia został zmieniony!",

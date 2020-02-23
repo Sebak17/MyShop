@@ -161,7 +161,8 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     
     Route::get('magazyn', 'AdminController@warehousePage')->name('admin_warehousePage'); // ADD TEST
     Route::get('magazyn/lista', 'AdminController@warehouseListPage')->name('admin_warehouseListPage'); // ADD TEST
-    Route::get('magazyn/towar/{id}', 'AdminController@warehouseItemPage')->where('id', '[0-9]+')->name('admin_warehouseItemPage'); // ADD TEST
+    Route::get('magazyn/produkt/{id}', 'AdminController@warehouseProductPage')->where('id', '[0-9]+')->name('admin_warehouseProductPage'); // ADD TEST
+    Route::get('magazyn/towar/szukaj', 'AdminController@warehouseItemSearchPage')->name('admin_warehouseItemSearchPage'); // ADD TEST
 
     Route::get('uzytkownicy', 'AdminController@usersListPage')->name('admin_usersListPage');
     Route::get('uzytkownik', 'AdminController@userPage')->name('admin_userPage');
@@ -218,6 +219,10 @@ Route::prefix('systemAdmin')->middleware('admin.auth')->group(function () {
     //      WAREHOUSE SITES
     //
     Route::post('warehouseList', 'AdminSystem\WarehouseController@list'); // ADD TEST
+    Route::post('warehouseItemsList', 'AdminSystem\WarehouseController@itemsList'); // ADD TEST
+    Route::post('warehouseAddItem', 'AdminSystem\WarehouseController@addItem'); // ADD TEST
+    Route::post('warehouseUpdateItem', 'AdminSystem\WarehouseController@updateItem'); // ADD TEST
+    Route::post('warehouseHistoryItem', 'AdminSystem\WarehouseController@historyItem'); // ADD TEST
 
     //
     //      ORDER MANAGE SITES

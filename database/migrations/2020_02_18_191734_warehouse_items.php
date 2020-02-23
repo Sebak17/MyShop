@@ -17,7 +17,7 @@ class WarehouseItems extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('code', 128);
-            $table->enum('status', ['AVAILABLE', 'UNAVAILABLE', 'RESERVED', 'SENT']);
+            $table->enum('status', ['AVAILABLE', 'UNAVAILABLE', 'RESERVED', 'SENT', 'INVISIBLE']);
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');

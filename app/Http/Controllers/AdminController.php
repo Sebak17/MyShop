@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderHistory;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\WarehouseItem;
 use App\Rules\ValidEmail;
 use App\Rules\ValidID;
 use Illuminate\Http\Request;
@@ -117,7 +118,7 @@ class AdminController extends Controller
         return view('admin.warehouse.list');
     }
 
-    public function warehouseItemPage($id)
+    public function warehouseProductPage($id)
     {
 
         $product = Product::where('id', $id)->first();
@@ -129,6 +130,25 @@ class AdminController extends Controller
         $items = $product->items;
 
         return view('admin.warehouse.product')->with('product', $product)->with('items', $items);
+    }
+
+    public function warehouseItemSearchPage(Request $request) 
+    {
+        $validator = Validator::make($request->all(), [
+            'code'      => 'required|string|min:6|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return view('admin.warehouse.not_exist');
+        }
+
+        $item = WarehouseItem::where('code', $request->code)->first();
+
+        if($item == null) {
+            return view('admin.warehouse.not_exist');
+        }
+
+        return view('admin.warehouse.item')->with('item', $item);
     }
 
     public function usersListPage()
