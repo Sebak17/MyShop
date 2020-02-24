@@ -29,4 +29,17 @@ class WarehouseHelper
 
     }
 
+    public static function addHistory(WarehouseItem $item, $msg)
+    {
+        
+        if($item == null || $msg == null)
+            return;
+
+        WarehouseItemHistory::create([
+            'item_id' => $item->id,
+            'data' => $msg,
+        ]);
+
+    }
+
 }

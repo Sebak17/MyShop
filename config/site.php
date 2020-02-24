@@ -45,8 +45,7 @@ return [
 
     'product_status' => [
         'INVISIBLE'    => "Niewidoczny",
-        'IN_STOCK'     => "Dostępny",
-        'INACCESSIBLE' => "Niedostępny",
+        'ACTIVE'       => "Aktywne",
         'INACTIVE'     => "Nieaktywny",
     ],
 
@@ -72,7 +71,7 @@ return [
         'AVAILABLE'       => "Dostępne",
         'UNAVAILABLE' => "Niedostępne",
         'RESERVED'      => "Zarezerwowane",
-        'SENT'       => "Wysłane",
+        'BOUGHT'       => "Kupione",
         'INVISIBLE'       => "Niewidoczne",
     ],
 

@@ -96,12 +96,15 @@ class AdminController extends Controller
 
         $productsData = array();
 
-        foreach ($order->products as $product) {
+        foreach ($order->products->unique('product_id') as $product) {
             $data              = array();
             $data['id']        = $product->product_id;
             $data['name']      = $product->name;
-            $data['amount']    = $product->amount;
-            $data['fullPrice'] = number_format((float) ($product->price * $product->amount), 2, '.', '');
+
+            $amount = $order->products->where('product_id', $product->product_id)->count();
+
+            $data['amount']    = $amount;
+            $data['fullPrice'] = number_format((float) ($product->price * $amount), 2, '.', '');
             array_push($productsData, $data);
         }
 

@@ -179,8 +179,12 @@ function confirmData() {
             if (data.success == true) {
                 showAlert(AlertType.SUCCESS, Lang.ORDER_CONFIRMING_SUCCESS);
                 location.href = data.url;
-            } else
-                showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING_ERROR);
+            } else {
+                if(data.msg != null)
+                    showAlert(AlertType.ERROR, data.msg);
+                else
+                    showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING_ERROR);
+            }
         },
         error: function () {
             showAlert(AlertType.ERROR, Lang.ORDER_CONFIRMING_ERROR);

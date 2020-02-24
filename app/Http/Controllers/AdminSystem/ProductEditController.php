@@ -68,7 +68,7 @@ class ProductEditController extends Controller
             'price'       => new ValidProductPrice,
             'description' => new ValidProductDescription,
             'category'    => new ValidProductCategory,
-            'status'      => "required|in:INVISIBLE,IN_STOCK,INACCESSIBLE,INACTIVE",
+            'status'      => "required|in:INVISIBLE,ACTIVE,INACTIVE",
             'params'      => new ValidProductParams,
         ]);
 

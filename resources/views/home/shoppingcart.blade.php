@@ -7,6 +7,13 @@
 <div class="container-fluid mt-3">
     <div class="row">
         <div class="col-12 col-lg-7 offset-lg-1">
+
+            <div class="alert alert-dismissible text-left d-none" id="alertFailMain">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <span></span>
+            </div>
+            <div id="alertFails"></div>
+
             <div class="card card-body mb-3">
 
                 <legend><i class="fas fa-shopping-basket"></i> Lista przedmiotów</legend>

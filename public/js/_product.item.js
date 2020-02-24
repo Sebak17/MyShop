@@ -59,6 +59,9 @@ function addProductToShoppingCart() {
         success: function (data) {
             if (data.success == true) {
                 showAlertDismissible(AlertType.SUCCESS, Lang.PRODUCT_ADDED_TO_SHOPPINGCART);
+            } else {
+                if(data.msg != null)
+                    showAlertDismissible(AlertType.ERROR, data.msg);
             }
         },
         error: function () {}

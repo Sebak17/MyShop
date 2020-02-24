@@ -15,12 +15,12 @@ class WarehouseItems extends Migration
     {
         Schema::create('warehouse_items', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('product_id')->nullable();
+            $table->unsignedBigInteger('product_id');
             $table->string('code', 128);
             $table->enum('status', ['AVAILABLE', 'UNAVAILABLE', 'RESERVED', 'BOUGHT', 'INVISIBLE']);
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

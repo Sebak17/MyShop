@@ -57,8 +57,12 @@
 						
 						<hr />
 						
-						<p>Status: {!! $status !!}</p>
+						<p class="mb-0">Status: {!! $status !!}</p>
 						
+						<hr />
+
+						<p class="mb-0">Dostępna ilość na magazynie: <strong>{{ $product->sizeAvailableItems() }}</strong></p>
+	
 						<hr />
 						
 						<div class="row">
@@ -69,12 +73,12 @@
 								</div>
 								
 								<div class="form-group">
-									@if($product->status != "INACCESSIBLE")
-									@if(Auth::guard('web')->check())
-									<button class="btn btn-primary" id="btnShoppingCartAdd"><i class="fas fa-plus"></i> Dodaj do koszyka</button>
-									@else
-									<button class="btn btn-warning" data-toggle="tooltip" data-placement="right" title="Musisz się zalogować!" disabled><i class="fas fa-plus"></i> Dodaj do koszyka</button>
-									@endif
+									@if($product->isAvailableToBuy())
+										@if(Auth::guard('web')->check())
+										<button class="btn btn-primary" id="btnShoppingCartAdd"><i class="fas fa-plus"></i> Dodaj do koszyka</button>
+										@else
+										<button class="btn btn-warning" data-toggle="tooltip" data-placement="right" title="Musisz się zalogować!" disabled><i class="fas fa-plus"></i> Dodaj do koszyka</button>
+										@endif
 									@else
 									<button class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Produkt nie jest dostępny!" disabled><i class="fas fa-plus"></i> Dodaj do koszyka</button>
 									@endif

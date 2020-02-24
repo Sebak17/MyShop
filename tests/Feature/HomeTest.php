@@ -28,7 +28,7 @@ class HomeTest extends TestCase
         for ($i = 0; $i < 4; $i++) {
             factory(Product::class)->create([
                 'category_id' => $category->id,
-                'status'      => "IN_STOCK",
+                'status'      => "ACTIVE",
             ]);
         }
 
@@ -44,7 +44,7 @@ class HomeTest extends TestCase
         for ($i = 0; $i < 4; $i++) {
             factory(Product::class)->create([
                 'category_id' => $category->id,
-                'status'      => "IN_STOCK",
+                'status'      => "ACTIVE",
             ]);
         }
 

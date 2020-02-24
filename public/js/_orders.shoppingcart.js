@@ -4,19 +4,21 @@ window.onload = function () {
 
     loadProducts();
 
-    $("#btnNext").click(function() {
+    $("#btnNext").click(function () {
         goToNextStep();
     });
 }
 
-function goToNextStep() 
-{
+function goToNextStep() {
     $.ajax({
         url: "/systemUser/confirmShoppingCart",
         method: "POST",
         success: function (data) {
             if (data.success == true) {
                 window.location.href = data.url;
+            } else {
+                showShoppingCartProductsFails(data.msg_fail, data.fails);
+                loadProducts();
             }
         },
         error: function () {
@@ -73,7 +75,7 @@ function bindElementsInList() {
             if (product === null)
                 return;
 
-            if (newAmount > 100) {
+            if (newAmount > 10) {
                 $(this).val(product.amount)
                 showAlert(AlertType.ERROR, Lang.TOO_MANY_ITEMS);
                 return;
@@ -129,7 +131,9 @@ function updateShoppingCart() {
         },
         success: function (data) {
             if (data.success == true) {
+                showShoppingCartProductsFails(data.msg_fail, data.fails);
 
+                loadProducts();
             }
         },
         error: function () {}
@@ -142,21 +146,49 @@ function loadProducts() {
         method: "POST",
         success: function (data) {
             if (data.success == true) {
+                products = [];
 
-                Object.values(data.products).forEach(function (item, key) {
-                    products.push({
-                        id: item.id,
-                        name: item.name,
-                        price: item.price,
-                        amount: item.amount,
+                showShoppingCartProductsFails(data.msg_fail, data.fails);
+
+                if (data.products != null) {
+                    Object.values(data.products).forEach(function (item, key) {
+                        products.push({
+                            id: item.id,
+                            name: item.name,
+                            price: item.price,
+                            amount: item.amount,
+                        });
                     });
-                });
+                }
+
                 reloadLocalData()
             }
         },
         error: function () {}
     });
 
+}
+
+function showShoppingCartProductsFails(failMsg, fails) {
+    if (failMsg != null) {
+        showAlertDismissible(AlertType.ERROR, failMsg, "#alertFailMain", true);
+    }
+    if (fails != null) {
+        let i = 0;
+        Object.values(fails).forEach(function (item, key) {
+            let id = "alertFail00" + i;
+            let m = String.raw `
+                            <div class="alert alert-dismissible text-left d-none" id="` + id + `">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <span></span>
+                            </div>
+                            `;
+
+            $("#alertFails").html($("#alertFails").html() + m);
+            showAlertDismissible(AlertType.ERROR, item.msg, "#" + id, true);
+            i++;
+        });
+    }
 }
 
 function updateSummary() {

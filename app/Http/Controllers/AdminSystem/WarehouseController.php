@@ -110,20 +110,6 @@ class WarehouseController extends Controller
         }
 
 
-        // for($i = 5 ; $i < 40 ; $i++) {
-        //     $d = array();
-
-        //     $d['id'] = $i;
-
-        //     $d['code'] = "TEST_C0DE_" . $i;
-        //     $d['status'] = 'INVISIBLE';
-
-        //     $d['created_at'] = date("Y-m-d H:i:s");
-
-        //     array_push($results['items'], $d);
-        // }
-
-
         $results['success'] = true;
         return response()->json($results);
     }
@@ -132,7 +118,7 @@ class WarehouseController extends Controller
         $validator = Validator::make($request->all(), [
             'id'      => new ValidID,
             'code'      => 'required|string|min:6|max:100',
-            'status' => 'required|in:AVAILABLE,UNAVAILABLE,RESERVED,SENT,INVISIBLE',
+            'status' => 'required|in:AVAILABLE,UNAVAILABLE,RESERVED,BOUGHT,INVISIBLE',
         ]);
 
         if ($validator->fails()) {

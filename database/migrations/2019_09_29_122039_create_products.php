@@ -15,7 +15,7 @@ class CreateProducts extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->enum('status', ['INVISIBLE', 'IN_STOCK', 'INACCESSIBLE', 'INACTIVE']);
+            $table->enum('status', ['INVISIBLE', 'ACTIVE', 'INACTIVE']);
             $table->unsignedBigInteger('category_id')->nullable();
             $table->float('price', 8, 2);
             $table->string('title', 120);

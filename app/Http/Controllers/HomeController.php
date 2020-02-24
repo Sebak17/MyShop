@@ -389,14 +389,10 @@ class HomeController extends Controller
 
         $status = "<strong class='text-muted'>BRAK DANYCH</strong>";
 
-        switch ($product->status) {
-            case "IN_STOCK":
-                $status = "<strong class='text-success'>DOSTĘPNY</strong>";
-                break;
-            case "INACCESSIBLE":
-                $status = "<strong class='text-danger'>BRAK NA MAGAZYNIE</strong>";
-                break;
-        }
+        if($product->isAvailableToBuy())
+            $status = "<strong class='text-success'>DOSTĘPNY</strong>";
+        else
+            $status = "<strong class='text-danger'>BRAK NA MAGAZYNIE</strong>";
 
         $params = json_decode($product->params);
 

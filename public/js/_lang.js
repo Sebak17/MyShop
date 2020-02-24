@@ -73,7 +73,7 @@ var Lang = {
     PRODUCT_PRICE_ERROR: "Cena produktu jest niepoprawna!",
     PRODUCT_DESCRIPTION_ERROR: "Opis produktu jest niepoprawny!",
 
-    TOO_MANY_ITEMS: "Maksymalna ilość przedmiotów to 100!",
+    TOO_MANY_ITEMS: "Maksymalna ilość przedmiotów to 10!",
 
     PRODUCT_ADDED_TO_SHOPPINGCART: "Produkt został dodany do koszyka!",
 

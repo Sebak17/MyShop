@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\UserSystem;
 
 use App\Helpers\OrderHelper;
+use App\Helpers\WarehouseHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderCreateMail;
 use App\Models\Order;
 use App\Models\OrderHistory;
 use App\Models\OrderProduct;
+use App\Models\WarehouseItem;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Rules\ValidAddress;
@@ -44,9 +46,14 @@ class OrderController extends Controller
             return response()->json($results);
         }
 
-        $product = Product::where('id', $request->id)->where('status', 'IN_STOCK')->first();
+        $product = Product::where('id', $request->id)->where('status', 'ACTIVE')->first();
 
         if ($product == null) {
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        if (!$product->isAvailableToBuy()) {
             $results['success'] = false;
             return response()->json($results);
         }
@@ -59,9 +66,13 @@ class OrderController extends Controller
 
         if (isset($shoppingCartData[$product->id])) {
 
-            if ($shoppingCartData[$product->id] < 100) {
-                $shoppingCartData[$product->id] = $shoppingCartData[$product->id] + 1;
+            if(($shoppingCartData[$product->id] + 1) > $product->sizeAvailableItems()) {
+                $results['success'] = false;
+                $results['msg'] = "Nie posiadamy takiej ilości na magazynie!";
+                return response()->json($results);
             }
+
+            $shoppingCartData[$product->id]++;
 
         } else {
             $shoppingCartData[$product->id] = 1;
@@ -80,11 +91,23 @@ class OrderController extends Controller
 
         $results['products'] = array();
 
+        $fails = OrderHelper::getProductsAvailableStatus();
+        if(count($fails) > 0) {
+            $results['fails'] = $fails;
+            $results['msg_fail'] = "Wystąpiła zmiana w koszyku spowodowana zmianą statusu produktów!";
+        }
+
+        OrderHelper::refreshShoppingCart();
+
         foreach ($request->session()->get('SHOPPINGCART_DATA', []) as $key => $value) {
 
-            $product = Product::where('id', $key)->where('status', 'IN_STOCK')->first();
+            $product = Product::where('id', $key)->where('status', 'ACTIVE')->first();
 
             if ($product == null) {
+                continue;
+            }
+
+            if (!$product->isAvailableToBuy()) {
                 continue;
             }
 
@@ -107,7 +130,7 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'products'          => 'array',
             'products.*.id'     => new ValidID,
-            'products.*.amount' => 'required|integer|between:1,100',
+            'products.*.amount' => 'required|integer|between:1,10',
         ]);
 
         $results = array();
@@ -130,7 +153,7 @@ class OrderController extends Controller
         if (is_array($request->products) && !empty($request->products)) {
 
             foreach ($request->products as $value) {
-                $product = Product::where('id', $value['id'])->where('status', 'IN_STOCK')->first();
+                $product = Product::where('id', $value['id'])->where('status', 'ACTIVE')->first();
 
                 if ($product == null) {
                     continue;
@@ -143,6 +166,14 @@ class OrderController extends Controller
 
         $request->session()->put('SHOPPINGCART_DATA', $newShoppingCartData);
         $request->session()->save();
+
+        $fails = OrderHelper::getProductsAvailableStatus();
+        if(count($fails) > 0) {
+            $results['fails'] = $fails;
+            $results['msg_fail'] = "Wystąpiła zmiana w koszyku spowodowana zmianą statusu produktów!";
+        }
+
+        OrderHelper::refreshShoppingCart();
 
         $results['success'] = true;
         return response()->json($results);
@@ -157,6 +188,17 @@ class OrderController extends Controller
             return response()->json($results);
         }
 
+        $fails = OrderHelper::getProductsAvailableStatus();
+        if(count($fails) > 0) {
+            $results['fails'] = $fails;
+            $results['msg_fail'] = "Wystąpiła zmiana w koszyku spowodowana zmianą statusu produktów!";
+            
+            $results['success'] = false;
+            return response()->json($results);
+        }
+
+        OrderHelper::refreshShoppingCart();
+
         $shoppingCartData = $request->session()->get('SHOPPINGCART_DATA');
 
         if (!is_array($shoppingCartData) || empty($shoppingCartData)) {
@@ -164,27 +206,7 @@ class OrderController extends Controller
             return response()->json($results);
         }
 
-        $newShoppingCartData = array();
-
-        foreach ($shoppingCartData as $key => $value) {
-
-            $product = Product::where('id', $key)->where('status', 'IN_STOCK')->first();
-
-            if ($product == null) {
-                continue;
-            }
-
-            $value = intval($value);
-
-            if (!is_int($value) || $value <= 0 || $value > 100) {
-                continue;
-            }
-
-            $newShoppingCartData[$key] = $value;
-        }
-
         $request->session()->put('SHOPPINGCART_STATUS', "INFORMATION");
-        $request->session()->put('SHOPPINGCART_DATA', $newShoppingCartData);
         $request->session()->save();
 
         $results['url']     = route('shoppingCartInformation');
@@ -277,19 +299,31 @@ class OrderController extends Controller
         $productsData = array();
         $summaryPrice = 0;
 
-        foreach ($shoppingCartData as $key => $value) {
-            $product = Product::where('id', $key)->where('status', 'IN_STOCK')->first();
+        foreach ($shoppingCartData as $key => $amount) {
+            $product = Product::where('id', $key)->where('status', 'ACTIVE')->first();
 
             if ($product == null) {
                 continue;
+            }
+
+            if (!$product->isAvailableToBuy()) {
+                $results['success'] = false;
+                $results['msg']     = "Produkt <strong>" . $product->title . "</strong> nie jest już dostępny!";
+                return response()->json($results);
+            }
+
+            if ($product->areItemsAvailable($amount) == null) {
+                $results['success'] = false;
+                $results['msg']     = "Produkt <strong>" . $product->title . "</strong> nie jest dostępny w ilości " . $amount . "!";
+                return response()->json($results);
             }
 
             $data           = array();
             $data['id']     = $product->id;
             $data['name']   = $product->title;
             $data['price']  = $product->price;
-            $data['amount'] = $value;
-            $summaryPrice += ($product->price * $value);
+            $data['amount'] = $amount;
+            $summaryPrice += ($product->price * $amount);
             array_push($productsData, $data);
         }
 
@@ -305,6 +339,21 @@ class OrderController extends Controller
             'phone'     => $request->input('clientPhone'),
         ];
 
+
+        foreach ($productsData as $product) {
+            $pr = Product::where('id', $product['id'])->where('status', 'active')->first();
+            for ($i = 0; $i < $product['amount']; $i++) {
+                $wh_item = $pr->getFirstAvailableItem();
+
+                if($wh_item == null) {
+                    $results['success'] = false;
+                    $results['msg']     = "Wystąpił błąd podczas rezerwowania produktów!";
+                    return response()->json($results);
+                }
+
+            }
+        }
+
         $order = Order::create([
             'user_id'      => $user->id,
             'status'       => 'CREATED',
@@ -317,8 +366,7 @@ class OrderController extends Controller
 
         if ($addNoteToOrder) {
             $note = $request->input('note');
-            // TODO
-            // NOTE FILTR
+
             $order->note = $note;
             $order->save();
         }
@@ -332,13 +380,24 @@ class OrderController extends Controller
         ]);
 
         foreach ($productsData as $product) {
-            OrderProduct::create([
-                'order_id'   => $order->id,
-                'product_id' => $product['id'],
-                'price'      => $product['price'],
-                'amount'     => $product['amount'],
-                'name'       => $product['name'],
-            ]);
+            $pr = Product::where('id', $product['id'])->where('status', 'active')->first();
+
+            for ($i = 0; $i < $product['amount']; $i++) {
+
+                $wh_item = $pr->getFirstAvailableItem();
+
+                OrderProduct::create([
+                    'order_id'          => $order->id,
+                    'product_id'        => $product['id'],
+                    'warehouse_item_id' => $wh_item['id'],
+                    'price'             => $product['price'],
+                    'name'              => $product['name'],
+                ]);
+
+                WarehouseHelper::changeStatus($wh_item, 'RESERVED');
+                WarehouseHelper::addHistory($wh_item, 'Dodano towar do zamwówienia #' . $order->id);
+            }
+
         }
 
         OrderHistory::create([
