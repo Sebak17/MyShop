@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\WarehouseItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\Helpers as Helper;
@@ -144,6 +145,7 @@ class OrderTest extends TestCase
         $this->actingAsUser();
 
         $product = factory(Product::class)->create();
+        $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
 
         $response = $this->post('/systemUser/addToShoppingCart', [
             'id' => $product->id,
@@ -163,6 +165,7 @@ class OrderTest extends TestCase
         $this->actingAsUser();
 
         $product = factory(Product::class)->create();
+        $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
 
         $response = $this->post('/systemUser/addToShoppingCart', [])->assertJsonStructure();
 
@@ -180,6 +183,7 @@ class OrderTest extends TestCase
         $this->actingAsUser();
 
         $product = factory(Product::class)->create();
+        $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
 
         $response = $this->post('/systemUser/addToShoppingCart', [
             'id' => $product->id . " a ",
