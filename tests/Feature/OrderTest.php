@@ -193,6 +193,25 @@ class OrderTest extends TestCase
 
     }
 
+    /** @test */
+    public function form_add_to_shoppingcart_incorrect_noitem()
+    {
+        $this->actingAsUser();
+
+        $product = factory(Product::class)->create();
+
+        $response = $this->post('/systemUser/addToShoppingCart', [
+            'id' => $product->id,
+        ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if ($result['success']) {
+            $this->fail("Added product to shopping cart without item in warehouse!");
+        }
+
+    }
+
     //
     //        SHOPPING CART UPDATE
     //

@@ -412,7 +412,7 @@ class OrderManagerTest extends TestCase
 
         $response = $this->post('/systemAdmin/orderChangeParcelID', [
             'id'       => $order->id,
-            'parcelID' => $this->faker->text(200),
+            'parcelID' => $this->faker->text(300),
         ])->assertJsonStructure();
 
         $result = json_decode($response->getContent(), true);

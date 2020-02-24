@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use App\Models\UserLocation;
 use App\Models\UserPersonal;
+use App\Models\WarehouseItem;
 use Illuminate\Http\UploadedFile;
 
 trait Helpers
@@ -77,7 +78,7 @@ trait Helpers
     }
 
 
-    public function addProductToUserShoppingCart($amountOfProducts = 2)
+    public function addProductToUserShoppingCart($amountOfProducts = 2, $addItemToWarehouse = true)
     {
 
         if ($this->currentUser == null) {
@@ -86,6 +87,9 @@ trait Helpers
 
         for ($i = 0; $i < $amountOfProducts; $i++) {
             $product = factory(Product::class)->create();
+            if($addItemToWarehouse)
+                $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+
             $this->post('/systemUser/addToShoppingCart', ['id' => $product->id])->assertJsonStructure();
         }
     }
