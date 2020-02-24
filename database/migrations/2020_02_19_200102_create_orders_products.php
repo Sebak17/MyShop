@@ -17,10 +17,13 @@ class CreateOrdersProducts extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('warehouse_item_id');
+
             $table->float('price', 8, 2);
-            $table->integer('amount');
             $table->text('name', 40);
+            
             $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('warehouse_item_id')->references('id')->on('warehouse_items');
         });
     }
 
