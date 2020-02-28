@@ -232,7 +232,12 @@ class OrderTest extends TestCase
         for ($i = 0; $i < 3; $i++) {
             $product = factory(Product::class)->create();
 
-            array_push($data['products'], array('id' => $product->id, 'amount' => rand(1, 3)));
+            $amount = rand(1, 3);
+
+            for($k = 0 ; $k < $amount ; $k++)
+                $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+
+            array_push($data['products'], array('id' => $product->id, 'amount' => $amount));
         }
 
         $response = $this->post('/systemUser/updateShoppingCart', $data)->assertJsonStructure();
@@ -241,6 +246,10 @@ class OrderTest extends TestCase
 
         if (!$result['success']) {
             $this->fail($result['msg']);
+        }
+
+        if (isset($result['msg_fail'])) {
+            $this->fail($result['msg_fail']);
         }
 
     }
@@ -295,6 +304,40 @@ class OrderTest extends TestCase
 
     }
 
+    /** @test */
+    public function form_update_shoppingcart_incorrect_noitem()
+    {
+        $this->actingAsUser();
+
+        $data = array();
+
+        $data['products'] = array();
+
+        for ($i = 0; $i < 3; $i++) {
+            $product = factory(Product::class)->create();
+
+            $amount = rand(1, 3);
+
+            for($k = 0 ; $k < ($amount - 1) ; $k++)
+                $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+
+            array_push($data['products'], array('id' => $product->id, 'amount' => $amount));
+        }
+
+        $response = $this->post('/systemUser/updateShoppingCart', $data)->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if (!$result['success']) {
+            $this->fail($result['msg']);
+        }
+
+        if (!isset($result['msg_fail'])) {
+            $this->fail("Success update shopping cart without items in warehouse");
+        }
+    }
+
+
     //
     //         ORDER CONFIRM
     //
@@ -311,7 +354,7 @@ class OrderTest extends TestCase
         $result = json_decode($response->getContent(), true);
 
         if (!$result['success']) {
-            $this->fail($result['msg']);
+            $this->fail("Error while confirming shopping!");
         }
 
     }
@@ -327,6 +370,23 @@ class OrderTest extends TestCase
 
         if ($result['success']) {
             $this->fail("Confirmed shopping cart without any products!");
+        }
+
+    }
+
+    /** @test */
+    public function form_confirm_shopping_incorrect_noitem()
+    {
+        $this->actingAsUser();
+
+        $this->addProductToUserShoppingCart(2, false);
+
+        $response = $this->post('/systemUser/confirmShoppingCart', [])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if ($result['success']) {
+            $this->fail("Shopping cart confirmed with no items!");
         }
 
     }

@@ -152,7 +152,7 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('kategorie', 'AdminController@categoriesPage')->name('admin_categoriesPage');
 
     Route::get('produkty/lista', 'AdminController@productsListPage')->name('admin_productsListPage');
-    Route::get('produkty/info/{id}', 'AdminController@productsItemPage')->name('admin_productsItemPage'); // ADD TEST
+    Route::get('produkty/info/{id}', 'AdminController@productsItemPage')->name('admin_productsItemPage');
     Route::get('produkty/dodaj', 'AdminController@productsAddPage')->name('admin_productsAddPage');
     Route::get('produkty/edytuj/{id}', 'AdminController@productsEditPage')->name('admin_productsEditPage');
 
@@ -160,10 +160,10 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('zamowienia/realizacja', 'AdminController@ordersRealisingListPage')->name('admin_ordersRealizeListPage');
     Route::get('zamowienia/{id}', 'AdminController@orderPage')->where('id', '[0-9]+')->name('admin_orderPageID');
     
-    Route::get('magazyn', 'AdminController@warehousePage')->name('admin_warehousePage'); // ADD TEST
-    Route::get('magazyn/lista', 'AdminController@warehouseListPage')->name('admin_warehouseListPage'); // ADD TEST
-    Route::get('magazyn/produkt/{id}', 'AdminController@warehouseProductPage')->where('id', '[0-9]+')->name('admin_warehouseProductPage'); // ADD TEST
-    Route::get('magazyn/towar/szukaj', 'AdminController@warehouseItemSearchPage')->name('admin_warehouseItemSearchPage'); // ADD TEST
+    Route::get('magazyn', 'AdminController@warehousePage')->name('admin_warehousePage');
+    Route::get('magazyn/lista', 'AdminController@warehouseListPage')->name('admin_warehouseListPage');
+    Route::get('magazyn/produkt/{id}', 'AdminController@warehouseProductPage')->where('id', '[0-9]+')->name('admin_warehouseProductPage');
+    Route::get('magazyn/towar/szukaj', 'AdminController@warehouseItemSearchPage')->name('admin_warehouseItemSearchPage');
 
     Route::get('uzytkownicy', 'AdminController@usersListPage')->name('admin_usersListPage');
     Route::get('uzytkownik', 'AdminController@userPage')->name('admin_userPage');
@@ -219,11 +219,11 @@ Route::prefix('systemAdmin')->middleware('admin.auth')->group(function () {
     //
     //      WAREHOUSE SITES
     //
-    Route::post('warehouseList', 'AdminSystem\WarehouseController@list'); // ADD TEST
-    Route::post('warehouseItemsList', 'AdminSystem\WarehouseController@itemsList'); // ADD TEST
-    Route::post('warehouseAddItem', 'AdminSystem\WarehouseController@addItem'); // ADD TEST
-    Route::post('warehouseUpdateItem', 'AdminSystem\WarehouseController@updateItem'); // ADD TEST
-    Route::post('warehouseHistoryItem', 'AdminSystem\WarehouseController@historyItem'); // ADD TEST
+    Route::post('warehouseList', 'AdminSystem\WarehouseController@list');
+    Route::post('warehouseItemsList', 'AdminSystem\WarehouseController@itemsList');
+    Route::post('warehouseAddItem', 'AdminSystem\WarehouseController@addItem');
+    Route::post('warehouseUpdateItem', 'AdminSystem\WarehouseController@updateItem');
+    Route::post('warehouseHistoryItem', 'AdminSystem\WarehouseController@historyItem');
 
     //
     //      ORDER MANAGE SITES

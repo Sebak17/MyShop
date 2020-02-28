@@ -3,6 +3,7 @@
 namespace Tests\Feature\AdminPanel;
 
 use App\Models\Product;
+use App\Models\WarehouseItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\Helpers as Helper;
@@ -146,6 +147,42 @@ class PageTest extends TestCase
     }
 
     //
+    //      PRODUCT INFO PAGE
+    //
+
+    /** @test */
+    public function page_productinfo_authenticated_admins_can_see()
+    {
+        $this->actingAsAdmin();
+
+        $response = $this->get('/admin/produkty/info/1')->assertRedirect('/admin/panel');
+    }
+
+    /** @test */
+    public function page_productinfo_not_logged_in_cannot_see()
+    {
+        $response = $this->get('/admin/produkty/info/1')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_productinfo_authenticated_users_cannot_see()
+    {
+        $this->actingAsUser();
+
+        $response = $this->get('/admin/produkty/info/1')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_productinfo_authenticated_admins_can_see_exist()
+    {
+        $this->actingAsAdmin();
+
+        $product = factory(Product::class)->create();
+
+        $response = $this->get('/admin/produkty/edytuj/' . $product->id)->assertOk();
+    }
+
+    //
     //      PRODUCT EDIT PAGE
     //
 
@@ -267,6 +304,134 @@ class PageTest extends TestCase
         $this->actingAsAdmin();
         $response = $this->get('/admin/zamowienia/' . $order->id)->assertOk();
     }
+
+    //
+    //      WAREHOUSE PAGE
+    //
+
+    /** @test */
+    public function page_warehouse_authenticated_admins_can_see()
+    {
+        $this->actingAsAdmin();
+
+        $response = $this->get('/admin/magazyn')->assertOk();
+    }
+
+    /** @test */
+    public function page_warehouse_not_logged_in_cannot_see()
+    {
+        $response = $this->get('/admin/magazyn')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_warehouse_authenticated_users_cannot_see()
+    {
+        $this->actingAsUser();
+
+        $response = $this->get('/admin/magazyn')->assertRedirect('/admin/not_authorizated');
+    }
+
+
+    //
+    //      WAREHOUSE LIST PAGE
+    //
+
+    /** @test */
+    public function page_warehouse_list_authenticated_admins_can_see()
+    {
+        $this->actingAsAdmin();
+
+        $response = $this->get('/admin/magazyn/lista')->assertOk();
+    }
+
+    /** @test */
+    public function page_warehouse_list_not_logged_in_cannot_see()
+    {
+        $response = $this->get('/admin/magazyn/lista')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_warehouse_list_authenticated_users_cannot_see()
+    {
+        $this->actingAsUser();
+
+        $response = $this->get('/admin/magazyn/lista')->assertRedirect('/admin/not_authorizated');
+    }
+
+    //
+    //      WAREHOUSE PRODUCT PAGE
+    //
+
+    /** @test */
+    public function page_warehouse_product_authenticated_admins_can_see()
+    {
+        $this->actingAsAdmin();
+
+        $response = $this->get('/admin/magazyn/produkt/1')->assertRedirect('/admin/magazyn');
+    }
+
+    /** @test */
+    public function page_warehouse_product_not_logged_in_cannot_see()
+    {
+        $response = $this->get('/admin/magazyn/produkt/1')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_warehouse_product_authenticated_users_cannot_see()
+    {
+        $this->actingAsUser();
+
+        $response = $this->get('/admin/magazyn/produkt/1')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_warehouse_product_authenticated_admins_can_see_exist()
+    {
+        $this->actingAsAdmin();
+        $product = factory(Product::class)->create();
+
+        $response = $this->get('/admin/magazyn/produkt/' . $product->id)->assertOk();
+    }
+
+    //
+    //      WAREHOUSE SEARCH PAGE
+    //
+
+    /** @test */
+    public function page_warehouse_search_authenticated_admins_can_see()
+    {
+        $this->actingAsAdmin();
+
+        $response = $this->get('/admin/magazyn/towar/szukaj')->assertOk();
+    }
+
+    /** @test */
+    public function page_warehouse_search_not_logged_in_cannot_see()
+    {
+        $response = $this->get('/admin/magazyn/towar/szukaj')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_warehouse_search_authenticated_users_cannot_see()
+    {
+        $this->actingAsUser();
+
+        $response = $this->get('/admin/magazyn/towar/szukaj')->assertRedirect('/admin/not_authorizated');
+    }
+
+    /** @test */
+    public function page_warehouse_search_authenticated_admins_can_see_exist()
+    {
+        $this->actingAsAdmin();
+        $product = factory(Product::class)->create();
+        $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+
+        $response = $this->get('/admin/magazyn/towar/szukaj/?code=' . $item->code)->assertOk();
+    }
+
+
+
+
 
     //
     //      USERS PAGE
