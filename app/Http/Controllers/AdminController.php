@@ -227,8 +227,8 @@ class AdminController extends Controller
     {
         $images = array();
 
-        if (Storage::exists('banners.json')) {
-            $images = json_decode(Storage::get('banners.json'), true);
+        if (Storage::exists('cfg/banners.json')) {
+            $images = json_decode(Storage::get('cfg/banners.json'), true);
         }
 
         return view('admin.settings.banners')->with('images', $images);
@@ -257,8 +257,8 @@ class AdminController extends Controller
 
         $ips = array();
 
-        if (Storage::exists('allowed_ips.json')) {
-            $ips = json_decode(Storage::get('allowed_ips.json'), true);
+        if (Storage::exists('cfg/allowed_ips.json')) {
+            $ips = json_decode(Storage::get('cfg/allowed_ips.json'), true);
         }
 
         return view('admin.settings.maintenance')->with('data', $data)->with('ips', $ips);

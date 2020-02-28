@@ -47,8 +47,8 @@ class SettingsController extends Controller
             $data['retry']   = null;
             $data['allowed'] = array();
 
-            if (Storage::exists('allowed_ips.json')) {
-                $data['allowed'] = json_decode(Storage::get('allowed_ips.json'), true);
+            if (Storage::exists('cfg/allowed_ips.json')) {
+                $data['allowed'] = json_decode(Storage::get('cfg/allowed_ips.json'), true);
             }
 
             File::put(storage_path('framework/down'), json_encode($data, JSON_PRETTY_PRINT));
@@ -77,8 +77,8 @@ class SettingsController extends Controller
 
         $ips = array();
 
-        if (Storage::exists('allowed_ips.json')) {
-            $ips = json_decode(Storage::get('allowed_ips.json'), true);
+        if (Storage::exists('cfg/allowed_ips.json')) {
+            $ips = json_decode(Storage::get('cfg/allowed_ips.json'), true);
         }
 
         if (in_array($request->ip, $ips)) {
@@ -89,7 +89,7 @@ class SettingsController extends Controller
 
         array_push($ips, $request->ip);
 
-        Storage::put('allowed_ips.json', json_encode($ips, JSON_PRETTY_PRINT));
+        Storage::put('cfg/allowed_ips.json', json_encode($ips, JSON_PRETTY_PRINT));
 
         if (File::exists(storage_path('framework/down'))) {
             $mainInfo            = json_decode(File::get(storage_path('framework/down')), true);
@@ -117,7 +117,7 @@ class SettingsController extends Controller
             return response()->json($results);
         }
 
-        $ips = json_decode(Storage::get('allowed_ips.json'), true);
+        $ips = json_decode(Storage::get('cfg/allowed_ips.json'), true);
 
         if ($request->ip == "127.0.0.1") {
             $results['success'] = false;
@@ -137,7 +137,7 @@ class SettingsController extends Controller
 
         $ips = array_values($ips);
 
-        Storage::put('allowed_ips.json', json_encode($ips, JSON_PRETTY_PRINT));
+        Storage::put('cfg/allowed_ips.json', json_encode($ips, JSON_PRETTY_PRINT));
 
         if (File::exists(storage_path('framework/down'))) {
             $mainInfo            = json_decode(File::get(storage_path('framework/down')), true);
@@ -178,8 +178,8 @@ class SettingsController extends Controller
 
         $banners = array();
 
-        if (Storage::exists('banners.json')) {
-            $banners = json_decode(Storage::get('banners.json'), true);
+        if (Storage::exists('cfg/banners.json')) {
+            $banners = json_decode(Storage::get('cfg/banners.json'), true);
         }
 
         $files = $request->file('images');
@@ -191,7 +191,7 @@ class SettingsController extends Controller
             array_push($banners, $hash);
         }
 
-        Storage::put('banners.json', json_encode($banners, JSON_PRETTY_PRINT));
+        Storage::put('cfg/banners.json', json_encode($banners, JSON_PRETTY_PRINT));
 
         $results['success'] = true;
 
@@ -222,12 +222,12 @@ class SettingsController extends Controller
 
         $banners = array();
 
-        if (Storage::exists('banners.json')) {
-            $banners = json_decode(Storage::get('banners.json'), true);
+        if (Storage::exists('cfg/banners.json')) {
+            $banners = json_decode(Storage::get('cfg/banners.json'), true);
         }
 
         Storage::delete("public/banners/" . $request->name);
-        Storage::put('banners.json', json_encode(array_diff($banners, [$request->name]), JSON_PRETTY_PRINT));
+        Storage::put('cfg/banners.json', json_encode(array_diff($banners, [$request->name]), JSON_PRETTY_PRINT));
 
         $results['success'] = true;
         return response()->json($results);

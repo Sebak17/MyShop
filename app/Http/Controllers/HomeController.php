@@ -20,8 +20,8 @@ class HomeController extends Controller
 
         $banners = array();
 
-        if (Storage::exists('banners.json')) {
-            $banners = json_decode(Storage::get('banners.json'), true);
+        if (Storage::exists('cfg/banners.json')) {
+            $banners = json_decode(Storage::get('cfg/banners.json'), true);
         }
 
         $categories     = Category::where('active', 1)->where('visible', 1)->where('overcategory', 0)->orderBy('orderID', 'ASC')->get();
