@@ -50,7 +50,7 @@ class HomeController extends Controller
             $pr          = array();
             $pr['url']   = route('productPage') . '?id=' . $product->id;
             $pr['name']  = $product->title;
-            $pr['price'] = number_format((float) $product->price, 2, '.', '');
+            $pr['price'] = number_format((float) $product->priceCurrent, 2, '.', '');
             $pr['image'] = (count($product->images) > 0 ? $product->images[0]->name : null);
             array_push($productsHistoryData, $pr);
         }
@@ -78,7 +78,7 @@ class HomeController extends Controller
                     $pr                             = array();
                     $pr['url']                      = route('productPage') . '?id=' . $product->id;
                     $pr['name']                     = $product->title;
-                    $pr['price']                    = number_format((float) $product->price, 2, '.', '');
+                    $pr['price']                    = number_format((float) $product->priceCurrent, 2, '.', '');
                     $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
                     $productsProposed[$product->id] = $pr;
 
@@ -105,7 +105,7 @@ class HomeController extends Controller
                         $pr                             = array();
                         $pr['url']                      = route('productPage') . '?id=' . $product->id;
                         $pr['name']                     = $product->title;
-                        $pr['price']                    = number_format((float) $product->price, 2, '.', '');
+                        $pr['price']                    = number_format((float) $product->priceCurrent, 2, '.', '');
                         $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
                         $productsProposed[$product->id] = $pr;
 
@@ -131,7 +131,7 @@ class HomeController extends Controller
                     $pr                             = array();
                     $pr['url']                      = route('productPage') . '?id=' . $product->id;
                     $pr['name']                     = $product->title;
-                    $pr['price']                    = number_format((float) $product->price, 2, '.', '');
+                    $pr['price']                    = number_format((float) $product->priceCurrent, 2, '.', '');
                     $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
                     $productsProposed[$product->id] = $pr;
 
@@ -228,9 +228,9 @@ class HomeController extends Controller
         $products     = Product::all();
         $productsData = array();
 
-        foreach ($products as $value) {
+        foreach ($products as $product) {
 
-            if ($value->status == 'INVISIBLE') {
+            if ($product->status == 'INVISIBLE') {
                 continue;
             }
 
@@ -239,7 +239,7 @@ class HomeController extends Controller
 
                 foreach ($allSubCategories as $cat) {
 
-                    if ($cat->id == $value->category_id) {
+                    if ($cat->id == $product->category_id) {
                         $isOkay = true;
                     }
 
@@ -247,7 +247,7 @@ class HomeController extends Controller
 
             }
 
-            if ($req_category == $value->category_id) {
+            if ($req_category == $product->category_id) {
                 $isOkay = true;
             }
 
@@ -255,22 +255,22 @@ class HomeController extends Controller
                 continue;
             }
 
-            if ($req_priceMin != "" && $value->price < $req_priceMin) {
+            if ($req_priceMin != "" && $product->priceCurrent < $req_priceMin) {
                 continue;
             }
 
-            if ($req_priceMax != "" && $value->price > $req_priceMax) {
+            if ($req_priceMax != "" && $product->priceCurrent > $req_priceMax) {
                 continue;
             }
 
-            $product           = array();
-            $product['id']     = $value->id;
-            $product['name']   = $value->title;
-            $product['price']  = number_format((float) $value->price, 2, '.', '');
-            $product['buyers'] = $value->getBuyedAmount();
-            $product['image']  = (count($value->images) > 0 ? $value->images[0]->name : null);
+            $item           = array();
+            $item['id']     = $product->id;
+            $item['name']   = $product->title;
+            $item['price']  = number_format((float) $product->priceCurrent, 2, '.', '');
+            $item['buyers'] = $product->getBuyedAmount();
+            $item['image']  = (count($product->images) > 0 ? $product->images[0]->name : null);
 
-            $productsData[$value->id] = $product;
+            $productsData[$product->id] = $item;
         }
 
         //   SORT

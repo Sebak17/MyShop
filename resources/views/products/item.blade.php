@@ -53,7 +53,20 @@
 						<p></p>
 						@endif
 
-						<h2>{{ number_format((float) $product->price, 2, '.', '') . " " . config('site.currency') }}</h2>
+
+						@if($product->priceCurrent != $product->priceNormal)
+						
+							<h2>{{ number_format((float) $product->priceCurrent, 2, '.', '') . " " . config('site.currency') }}</h2>
+							<div>
+								<h4>
+									<del class="text-muted">{{ number_format((float) $product->priceNormal, 2, '.', '') . " " . config('site.currency') }}</del>
+									<span> | </span>
+									<span>Taniej o <strong class="text-danger">{{ number_format((float) $product->priceNormal - $product->priceCurrent, 2, '.', '') . " " . config('site.currency') }}</strong></span>
+								</h4>
+							</div>
+						@else
+							<h2>{{ number_format((float) $product->priceCurrent, 2, '.', '') . " " . config('site.currency') }}</h2>
+						@endif
 						
 						<hr />
 						

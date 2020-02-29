@@ -162,7 +162,8 @@ class ProductCreateController extends Controller
 
         $product = Product::create([
             'title'       => $request->name,
-            'price'       => $request->price,
+            'priceCurrent'       => $request->price,
+            'priceNormal'       => $request->price,
             'description' => $request->description,
             'status'      => "INVISIBLE",
             'category_id' => $category->id,

@@ -12,7 +12,7 @@ class Product extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'price', 'title', 'description', 'status', 'category_id', 'params',
+        'priceCurrent', 'priceNormal', 'title', 'description', 'status', 'category_id', 'params',
     ];
 
     public function getBuyedAmount()

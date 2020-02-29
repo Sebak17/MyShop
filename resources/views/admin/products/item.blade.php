@@ -10,33 +10,42 @@
 	
 	<div class="row">
 		<div class="col-12 col-md-7">
-			<div class="card card-body mb-3">
-				<legend><i class="fas fa-chart-bar"></i> Statystyki zakupów</legend>
-				<hr />
-				
-				<div class="row">
-					<div class="col-6">
-						<div class="row text-left ml-2">
-							<div class="col-6">Ilość zakupionych: </div>
-							<div class="col-6"><strong>{{ $product->getBoughtItemsTotal() }}</strong></div>
+			<div class="col-12">
+				<div class="card card-body mb-3">
+					<legend><i class="fas fa-chart-bar"></i> Statystyki zakupów</legend>
+					<hr />
+					
+					<div class="row">
+						<div class="col-6">
+							<div class="row text-left ml-2">
+								<div class="col-6">Ilość zakupionych: </div>
+								<div class="col-6"><strong>{{ $product->getBoughtItemsTotal() }}</strong></div>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="row text-left ml-2">
+								<div class="col-6">??: </div>
+								<div class="col-6"><strong>???</strong></div>
+							</div>
+						</div>
+
+						<div class="col-12 text-right mt-2">
+							<button class="btn btn-info" id="btnOrdersListModal"><i class="fas fa-list-ol"></i> Lista ofert</button>
 						</div>
 					</div>
-					<div class="col-6">
-						<div class="row text-left ml-2">
-							<div class="col-6">??: </div>
-							<div class="col-6"><strong>???</strong></div>
-						</div>
-					</div>
-
-					<div class="col-12 text-right mt-2">
-						<button class="btn btn-info" id="btnOrdersListModal"><i class="fas fa-list-ol"></i> Lista ofert</button>
-					</div>
+				</div>
+			</div>
 
 
+			<div class="col-12 col-xl-6">
+				<div class="card card-body">
+					<legend><i class="fas fa-hand-holding-usd"></i> Promocja</legend>
+					<hr />
+
+					<button id="btnPromotionRemove" class="btn btn-danger mb-2">Usuń <i class="fas fa-times"></i></button>
+					<button id="btnPromotionAddModal" class="btn btn-success">Stwórz <i class="fas fa-arrow-right"></i></button>
 
 				</div>
-				
-				
 			</div>
 		</div>
 		
@@ -73,12 +82,12 @@
 				
 				<div class="row text-left ml-2">
 					<div class="col-4">Cena aktualna: </div>
-					<div class="col-8"><strong>{{ $product->price }}</strong></div>
+					<div class="col-8"><strong>{{ number_format((float) $product->priceCurrent, 2, '.', '') . " " . config('site.currency') }}</strong></div>
 				</div>
 				
 				<div class="row text-left ml-2">
-					<div class="col-4">Cena promocyjna: </div>
-					<div class="col-8"><strong>???</strong></div>
+					<div class="col-4">Cena normalna: </div>
+					<div class="col-8"><strong>{{ number_format((float) $product->priceNormal, 2, '.', '') . " " . config('site.currency') }}</strong></div>
 				</div>
 				
 				<hr />
@@ -196,6 +205,35 @@
 	</div>
 </div>
 
+<!-- Promotion modal -->
+<div class="modal fade" id="modalPromotion">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-coins"></i> Stwórz promocję</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+
+				<div class="alert d-none" id="alert01"></div>
+
+				<div class="form-group">
+					<label for="inp_promotionCost">Podaj cenę promocyjną:</label>
+					<input id="inp_promotionCost" type="number" class="form-control">
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
+				<button type="button" class="btn btn-success" id="btPromotionAdd">Dodaj <i class="fas fa-plus-circle"></i></button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
 
 
 <script src="{{ asset('js/_validation.js') }}" charset="utf-8"></script>
@@ -208,6 +246,77 @@
 		$("#btnOrdersListModal").click(function(){
 			$("#modalOrdersList").modal('show');
 		});
+
+		$("#btnPromotionAddModal").click(function(){
+			$("#modalPromotion").modal('show');
+		});
+
+		$("#btPromotionAdd").click(function(){
+			promotionAdd();
+		});
+
+		$("#btnPromotionRemove").click(function(){
+			promotionRemove();
+		});
+	}
+
+	function promotionAdd() {
+		let d_price = $("#inp_promotionCost").val();
+
+		if (!validateProductPrice(d_price)) {
+	        showAlert(AlertType.ERROR, Lang.PRODUCT_PRICE_ERROR, '#alert01');
+	        return;
+	    }
+
+	    let d_id = $("[data-id]").attr('data-id');
+
+	    $.ajax({
+	        url: "/systemAdmin/productPromotionAdd",
+	        method: "POST",
+	        data: {
+	            id: d_id,
+	            price: d_price,
+	        },
+	        success: function (data) {
+	            if (data.success == true) {
+	                setTimeout(function(){
+	                	location.reload();
+	                }, 500);
+	            } else {
+	            	if(data.msg != null)
+	            		showAlert(AlertType.ERROR, data.msg, '#alert01');	
+	            	else
+	            		showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert01');	
+	            }
+	        },
+	        error: function () {
+				showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert01');
+	        }
+	    });
+	}
+
+	function promotionRemove() {
+		let d_price = $("#inp_promotionCost").val();
+
+	    let d_id = $("[data-id]").attr('data-id');
+
+	    $.ajax({
+	        url: "/systemAdmin/productPromotionRemove",
+	        method: "POST",
+	        data: {
+	            id: d_id,
+	        },
+	        success: function (data) {
+	            if (data.success == true) {
+	                setTimeout(function(){
+	                	location.reload();
+	                }, 500);
+	            } else {	
+	            }
+	        },
+	        error: function () {
+	        }
+	    });
 	}
 </script>
 

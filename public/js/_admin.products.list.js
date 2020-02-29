@@ -8,12 +8,12 @@ window.onload = function () {
 }
 
 function screenProductsEmpty() {
-    $('#productsList').html(String.raw`<tr class="table-danger"><td class="text-center" colspan="5"><i class="fas fa-times-circle"></i> Nie znaleziono produktów!</td></tr>`);
+    $('#productsList').html(String.raw`<tr class="table-danger"><td class="text-center" colspan="6"><i class="fas fa-times-circle"></i> Nie znaleziono produktów!</td></tr>`);
     $('#productsAmount').html("0");
 }
 
 function screenLoading() {
-    $('#productsList').html(String.raw`<tr><td class="text-center" colspan="5"><i class="fas fa-circle-notch fa-spin fa-3x"></i> <h4>Ładowanie produktów...</h4></td></tr>`);
+    $('#productsList').html(String.raw`<tr><td class="text-center" colspan="6"><i class="fas fa-circle-notch fa-spin fa-3x"></i> <h4>Ładowanie produktów...</h4></td></tr>`);
     $('#productsAmount').html("?");
 }
 
@@ -81,7 +81,10 @@ function loadProducts() {
                                                 ` + data.list[i].status + `
                                             </td>
                                             <td class="align-middle text-left">
-                                                <h6>` + data.list[i].price + ` ` + cfg_currency +  `</h6>
+                                                <h6>` + data.list[i].priceNormal + ` ` + cfg_currency +  `</h6>
+                                            </td>
+                                            <td class="align-middle text-left">
+                                                <h6>` + (  data.list[i].priceCurrent != null ? data.list[i].priceCurrent : "Nie") + `</h6>
                                             </td>
                                             <td class="align-middle text-right">
                                                 <a href="/admin/produkty/info/` + data.list[i].id  + `"><button class="btn btn-sm btn-info mb-1"><i class="fas fa-arrow-right"></i> Pokaż</button></a>

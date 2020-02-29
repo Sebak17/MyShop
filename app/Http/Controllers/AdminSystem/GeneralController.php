@@ -85,11 +85,11 @@ class GeneralController extends Controller
                     continue;
                 }
 
-                if ($request->minPrice != "" && $prod['price'] < $request->minPrice) {
+                if ($request->minPrice != "" && $prod->priceNormal < $request->minPrice) {
                     continue;
                 }
 
-                if ($request->maxPrice != "" && $prod['price'] > $request->maxPrice) {
+                if ($request->maxPrice != "" && $prod->priceNormal > $request->maxPrice) {
                     continue;
                 }
 
@@ -100,7 +100,9 @@ class GeneralController extends Controller
             $list[$i]['id']     = $prod['id'];
             $list[$i]['name']   = $prod['title'];
             $list[$i]['status'] = config('site.product_status.' . $prod['status']);
-            $list[$i]['price']  = number_format((float) $prod['price'], 2, '.', '');
+            $list[$i]['priceNormal']  = number_format((float) $prod['priceNormal'], 2, '.', '');
+            if($prod->priceNormal != $prod->priceCurrent)
+                $list[$i]['priceCurrent']  = number_format((float) $prod['priceCurrent'], 2, '.', '');
 
             $list[$i]['image1'] = (count($prod->images) > 0 ? $prod->images[0]->name : null);
 

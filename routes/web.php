@@ -199,6 +199,13 @@ Route::prefix('systemAdmin')->middleware('admin.auth')->group(function () {
     Route::post('categoryEdit', 'AdminSystem\CategoryController@edit');
     Route::post('categoryChangeOrder', 'AdminSystem\CategoryController@changeOrder');
 
+
+    //
+    //      PRODUCT GENERAL SITES
+    //
+    Route::post('productPromotionAdd', 'AdminSystem\ProductController@promotionAdd');
+    Route::post('productPromotionRemove', 'AdminSystem\ProductController@promotionRemove');
+
     //
     //      PRODUCT CREATE SITES
     //

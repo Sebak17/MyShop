@@ -89,12 +89,13 @@ class ProductEditController extends Controller
             return response()->json($results);
         }
 
-        $product->title       = $request->name;
-        $product->price       = $request->price;
-        $product->description = $request->description;
-        $product->category_id = $request->category;
-        $product->status      = $request->status;
-        $product->params      = $request->params;
+        $product->title        = $request->name;
+        $product->priceCurrent = $request->price;
+        $product->priceNormal  = $request->price;
+        $product->description  = $request->description;
+        $product->category_id  = $request->category;
+        $product->status       = $request->status;
+        $product->params       = $request->params;
 
         $product->save();
 

@@ -23,6 +23,7 @@
 							<th>Nazwa produktu</th>
 							<th>Status</th>
 							<th>Cena</th>
+							<th>Promocja</th>
 							<th>Opcje</th>
 						</tr>
 						

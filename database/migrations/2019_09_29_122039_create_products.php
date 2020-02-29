@@ -17,7 +17,8 @@ class CreateProducts extends Migration
             $table->bigIncrements('id');
             $table->enum('status', ['INVISIBLE', 'ACTIVE', 'INACTIVE']);
             $table->unsignedBigInteger('category_id')->nullable();
-            $table->float('price', 8, 2);
+            $table->float('priceCurrent', 8, 2);
+            $table->float('priceNormal', 8, 2);
             $table->string('title', 120);
             $table->text('description');
             $table->text('params')->nullable();
