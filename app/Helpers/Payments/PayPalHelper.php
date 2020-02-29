@@ -32,7 +32,7 @@ class PayPalHelper
 
     }
 
-    public function createPayment(Order $order, \App\Payment $order_payment)
+    public function createPayment(Order $order, \App\Models\Payment $order_payment)
     {
 
         $results = array();
@@ -55,7 +55,7 @@ class PayPalHelper
 
             $item->setName($product->name)
                 ->setCurrency('PLN')
-                ->setQuantity($product->amount)
+                ->setQuantity(1)
                 ->setPrice($product->price);
 
             array_push($productsList, $item);
@@ -162,7 +162,7 @@ class PayPalHelper
 
         if ($result->getState() == 'approved') {
 
-            $order_payment = \App\Payment::where('externalID', $result->getId())->where('amount', $result->getTransactions()[0]->getAmount()->getTotal())->first();
+            $order_payment = \App\Models\Payment::where('externalID', $result->getId())->where('amount', $result->getTransactions()[0]->getAmount()->getTotal())->first();
 
             if ($order_payment == null) {
                 $results['success'] = false;

@@ -57,8 +57,8 @@ class PanelController extends Controller
             $data['id']        = $product->id;
             $data['name']      = $product->title;
             $data['amount']    = $value;
-            $data['fullPrice'] = number_format((float) ($product->price * $value), 2, '.', '');
-            $summaryPrice += $product->price * $value;
+            $data['fullPrice'] = number_format((float) ($product->priceCurrent * $value), 2, '.', '');
+            $summaryPrice += $product->priceCurrent * $value;
             array_push($productsData, $data);
         }
 
@@ -93,7 +93,7 @@ class PanelController extends Controller
             $amount = $order->products->where('product_id', $product->product_id)->count();
 
             $data['amount']    = $amount;
-            $data['fullPrice'] = number_format((float) ($product->price * $amount), 2, '.', '');
+            $data['fullPrice'] = number_format((float) ($product->priceCurrent * $amount), 2, '.', '');
             array_push($productsData, $data);
         }
 
@@ -138,7 +138,7 @@ class PanelController extends Controller
             $pr          = array();
             $pr['url']   = route('productPage') . '?id=' . $product->id;
             $pr['name']  = $product->title;
-            $pr['price'] = number_format((float) $product->price, 2, '.', '');
+            $pr['price'] = number_format((float) $product->priceCurrent, 2, '.', '');
             $pr['image'] = (count($product->images) > 0 ? $product->images[0]->name : null);
             array_push($favoritesData, $pr);
         }
@@ -158,6 +158,13 @@ class PanelController extends Controller
 
         $lastProducts = array();
 
+        $summary['products'] = OrderProduct::join('orders', 'orders_products.order_id', '=', 'orders.id')
+            ->where(function ($query) {
+                $query->where('orders.status', '=', 'PAID')->orWhere('orders.status', '=', 'REALIZE')->orWhere('orders.status', '=', 'SENT')->orWhere('orders.status', '=', 'RECEIVE');
+            })->where(function ($query) use ($user) {
+            $query->where('orders.user_id', '=', $user->id);
+        })->count();
+
         $orders_products = OrderProduct::join('orders', 'orders_products.order_id', '=', 'orders.id')
             ->where(function ($query) {
                 $query->where('orders.status', '=', 'PAID')->orWhere('orders.status', '=', 'REALIZE')->orWhere('orders.status', '=', 'SENT')->orWhere('orders.status', '=', 'RECEIVE');
@@ -171,8 +178,6 @@ class PanelController extends Controller
         foreach ($orders_products as $pr) {
             $product = Product::where('id', $pr->product_id)->first();
 
-            $summary['products'] += $pr->amount;
-
             if ($product == null || $product->status == 'INVISIBLE') {
                 continue;
             }
@@ -180,7 +185,7 @@ class PanelController extends Controller
             $pr          = array();
             $pr['url']   = route('productPage') . '?id=' . $product->id;
             $pr['name']  = $product->title;
-            $pr['price'] = number_format((float) $product->price, 2, '.', '');
+            $pr['price'] = number_format((float) $product->priceCurrent, 2, '.', '');
             $pr['image'] = (count($product->images) > 0 ? $product->images[0]->name : null);
             array_push($lastProducts, $pr);
         }

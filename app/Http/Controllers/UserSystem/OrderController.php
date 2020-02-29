@@ -115,7 +115,7 @@ class OrderController extends Controller
 
             $data['id']     = $key;
             $data['name']   = $product->title;
-            $data['price']  = $product->price;
+            $data['price']  = $product->priceCurrent;
             $data['amount'] = $value;
 
             array_push($results['products'], $data);
@@ -323,7 +323,7 @@ class OrderController extends Controller
             $data['name']   = $product->title;
             $data['price']  = $product->priceCurrent;
             $data['amount'] = $amount;
-            $summaryPrice += ($product->price * $amount);
+            $summaryPrice += ($product->priceCurrent * $amount);
             array_push($productsData, $data);
         }
 
