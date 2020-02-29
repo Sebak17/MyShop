@@ -105,7 +105,24 @@ class AdminController extends Controller
 
             $data['amount']    = $amount;
             $data['fullPrice'] = number_format((float) ($product->price * $amount), 2, '.', '');
-            array_push($productsData, $data);
+
+            $data['items'] = array();
+
+            $productsData[$product->product_id] = $data;
+        }
+
+        foreach ($order->products as $product) {
+
+            $item = WarehouseItem::where('id', $product->warehouse_item_id)->first();
+
+            $code = "???";
+
+            if($item != null) {
+                $code = $item->code;
+            }
+
+            array_push($productsData[$product->product_id]['items'], $code);
+
         }
 
         $deliverInfo         = json_decode($order->deliver_info, true);

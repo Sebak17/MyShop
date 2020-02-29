@@ -97,7 +97,7 @@
 
 					<div class="row text-left ml-2">
 						<div class="col-6">Numer przesyłki: </div>
-						<div class="col-6"><strong>{!! $order->deliver_parcelID ?? '<i class="fas fa-question-circle"></i>' !!}</strong></div>
+						<div class="col-6"><strong>{!! $order->deliver_parcelID ?? '<i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="Numer przesyłki nie został podany!"></i>' !!}</strong></div>
 					</div>
 					
 					@if($deliverInfo['type'] == 'INPOST_LOCKER')
@@ -124,6 +124,11 @@
 								<a href="{{ route('admin_productsItemPage', $product['id']) }}"><h6>{{ $product['name'] }}</h6></a>
 							</td>
 							<td>{{ $product['amount'] }} szt.</td>
+							<td>
+								@for($i = 0 ; $i < count($product['items']) ; $i++)
+									 {!! nl2br($i != 0 ? "\n" : "") !!}{{ $product['items'][$i] }}
+								@endfor
+							</td>
 							<td>{{ $product['fullPrice'] }} {{ config('site.currency') }}</td>
 						</tr>
 						@endforeach
