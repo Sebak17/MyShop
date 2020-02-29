@@ -233,6 +233,7 @@ Route::prefix('systemAdmin')->middleware('admin.auth')->group(function () {
     Route::post('orderChangePayment', 'AdminSystem\OrderController@changePayment');
     Route::post('orderChangeCost', 'AdminSystem\OrderController@changeCost');
     Route::post('orderChangeParcelID', 'AdminSystem\OrderController@changeParcelID');
+    Route::post('orderCancel', 'AdminSystem\OrderController@orderCancel'); // ADD TEST
 
 
     //

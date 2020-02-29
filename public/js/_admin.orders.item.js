@@ -37,6 +37,10 @@ function bindButtons() {
         $('#modalChangeParcelID').modal('show');
     });
 
+    $('#btnOrderCancelModal').click(function () {
+        $('#modalCancel').modal('show');
+    });
+
 
 
     $("#inp_orderDeliverType").each(function (index) {
@@ -64,6 +68,10 @@ function bindButtons() {
 
     $('#btnChangeParcelID').click(function () {
         changeParcelID();
+    });
+
+    $('#btnCancelOrder').click(function () {
+        cancelOrder();
     });
 
 }
@@ -325,6 +333,34 @@ function changeParcelID() {
         },
         error: function () {
             showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert04');
+        }
+    });
+}
+
+function cancelOrder() {
+    $.ajax({
+        url: "/systemAdmin/orderCancel",
+        method: "POST",
+        data: {
+            id: _orderID,
+        },
+        success: function (data) {
+            try {
+                if (data.success == true) {
+                    showAlert(AlertType.SUCCESS, Lang.ORDER_CANCEL_SUCCESS, '#alert05');
+
+                    setTimeout(function (argument) {
+                        location.reload();
+                    }, 800);
+                } else {
+                    showAlert(AlertType.ERROR, data.msg, '#alert05');
+                }
+            } catch (e) {
+                showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert05');
+            }
+        },
+        error: function () {
+            showAlert(AlertType.ERROR, Lang.FORM_SENDING_ERROR, '#alert05');
         }
     });
 }

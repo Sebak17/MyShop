@@ -121,7 +121,7 @@
 						@foreach ($productsData as $product)
 						<tr>
 							<td>
-								<a href="/produkt?id={{ $product['id'] }}"><h6>{{ $product['name'] }}</h6></a>
+								<a href="{{ route('admin_productsItemPage', $product['id']) }}"><h6>{{ $product['name'] }}</h6></a>
 							</td>
 							<td>{{ $product['amount'] }} szt.</td>
 							<td>{{ $product['fullPrice'] }} {{ config('site.currency') }}</td>
@@ -154,6 +154,10 @@
 						<button class="btn btn-info mt-2" id="btnChangeCostModal"><i class="fas fa-money-bill-wave-alt"></i> Zmień koszt</button>
 
 						<button class="btn btn-info mt-2" id="btnChangeParcelIDModal"><i class="fas fa-truck-loading"></i> Nadaj numer przesyłki</button>
+					</div>
+
+					<div class="col-12 mt-2 text-center">
+						<button class="btn btn-danger" id="btnOrderCancelModal"><i class="fas fa-minus-circle"></i> Anuluj zamówienie</button>
 					</div>
 				</div>
 			</div>
@@ -478,6 +482,29 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Zamknij</button>
 				<button type="button" class="btn btn-success" id="btnChangeParcelID">Zmień <i class="fas fa-exchange-alt"></i></button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<!-- Order cancel -->
+<div class="modal fade" id="modalCancel">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-minus-circle"></i> Czy chcesz anulować zamówienie?</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="alert d-none" id="alert05"></div>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Nie</button>
+				<button type="button" class="btn btn-success" id="btnCancelOrder">Tak <i class="fas fa-check"></i></button>
 			</div>
 			
 		</div>

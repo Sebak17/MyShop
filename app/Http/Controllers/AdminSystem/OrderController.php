@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\AdminSystem;
 
 use App\Helpers\OrderHelper;
+use App\Helpers\WarehouseHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\WarehouseItem;
 use App\Models\OrderHistory;
 use App\Rules\ValidAddress;
 use App\Rules\ValidCity;
@@ -41,6 +43,13 @@ class OrderController extends Controller
             $results['success'] = false;
 
             $results['msg'] = "Nie znaleziono zamówienia!";
+            return response()->json($results);
+        }
+
+        if($order->status == "CANCELED") {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie możesz zmienić statusu gdy zamówienie jest anulowane!";
             return response()->json($results);
         }
 
@@ -121,6 +130,13 @@ class OrderController extends Controller
             return response()->json($results);
         }
 
+        if($order->status == "CANCELED") {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie możesz zmienić adresu gdy zamówienie jest anulowane!";
+            return response()->json($results);
+        }
+
         $order->deliver_name = $request->input('deliver.type');
         $order->deliver_info = json_encode($deliver_info);
         $order->save();
@@ -156,6 +172,13 @@ class OrderController extends Controller
             $results['success'] = false;
 
             $results['msg'] = "Nie znaleziono zamówienia!";
+            return response()->json($results);
+        }
+
+        if($order->status == "CANCELED") {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie możesz zmienić płatności gdy zamówienie jest anulowane!";
             return response()->json($results);
         }
 
@@ -196,6 +219,13 @@ class OrderController extends Controller
             return response()->json($results);
         }
 
+        if($order->status == "CANCELED") {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie możesz zmienić kosztu gdy zamówienie jest anulowane!";
+            return response()->json($results);
+        }
+
         OrderHistory::create([
             'order_id' => $order->id,
             'data'     => 'Zmiana kosztu zamówienia z ' . $order->cost . ' na ' . $request->cost,
@@ -233,6 +263,13 @@ class OrderController extends Controller
             return response()->json($results);
         }
 
+        if($order->status == "CANCELED") {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie możesz zmienić numeru przesyłki gdy zamówienie jest anulowane!";
+            return response()->json($results);
+        }
+
         OrderHistory::create([
             'order_id' => $order->id,
             'data'     => 'Zmiana numeru przesyłki na ' . $request->parcelID,
@@ -240,6 +277,60 @@ class OrderController extends Controller
 
         $order->deliver_parcelID = $request->parcelID;
         $order->save();
+
+        $results['success'] = true;
+        return response()->json($results);
+    }
+
+    public function orderCancel(Request $request) 
+    {
+        $validator = Validator::make($request->all(), [
+            'id'       => new ValidID,
+        ]);
+
+        $results = array();
+
+        if ($validator->fails()) {
+            $results['success'] = false;
+
+            $results['msg'] = $validator->errors()->first();
+            return response()->json($results);
+        }
+
+        $order = Order::where('id', $request->id)->first();
+
+        if ($order == null) {
+            $results['success'] = false;
+
+            $results['msg'] = "Nie znaleziono zamówienia!";
+            return response()->json($results);
+        }
+
+        if($order->status == "CANCELED") {
+            $results['success'] = false;
+
+            $results['msg'] = "Zamówienie jest już anulowane!";
+            return response()->json($results);
+        }
+
+        OrderHistory::create([
+            'order_id' => $order->id,
+            'data'     => 'Anulowanie zamówienia przez administratora',
+        ]);
+
+        $order->status = "CANCELED";
+        $order->save();
+
+        foreach ($order->products as $product) {
+            $item = WarehouseItem::where('id', $product->warehouse_item_id)->first();
+            
+            if($item == null) {
+                continue;
+            }
+
+            WarehouseHelper::addHistory($item, 'Anulowanie zamówienia #' . $order->id . ' oraz zwolnienie produktów!');
+            WarehouseHelper::changeStatus($item, 'AVAILABLE');
+        }
 
         $results['success'] = true;
         return response()->json($results);

@@ -442,4 +442,63 @@ class OrderManagerTest extends TestCase
 
     }
 
+
+    //
+    //      ORDER CANCEL
+    //
+
+    /** @test */
+    public function form_order_cancel_correct()
+    {
+        $order = $this->createOrder();
+
+        $this->actingAsAdmin();
+
+        $response = $this->post('/systemAdmin/orderCancel', [
+            'id'     => $order->id,
+        ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if (!$result['success']) {
+            $this->fail($result['msg']);
+        }
+
+    }
+
+    /** @test */
+    public function form_order_cancel_incorrect_order_notexist()
+    {
+        $this->actingAsAdmin();
+
+        $response = $this->post('/systemAdmin/orderCancel', [
+            'id'     => 1,
+        ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if ($result['success']) {
+            $this->fail("Cancel order without existing order!");
+        }
+
+    }
+
+    /** @test */
+    public function form_order_cancel_incorrect_id_empty()
+    {
+        $order = $this->createOrder();
+
+        $this->actingAsAdmin();
+
+        $response = $this->post('/systemAdmin/orderCancel', [
+        ])->assertJsonStructure();
+
+        $result = json_decode($response->getContent(), true);
+
+        if ($result['success']) {
+            $this->fail("Cancel order without order id!");
+        }
+
+    }
+
 }
