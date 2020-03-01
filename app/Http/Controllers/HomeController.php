@@ -147,16 +147,18 @@ class HomeController extends Controller
     public function productsPage(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'category'  => 'integer',
-            'sort'      => 'numeric',
-            'price-min' => 'numeric',
-            'price-max' => 'numeric',
+            'category'  => 'required|integer',
+            'sort'      => 'required|numeric',
+            'price-min' => 'required|numeric',
+            'price-max' => 'required|numeric',
+            'string' => 'required|string',
         ]);
 
         $req_category = $request->input('category');
         $req_sort     = $request->input('sort');
         $req_priceMin = $request->input('price-min');
         $req_priceMax = $request->input('price-max');
+        $req_string = $request->input('string');
 
         if ($validator->fails()) {
 
@@ -174,6 +176,10 @@ class HomeController extends Controller
 
             if ($validator->errors()->first('price-max') != '') {
                 $req_priceMax = 0;
+            }
+
+            if ($validator->errors()->first('string') != '') {
+                $req_string = "";
             }
 
         }
@@ -225,10 +231,9 @@ class HomeController extends Controller
 
         }
 
-        $products     = Product::all();
         $productsData = array();
 
-        foreach ($products as $product) {
+        foreach (Product::all() as $product) {
 
             if ($product->status == 'INVISIBLE') {
                 continue;
@@ -252,6 +257,10 @@ class HomeController extends Controller
             }
 
             if (isset($isOkay) && !$isOkay) {
+                continue;
+            }
+
+            if ($req_string != "" && !preg_match("/(" . $req_string . ")/i", $product->title)) {
                 continue;
             }
 

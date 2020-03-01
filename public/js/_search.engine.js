@@ -15,7 +15,7 @@ function searchEngine_bindKeys() {
 
 function searchProducts() {
 	let val = $("#searchBox").val();
-	val = val.replace(/[^\w\s]/gi, '');
+	val = val.replace(/[^a-zA-Z0-9żźćńółęąśŻŹĆĄŚĘŁÓŃ\- ]/g, "");
 
 	if(val.length < 3) {
 		return;
