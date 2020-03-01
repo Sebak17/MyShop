@@ -158,7 +158,7 @@ class HomeController extends Controller
         $req_sort     = $request->input('sort');
         $req_priceMin = $request->input('price-min');
         $req_priceMax = $request->input('price-max');
-        $req_string = $request->input('string');
+        $req_string = urldecode($request->input('string'));
 
         if ($validator->fails()) {
 

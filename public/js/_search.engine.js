@@ -21,5 +21,5 @@ function searchProducts() {
 		return;
 	}
 
-	window.location.href = "/produkty/?string=" + val;
+	window.location.href = "/produkty/?string=" + encodeURIComponent(val);
 }

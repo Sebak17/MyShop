@@ -27,7 +27,7 @@ function parseURL() {
     }
 
     if (url.searchParams.get("string")) {
-        filtersValues['string'] = url.searchParams.get("string");
+        filtersValues['string'] = decodeURIComponent(url.searchParams.get("string"));
         $("#searchBox").val(filtersValues['string']);
     }
 
