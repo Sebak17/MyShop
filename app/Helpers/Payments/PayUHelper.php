@@ -49,7 +49,7 @@ class PayUHelper
 
             $item['name']      = $product->name;
             $item['unitPrice'] = $product->price * 100;
-            $item['quantity']  = $product->amount;
+            $item['quantity']  = 1;
 
             array_push($payu_order['products'], $item);
 
