@@ -56,12 +56,12 @@
                             
                             <div class="row" id="proposedProducts">
                                 @foreach($productsProposed as $product)
-                                <div class="col-6 col-md-4 col-lg-3 col-xl-3">
+                                <div class="col-6 col-md-4 col-lg-3 col-xl-3 mt-2 mt-md-0">
                                     <a href="{{ $product['url'] }}" class="tdn">
-                                        <div class="card">
-                                            <img style="height: 200px; width: 100%; display: block;"
-                                            src="/storage/products_images/{{ $product['image'] }}"
-                                            alt="{{ $product['name'] }}">
+                                        <div class="card h-100">
+                                            <div style="height: 200px;" class="d-flex">
+                                                <img class="img-fluid my-auto" src="/storage/products_images/{{ $product['image'] }}" alt="{{ $product['name'] }}">
+                                            </div>
 
                                             <div class="card-body">
                                                 <h3 class="card-title">{{ $product['price'] . " " . config('site.currency') }}</h3>
@@ -86,9 +86,9 @@
 
                             <div class="row" id="lastSeen">
                                 @foreach($productsHistory as $product)
-                                <div class="col-6 col-md-4 col-lg-3 col-xl-2 mt-2 mt-md-1">
+                                <div class="col-6 col-md-4 col-lg-3 col-xl-2 mt-2 mt-md-2">
                                     <a href="{{ $product['url'] }}" class="tdn">
-                                        <div class="card">
+                                        <div class="card h-100">
                                             <img style="height: 200px; width: 100%; display: block;"
                                             src="/storage/products_images/{{ $product['image'] }}"
                                             alt="{{ $product['name'] }}">
