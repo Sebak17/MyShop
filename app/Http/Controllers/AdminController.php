@@ -7,7 +7,7 @@ use App\Models\OrderHistory;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\WarehouseItem;
-use App\Rules\ValidEmail;
+use App\Rules\ValidEMail;
 use App\Rules\ValidID;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -196,7 +196,7 @@ class AdminController extends Controller
 
         $validator = Validator::make($request->all(), [
             'id'    => new ValidID,
-            'email' => new ValidEmail,
+            'email' => new ValidEMail,
         ]);
 
         $results = array();
