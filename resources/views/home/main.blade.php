@@ -59,7 +59,7 @@
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-3 mt-2 mt-md-0">
                                     <a href="{{ $product['url'] }}" class="tdn">
                                         <div class="card h-100">
-                                            <div style="height: 200px;" class="d-flex">
+                                            <div style="height: 200px;" class="d-flex p-2">
                                                 <img class="img-fluid my-auto" src="/storage/products_images/{{ $product['image'] }}" alt="{{ $product['name'] }}">
                                             </div>
 
@@ -89,9 +89,9 @@
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-2 mt-2 mt-md-2">
                                     <a href="{{ $product['url'] }}" class="tdn">
                                         <div class="card h-100">
-                                            <img style="height: 200px; width: 100%; display: block;"
-                                            src="/storage/products_images/{{ $product['image'] }}"
-                                            alt="{{ $product['name'] }}">
+                                            <div style="height: 200px;" class="d-flex p-2">
+                                                <img class="img-fluid my-auto" src="/storage/products_images/{{ $product['image'] }}" alt="{{ $product['name'] }}">
+                                            </div>
 
                                             <div class="card-body">
                                                 <h3 class="card-title">{{ $product['price'] . " " . config('site.currency') }}</h3>
