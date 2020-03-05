@@ -23,7 +23,6 @@ class Product extends Model
             })->where(function ($query) {
             $query->where('orders_products.product_id', '=', $this->id);
         })
-            ->distinct()
             ->count('orders.id');
 
         return $amount;
@@ -58,29 +57,37 @@ class Product extends Model
         return $orders;
     }
 
-    public function isAvailableToBuy() 
+    public function isAvailableToBuy()
     {
-        if($this->status != 'ACTIVE')
-            return false;
 
-        if( count($this->items->where('status', 'AVAILABLE')) > 0 )
+        if ($this->status != 'ACTIVE') {
+            return false;
+        }
+
+        if (count($this->items->where('status', 'AVAILABLE')) > 0) {
             return true;
+        }
+
         return false;
     }
 
-    public function sizeAvailableItems() {
+    public function sizeAvailableItems()
+    {
         return $this->items->where('status', 'AVAILABLE')->count();
     }
 
-    public function areItemsAvailable($amount) {
+    public function areItemsAvailable($amount)
+    {
 
-        if(count($this->items->where('status', 'AVAILABLE')->take($amount)) != $amount)
+        if (count($this->items->where('status', 'AVAILABLE')->take($amount)) != $amount) {
             return null;
+        }
 
         return true;
     }
 
-    public function getFirstAvailableItem() {
+    public function getFirstAvailableItem()
+    {
         return $this->items->where('status', 'AVAILABLE')->first();
     }
 
