@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\CategoriesHelper;
+use App\Helpers\ProductsHelper;
 use App\Models\Category;
 use App\Models\Product;
 use App\Rules\ValidID;
@@ -43,7 +44,7 @@ class HomeController extends Controller
         foreach ($productsHistorySession as $id) {
             $product = Product::where('id', $id)->first();
 
-            if ($product == null || $product->status == 'INVISIBLE') {
+            if ($product == null || $product->status != 'ACTIVE') {
                 continue;
             }
 
@@ -59,86 +60,13 @@ class HomeController extends Controller
 
         $productsProposed = array();
 
-        if (Product::all()->count() > 0) {
-
-            if (empty($productsHistorySession)) {
-
-                while (count($productsProposed) != 4) {
-
-                    $product = Product::all()->random();
-
-                    if ($product == null || $product->status == 'INVISIBLE') {
-                        continue;
-                    }
-
-                    if (isset($productsProposed[$product->id])) {
-                        continue;
-                    }
-
-                    $pr                             = array();
-                    $pr['url']                      = route('productPage') . '?id=' . $product->id;
-                    $pr['name']                     = $product->title;
-                    $pr['price']                    = number_format((float) $product->priceCurrent, 2, '.', '');
-                    $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
-                    $productsProposed[$product->id] = $pr;
-
-                }
-
-            } else {
-
-                foreach ($productsHistorySession as $id) {
-
-                    $op = Product::where('id', $id)->first();
-
-                    for ($i = 0; $i < 4; $i++) {
-
-                        $product = Product::where('category_id', $op->category_id)->get()->random();
-
-                        if ($product == null || $product->status == 'INVISIBLE') {
-                            continue;
-                        }
-
-                        if (isset($productsProposed[$product->id])) {
-                            continue;
-                        }
-
-                        $pr                             = array();
-                        $pr['url']                      = route('productPage') . '?id=' . $product->id;
-                        $pr['name']                     = $product->title;
-                        $pr['price']                    = number_format((float) $product->priceCurrent, 2, '.', '');
-                        $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
-                        $productsProposed[$product->id] = $pr;
-
-                    }
-
-                }
-
-                shuffle($productsProposed);
-                $productsProposed = array_slice($productsProposed, 0, 4, true);
-
-                while (count($productsProposed) < 4) {
-
-                    $product = Product::all()->random();
-
-                    if ($product == null || $product->status == 'INVISIBLE') {
-                        continue;
-                    }
-
-                    if (isset($productsProposed[$product->id])) {
-                        continue;
-                    }
-
-                    $pr                             = array();
-                    $pr['url']                      = route('productPage') . '?id=' . $product->id;
-                    $pr['name']                     = $product->title;
-                    $pr['price']                    = number_format((float) $product->priceCurrent, 2, '.', '');
-                    $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
-                    $productsProposed[$product->id] = $pr;
-
-                }
-
-            }
-
+        foreach (ProductsHelper::getProposedProducts() as $product) {
+            $pr                             = array();
+            $pr['url']                      = route('productPage') . '?id=' . $product->id;
+            $pr['name']                     = $product->title;
+            $pr['price']                    = number_format((float) $product->priceCurrent, 2, '.', '');
+            $pr['image']                    = (count($product->images) > 0 ? $product->images[0]->name : null);
+            $productsProposed[$product->id] = $pr;
         }
 
         return view('home/main')->with('banners', $banners)->with('categories', $categoriesData)->with('productsHistory', $productsHistoryData)->with('productsProposed', $productsProposed);
@@ -151,14 +79,14 @@ class HomeController extends Controller
             'sort'      => 'required|numeric',
             'price-min' => 'required|numeric',
             'price-max' => 'required|numeric',
-            'string' => 'required|string',
+            'string'    => 'required|string',
         ]);
 
         $req_category = $request->input('category');
         $req_sort     = $request->input('sort');
         $req_priceMin = $request->input('price-min');
         $req_priceMax = $request->input('price-max');
-        $req_string = urldecode($request->input('string'));
+        $req_string   = urldecode($request->input('string'));
 
         if ($validator->fails()) {
 
@@ -235,7 +163,7 @@ class HomeController extends Controller
 
         foreach (Product::all() as $product) {
 
-            if ($product->status == 'INVISIBLE') {
+            if ($product->status != 'ACTIVE') {
                 continue;
             }
 
@@ -359,7 +287,7 @@ class HomeController extends Controller
 
         $product = Product::where('id', $request->id)->first();
 
-        if ($product == null || $product->status == 'INVISIBLE') {
+        if ($product == null || $product->status != 'ACTIVE') {
             return view('products.not_exist');
         }
 
@@ -398,10 +326,11 @@ class HomeController extends Controller
 
         $status = "<strong class='text-muted'>BRAK DANYCH</strong>";
 
-        if($product->isAvailableToBuy())
+        if ($product->isAvailableToBuy()) {
             $status = "<strong class='text-success'>DOSTĘPNY</strong>";
-        else
+        } else {
             $status = "<strong class='text-danger'>BRAK NA MAGAZYNIE</strong>";
+        }
 
         $params = json_decode($product->params);
 
