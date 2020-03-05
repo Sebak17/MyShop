@@ -45,13 +45,26 @@ class Product extends Model
 
     public function getOrders()
     {
-        $orders = \App\Models\Order::join('orders_products', 'orders_products.order_id', '=', 'orders.id')
+        // $orders = collect();
+        // foreach (\App\Models\Order::all() as $order) {
+        //     if (!in_array($order->status, ['PAID', 'REALIZE', 'SENT', 'RECEIVE'])) {
+        //         continue;
+        //     }
+        //     foreach($order->products as $product) {
+        //         if($product->product_id == $this->id)
+        //             $orders->push($order);
+        //     }
+        // }
+
+        $orders = \App\Models\Order::
+            join('orders_products', 'orders_products.order_id', '=', 'orders.id')
             ->where(function ($query) {
                 $query->where('orders.status', '=', 'PAID')->orWhere('orders.status', '=', 'REALIZE')->orWhere('orders.status', '=', 'SENT')->orWhere('orders.status', '=', 'RECEIVE');
-            })->where(function ($query) {
-            $query->where('orders_products.product_id', '=', $this->id);
-        })
-            ->distinct()
+            })
+            ->where(function ($query) {
+                $query->where('orders_products.product_id', '=', $this->id);
+            })
+            ->groupBy('orders.id')
             ->get();
 
         return $orders;
