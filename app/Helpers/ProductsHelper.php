@@ -38,7 +38,7 @@ class ProductsHelper
 
                 for ($i = 0; $i < 4; $i++) {
 
-                    $product = $products::where('category_id', $op->category_id)->get()->random();
+                    $product = $products->where('category_id', $op->category_id)->random();
 
                     if ($product == null || $product->status == 'INVISIBLE') {
                         continue;
