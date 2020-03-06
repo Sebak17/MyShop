@@ -54,6 +54,7 @@ trait Helpers
 
     public function actingAsUser()
     {
+
         if ($this->currentUser == null || User::count() == 0) {
             $this->createUser();
         }
@@ -70,13 +71,13 @@ trait Helpers
 
     public function banUser()
     {
+
         if ($this->currentUser == null) {
             $this->createUser();
         }
 
         return factory(Ban::class)->create(['user_id' => $this->currentUser->id]);
     }
-
 
     public function addProductToUserShoppingCart($amountOfProducts = 2, $addItemToWarehouse = true)
     {
@@ -87,11 +88,14 @@ trait Helpers
 
         for ($i = 0; $i < $amountOfProducts; $i++) {
             $product = factory(Product::class)->create();
-            if($addItemToWarehouse)
+
+            if ($addItemToWarehouse) {
                 $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+            }
 
             $this->post('/systemUser/addToShoppingCart', ['id' => $product->id])->assertJsonStructure();
         }
+
     }
 
     public function confirmShoppingCart()
@@ -102,6 +106,7 @@ trait Helpers
         if (!$result['success']) {
             $this->fail("Error while confirming shopping cart!");
         }
+
     }
 
     public function productUploadImages()
@@ -123,13 +128,15 @@ trait Helpers
         if (!$result['success']) {
             $this->fail($result['msg'] ?? "Failed to upload images to product!");
         }
-    }
 
+    }
 
     public function createProduct($withImages = true)
     {
-        if($withImages)
+
+        if ($withImages) {
             $this->productUploadImages();
+        }
 
         $category = factory(Category::class)->create();
 
@@ -149,8 +156,9 @@ trait Helpers
 
         $product = Product::first();
 
-        if($product == null)
+        if ($product == null) {
             $this->fail('After success creation, product is null!');
+        }
 
         return $product;
     }
@@ -170,29 +178,59 @@ trait Helpers
 
     public function createOrder()
     {
-        $this->actingAsUser();
+        $category = factory(Category::class)->create();
 
-        $this->addProductToUserShoppingCart();
-        $this->confirmShoppingCart();
-
-        $data = $this->getOrderCreateData();
-        $data['clientFName'] = $this->currentUser->personal->firstname;
-        $data['clientSName'] = $this->currentUser->personal->surname;
-        $data['clientPhone'] = $this->currentUser->personal->phoneNumber;
-
-        $response = $this->post('/systemUser/createOrder', $data)->assertJsonStructure();
-
-        $result = json_decode($response->getContent(), true);
-        if (!$result['success']) {
-            $this->fail($result['msg']);
+        if ($this->currentUser == null) {
+            $this->createUser();
         }
 
-        $order = Order::first();
+        $order = factory(Order::class)->create(['user_id' => $this->currentUser->id, 'status' => 'REALIZE']);
 
-        if($order == null)
-            $this->fail('After success creation, order is null!');
+        for ($i = 0; $i < rand(2, 4); $i++) {
+            $product = factory(Product::class)->create(['category_id' => $category->id, 'status' => 'ACTIVE']);
+
+            for ($i = 0; $i < rand(1, 3); $i++) {
+                $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+
+                $order_product = factory(OrderProduct::class)->create([
+                    'order_id'          => $order->id,
+                    'product_id'        => $product->id,
+                    'warehouse_item_id' => $item->id,
+                    'price'             => $product->priceCurrent,
+                    'name'              => $product->title,
+                ]);
+            }
+
+        }
 
         return $order;
+    }
+
+    public function createProductWithOrder($orders = 1, $items = 1)
+    {
+        $category = factory(Category::class)->create();
+        $product = factory(Product::class)->create(['category_id' => $category->id, 'status' => 'ACTIVE']);
+        if ($this->currentUser == null) {
+            $this->createUser();
+        }
+
+        for($o = 0 ; $o < $orders ; $o++) {
+            $order = factory(Order::class)->create(['user_id' => $this->currentUser->id, 'status' => 'REALIZE']);
+
+            for($i = 0 ; $i < $items ; $i++) {
+                $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+
+                $order_product = factory(OrderProduct::class)->create([
+                    'order_id' => $order->id, 
+                    'product_id' => $product->id, 
+                    'warehouse_item_id' => $item->id, 
+                    'price' => $product->priceCurrent, 
+                    'name' => $product->title,
+                ]);
+            }
+        }
+
+        return $product;
     }
 
     public function getSignUpData()
@@ -224,9 +262,9 @@ trait Helpers
             'note'        => $this->faker->text(150),
         ];
 
-        if($locker) {
+        if ($locker) {
             $res['deliver'] = [
-                'type'     => "INPOST_LOCKER",
+                'type'       => "INPOST_LOCKER",
                 'lockerName' => "GWI03L",
             ];
         } else {
