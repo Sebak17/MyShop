@@ -27,6 +27,9 @@
             </exclude>
         </whitelist>
     </filter>
+    <logging>
+        <log type="coverage-html" target="./reports/report" lowUpperBound="50" highLowerBound="80" />
+    </logging>
     <extensions>
         <extension class="Tests\Bootstrap"/>
     </extensions>
