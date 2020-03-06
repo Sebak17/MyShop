@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\User;
 use App\Models\UserInfo;
 use App\Models\UserLocation;
@@ -131,38 +132,6 @@ trait Helpers
 
     }
 
-    public function createProduct($withImages = true)
-    {
-
-        if ($withImages) {
-            $this->productUploadImages();
-        }
-
-        $category = factory(Category::class)->create();
-
-        $response = $this->post('/systemAdmin/productCreate', [
-            'name'        => str_replace(".", "", $this->faker->sentence(5)),
-            'price'       => $this->faker->randomFloat(2, 1, 10000),
-            'description' => $this->faker->text(200),
-            'category'    => $category->id,
-            'params'      => '[{"name":"Nazwa","value":"Wartość"}]',
-        ])->assertJsonStructure();
-
-        $result = json_decode($response->getContent(), true);
-
-        if (!$result['success']) {
-            $this->fail($result['msg']);
-        }
-
-        $product = Product::first();
-
-        if ($product == null) {
-            $this->fail('After success creation, product is null!');
-        }
-
-        return $product;
-    }
-
     public function productUploadedImagesList()
     {
         $response = $this->post('/systemAdmin/productLoadOldImages', [])->assertJsonStructure();
@@ -176,8 +145,9 @@ trait Helpers
         return $result['images'];
     }
 
-    public function createOrder()
+    public function createOrder($products = 1, $itemsPerProduct = 2)
     {
+
         $category = factory(Category::class)->create();
 
         if ($this->currentUser == null) {
@@ -186,10 +156,10 @@ trait Helpers
 
         $order = factory(Order::class)->create(['user_id' => $this->currentUser->id, 'status' => 'REALIZE']);
 
-        for ($i = 0; $i < rand(2, 4); $i++) {
+        for ($i = 0; $i < $products; $i++) {
             $product = factory(Product::class)->create(['category_id' => $category->id, 'status' => 'ACTIVE']);
 
-            for ($i = 0; $i < rand(1, 3); $i++) {
+            for ($i = 0; $i < $itemsPerProduct; $i++) {
                 $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
 
                 $order_product = factory(OrderProduct::class)->create([
@@ -209,24 +179,45 @@ trait Helpers
     public function createProductWithOrder($orders = 1, $items = 1)
     {
         $category = factory(Category::class)->create();
-        $product = factory(Product::class)->create(['category_id' => $category->id, 'status' => 'ACTIVE']);
+        $product  = factory(Product::class)->create(['category_id' => $category->id, 'status' => 'ACTIVE']);
+
         if ($this->currentUser == null) {
             $this->createUser();
         }
 
-        for($o = 0 ; $o < $orders ; $o++) {
+        for ($o = 0; $o < $orders; $o++) {
             $order = factory(Order::class)->create(['user_id' => $this->currentUser->id, 'status' => 'REALIZE']);
 
-            for($i = 0 ; $i < $items ; $i++) {
+            for ($i = 0; $i < $items; $i++) {
                 $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
 
                 $order_product = factory(OrderProduct::class)->create([
-                    'order_id' => $order->id, 
-                    'product_id' => $product->id, 
-                    'warehouse_item_id' => $item->id, 
-                    'price' => $product->priceCurrent, 
-                    'name' => $product->title,
+                    'order_id'          => $order->id,
+                    'product_id'        => $product->id,
+                    'warehouse_item_id' => $item->id,
+                    'price'             => $product->priceCurrent,
+                    'name'              => $product->title,
                 ]);
+            }
+
+        }
+
+        return $product;
+    }
+
+    public function createProduct($withImages = true, $items = 1)
+    {
+        $category = factory(Category::class)->create();
+
+        $product = factory(Product::class)->create(['category_id' => $category->id, 'status' => 'ACTIVE']);
+
+        for ($i = 0; $i < $items; $i++) {
+            $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+        }
+
+        if ($withImages) {
+            for ($i = 0; $i < 2; $i++) {
+                $image = factory(ProductImage::class)->create(['product_id' => $product->id]);
             }
         }
 
