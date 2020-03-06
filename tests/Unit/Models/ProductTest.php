@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Category;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\WarehouseItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -88,5 +89,106 @@ class ProductTest extends TestCase
 
         $this->assertEquals($product->isAvailableToBuy(), false);
 
+    }
+
+    //
+    //      sizeAvailableItems
+
+    /** @test */
+    public function size_items_available_success()
+    {
+        $category = factory(Category::class)->create();
+        $product = factory(Product::class)->create(['category_id' => $category->id ]);
+
+        for($i = 0 ; $i < 2 ; $i++) {
+            $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+        }
+
+        $this->assertEquals($product->sizeAvailableItems(), 2);
+
+    }
+
+
+    //
+    //      areItemsAvailable
+
+    /** @test */
+    public function are_items_available_success()
+    {
+        $category = factory(Category::class)->create();
+        $product = factory(Product::class)->create(['category_id' => $category->id ]);
+
+        for($i = 0 ; $i < 2 ; $i++) {
+            $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+        }
+
+        $this->assertEquals($product->areItemsAvailable(2), true);
+
+    }
+
+    /** @test */
+    public function are_items_available_notenought()
+    {
+        $category = factory(Category::class)->create();
+        $product = factory(Product::class)->create(['category_id' => $category->id ]);
+
+        for($i = 0 ; $i < 1 ; $i++) {
+            $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+        }
+
+        $this->assertEquals($product->areItemsAvailable(2), false);
+
+    }
+
+
+    //
+    //      images
+
+    /** @test */
+    public function images_success()
+    {
+        $category = factory(Category::class)->create();
+        $product = factory(Product::class)->create(['category_id' => $category->id ]);
+
+        $image = factory(ProductImage::class)->create(['product_id' => $product->id ]);
+
+        $this->assertEquals($product->images->count(), 1);
+
+    }
+
+
+    //
+    //      getFirstAvailableItem
+
+    /** @test */
+    public function get_first_available_item_success()
+    {
+        $category = factory(Category::class)->create();
+        $product = factory(Product::class)->create(['category_id' => $category->id ]);
+
+        $item = factory(WarehouseItem::class)->create(['product_id' => $product->id]);
+
+        $this->assertEquals($product->getFirstAvailableItem()->id, $item->id);
+    }
+
+    /** @test */
+    public function get_first_available_item_empty()
+    {
+        $category = factory(Category::class)->create();
+        $product = factory(Product::class)->create(['category_id' => $category->id ]);
+
+        $this->assertEquals($product->getFirstAvailableItem(), null);
+    }
+
+    //
+    //      getCategory
+
+    /** @test */
+    public function get_category_success()
+    {
+        $category = factory(Category::class)->create();
+        $product = factory(Product::class)->create(['category_id' => $category->id ]);
+
+        $this->assertEquals($product->getCategory()->id, $category->id);
     }
 }
